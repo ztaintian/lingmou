@@ -6,15 +6,15 @@
   	</div>
   	<div>
 	  	<input type="" name="account"  v-model="account" class="iptAct" placeholder="请输入账号">
-	  	<div ref="account" class="line"></div>
+	  	<div ref="account"  :class="[accountFlag?'linelast':'line']"></div>
 	  	<div class="error" >{{accountShow}}</div>
   	</div>
   	<div>
 	  	<input type="" name="pass"   v-model="pass" class="iptSct" placeholder="请输入密码">
-	  	<div ref="pass" class="line"></div>
+	  	<div ref="pass" :class="[passFlag?'linelast':'line']"></div>
 	  	<div class="error">{{passShow}}</div>
   	</div>
-  	<button ref="bnt" class="bnt" type="" @click="login">登录</button>
+  	<button ref="bnt" :class="[bntIf?'bntlast':'bnt','bnt']" type="" @click="login">登录</button>
   </div>
 </template>
 
@@ -31,17 +31,16 @@ export default {
     	passFlag:false,
     	accountShow:'',
     	passShow:'',
-    	accountMessage:'账号不存在，请重新填写'
+    	accountMessage:'账号不存在，请重新填写',
+    	bntIf:false
     }
   },
   methods:{
   	ifBnt(){
   		if(this.accountFlag && this.passFlag){
-  			this.$refs.bnt.style.background = "#324656"
-  			this.$refs.bnt.style.cursor = "pointer"
+  			this.bntIf = true
   		}else{
-  			this.$refs.bnt.style.background = "rgba(50,70,86,0.30)"
-  			this.$refs.bnt.style.cursor = "default"
+  			this.bntIf = false
   		}
   	},
   	login(){
@@ -62,26 +61,18 @@ export default {
   watch:{
   	account:function(val){
   		if(val==null || val==undefined || val==''){
-  			this.$refs.account.style.backgroundColor = '#D8D8D8'
-  			this.$refs.account.style.height = '1px'
   			this.accountFlag = false
   			this.accountShow = ''
   		}else{
-  			this.$refs.account.style.backgroundColor = '#324656'
-  			this.$refs.account.style.height = '2px'
   			this.accountFlag = true
   		}
   		this.ifBnt()
   	},
   	pass:function(val){
   		if(val==null || val==undefined || val==''){
-  			this.$refs.pass.style.backgroundColor = '#D8D8D8'
-  			this.$refs.pass.style.height = '1px'
   			this.passFlag = false
   			this.passShow = ''
   		}else{
-  			this.$refs.pass.style.backgroundColor = '#324656'
-  			this.$refs.pass.style.height = '2px'
   			this.passFlag = true
   		}
   		this.ifBnt()
@@ -123,6 +114,14 @@ export default {
 			background: #D8D8D8;
 			height:1px;
 		}
+		@keyframes mymove{
+			from {width:0;}
+			to {width:100%;}
+		}
+		.linelast{
+			background: #324656;
+			height:2px;
+		}
 		.iptSct{
 			margin-top: 40px;
 		}
@@ -135,15 +134,17 @@ export default {
 			border-radius: 2px;
 			outline: none;
 			color:#FFFFFF;
+			cursor:default;
+		}
+		.bntlast{
+			background:#324656;
+			cursor:pointer;
 		}
 		.error{
 			color:#D61E2A;
 			font-size:12px;
 			line-height:16px;
 			margin-top:4px;
-			height:16px;
-		}
-		.station{
 			height:16px;
 		}
 	}
