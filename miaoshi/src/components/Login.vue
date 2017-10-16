@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-  	<img src="" alt="">
+
   </div>
 </template>
 

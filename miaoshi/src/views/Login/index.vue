@@ -20,6 +20,7 @@
 
 <script>
 import logo from '@/assets/logo.png'
+
 export default {
   name: 'Login',
   data () {
@@ -49,6 +50,7 @@ export default {
 	  			this.accountShow = ''
 		  		if(this.pass =='123456'){
 		  			this.passShow = ''
+		  			this.$router.push('/home')
 		  		}else{
 		  			this.passShow = '账号密码不匹配，请重新填写'
 		  		}

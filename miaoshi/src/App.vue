@@ -12,7 +12,5 @@ export default {
 
 <style>
   @import '~normalize.css/normalize.css';
-	#app {
-	  font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
-	}
+  @import './styles/index.css';
 </style>
