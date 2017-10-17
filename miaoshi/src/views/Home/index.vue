@@ -53,13 +53,16 @@ export default {
 <style lang="scss" scoped>
 .home{
 	height: 100%;
-	width:1336px;
+	max-width:1336px;
+	min-width:1150px;
 	margin:0 auto;
-	overflow: hidden;
+	display:flex;
 	.left{
+		z-index: 999;
 		float:left;
+		position: fixed;
 		overflow: hidden;
-		width:150px;
+		width:140px;
 		.imglogo{
 			background: #D61E2A;
 			height:60px;
@@ -94,13 +97,14 @@ export default {
 	}
 	.right{
 		overflow: hidden;
+		float:left;
+		margin-left:140px;
+		width:89.5%;
 		.routerchild{
 			overflow: hidden;
 			background: #F0F0F0;
 			padding:24px;
 		}
-		float:left;
-		width:1186px;
 		.top{
 		  height:60px;
 			font-size: 14px;

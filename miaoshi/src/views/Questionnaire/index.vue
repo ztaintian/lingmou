@@ -24,11 +24,12 @@
     		</div>
 	  	</div>
   	</div>
-  	<div class="questionOne" v-for="(v,index) in questionList">
-  		<span class="one">{{v.questionNmae}}</span>
-  		<span class="ifShow">展开</span>
-  		<div class="showzoun" v-show="true">
-  			<div class="line"></div>
+  	<div class="line linetop"></div>
+  	<div class="questionOne" v-for="(v,indexQ) in questionList">
+  		<span class="one">{{indexQ|questionToString}}</span>
+  		<span class="ifShow" @click="show(v)">{{v.show?'收起':'展开'}}</span>
+  		<span class="ifShow del" v-show="v.delShow" @click="delQuestion(indexQ)">删除问题</span>
+  		<div class="showzoun" v-show="v.show">
 		  	<div class="zune">
 			  	<span class="name title">标题</span>
 			  	<div class="right">
@@ -38,33 +39,23 @@
 		  	</div>
 		  	<div class="choice">
 		  		<span class="type">类型</span>
-		  		<!-- <span style="bctype"><input type="radio" id="one" value="单选" name="type"></span><label>单选</label> -->
 		  		<el-radio class="radio" v-model="v.radio" label="1">单选</el-radio>
 		  		<el-radio class="radio" v-model="v.radio" label="2">多选</el-radio>
 		  		<el-radio class="radio" v-model="v.radio" label="3">填空</el-radio>
-		  		<!-- <input type="radio" id="one" value="多选" name="type"><label>多选</label>
-		  		<input type="radio" id="one" value="填空" name="type"><label>填空</label> -->
 		  	</div>
-  		</div>
-  		<div class="showzoun" v-show="true">
-  			<div class="line"></div>
-		  	<div class="zune">
-			  	<span class="name title">标题</span>
+		  	<div class="zune choiceOne" v-for="(v,indexC) in v.choiceList">
+			  	<span class="name">选项{{indexC+1}}</span>
 			  	<div class="right">
 				  	<input class="nameipt" type="" name="">
 			  		<span class="count">0/35</span>
 			  	</div>
+			  	<span class="delchoice" @click="delChoice(indexC,indexQ)" v-if="v.delCe">删除选项</span>
 		  	</div>
-		  	<div class="choice">
-		  		<span class="type">类型</span>
-		  		<!-- <span style="bctype"><input type="radio" id="one" value="单选" name="type"></span><label>单选</label> -->
-		  		<el-radio class="radio" v-model="v.radio" label="1">单选</el-radio>
-		  		<el-radio class="radio" v-model="v.radio" label="2">多选</el-radio>
-		  		<el-radio class="radio" v-model="v.radio" label="3">填空</el-radio>
-		  		<!-- <input type="radio" id="one" value="多选" name="type"><label>多选</label>
-		  		<input type="radio" id="one" value="填空" name="type"><label>填空</label> -->
+		  	<div class="addchoice">
+		  		<a href="javascript:;" @click="addChoice(indexQ)">＋添加选项</a>
 		  	</div>
   		</div>
+  		<div class="line"></div>
   	</div>
   	<div class="addquestion">
   		<a href="javascript:;" @click="addQuestion">＋添加问题</a>
@@ -83,7 +74,7 @@ export default {
     	imgUrl:icon,
     	timeDate:[],
     	radio:false,
-    	questionList:[{questionNmae:'问题一',radio:'radio1'},{questionNmae:'问题二',radio:'radio1'}],
+    	questionList:[{show:true,questionNmae:'问题一',radio:'radio1',choiceList:[{delCe:false}],delShow:false}],
     	bacStyles:'background:  #F5F5F5 url('+icon+')  no-repeat;background-position:95% 40%;'
     }
   },
@@ -99,10 +90,31 @@ export default {
   },
   methods:{
   	addQuestion(){
-  		this.questionList.push({questionNmae:'问题三'})
-  		setTimeout(function(){
-		  	document.querySelector('#left').style.height = document.querySelector('#right').offsetHeight+'px'
-  		},200)
+  		this.questionList.push({show:true,radio:'radio'+this.questionList.length,choiceList:[{delCe:false}],delShow:false})
+  		if(this.questionList.length > 1){
+  			this.questionList[this.questionList.length-2].delShow = false;
+  			this.questionList[this.questionList.length-1].delShow = true;
+  		}
+  	},
+  	addChoice:function(index){
+  		this.questionList[index].choiceList.push({delCe:false})
+  		if(this.questionList[index].choiceList.length > 1){
+  			this.questionList[index].choiceList[this.questionList[index].choiceList.length-2].delCe = false;
+  			this.questionList[index].choiceList[this.questionList[index].choiceList.length-1].delCe = true;
+  		}
+  	},
+  	delChoice:function(indexC,indexQ){
+  		this.questionList[indexQ].choiceList.splice(indexC,1)
+  	},
+  	show:function(v){
+  		v.show = !v.show
+  	},
+  	delQuestion:function(index){
+  		this.questionList.splice(index,1)
+  		if(this.questionList.length > 1){
+  			this.questionList[this.questionList.length-2].delShow = false;
+  			this.questionList[this.questionList.length-1].delShow = true;
+  		}
   	}
   }
 }
@@ -111,9 +123,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 	.questionnaire{
+		font-family: 微软雅黑,'Avenir', Helvetica, Arial, sans-serif;
 		overflow: hidden;
 		padding:30px 0 0 40px;
-		width:1098px;
+		width:96.6%;
 		background: #FFFFFF;
 		.zune{
 			overflow: hidden;
@@ -145,7 +158,7 @@ export default {
 		}
 		.nameipt{
 			height:40px;
-			width:560px;
+			width:600px;
 			border: 1px solid #E0E0E0;
 			border-radius: 4px;
 		}
@@ -154,10 +167,13 @@ export default {
 			height:40px;
 			background: #F5F5F5;
 			color: #333333;
-			font-size: 14px;
 			border: 1px solid #E0E0E0;
 			border-radius: 4px;
 			float:left;
+			.el-input__inner{
+				font-size: 14px;
+				font-weight:bold;
+			}
 		}
 		.datetime{
 			margin-top: 16px;
@@ -177,59 +193,92 @@ export default {
 			background: #F5F5F5;
 			border: 1px solid #E0E0E0;
 			border-radius: 4px;
+			color: #333333;
+			font-size: 14px;
+			font-weight:bold;
 			option{
+				font-weight:bold;
 				font-size: 14px;
 				color: #333333;
 				line-height:19px;
 			}
 		}
 		.questionOne{
-			padding:0 0 0 30px;
-			width:1025px;
-			background: #F5F5F5;
+			padding:0 0 0 76px;
+			width:89.5%;
 			border-radius: 4px;
-			margin-top:12px;
 			overflow: hidden;
 			.one{
-				font-family:'PingFangSC-Medium';
 				font-size: 14px;
 				line-height:52px;
 				font-weight:900;
 				color: #000000;
-				letter-spacing: 0;
 			}
 			.ifShow{
 				display:inline-block;
 				float:right;
+				cursor: pointer;
 				font-size: 14px;
 				line-height:52px;
 				color: #2D78B3;
 				letter-spacing: 0;
+			}
+			.del{
 				margin-right:30px;
+			}
+			.delchoice{
+				margin-left:20px;
+				float:left;
+				cursor: pointer;
+				font-size: 14px;
+				line-height:40px;
+				color: #2D78B3;
+			}
+			.choiceOne{
+				margin:16px 0 0 48px;
+				font-weight: normal;
+				margin-bottom: 8px;
+			}
+			.addchoice{
+				border: 1px  dotted #C4C4C4;
+				border-radius: 4px;
+				width:600px;
+				height:40px;
+				text-align: center;
+				margin-left:104px;
+				margin-bottom: 21px;
+				a{
+					line-height:40px;
+					font-size: 14px;
+					color: #2D78B3;
+					text-decoration: none;
+				}
 			}
 		}
 		.addquestion{
-			margin-top:12px;
-			margin-bottom: 30px;
-			width:1053px;
-			height:52px;
+			margin: 12px 0 163px 76px;
+			width:89.5%;
+			height:40px;
 			border: 1px dotted #C4C4C4;
 			border-radius: 4px;
-			text-align: center;
 			a{
-				line-height:52px;
+				line-height:40px;
 				font-size: 14px;
 				color: #2D78B3;
 				text-decoration: none;
 			}
 		}
+		.line{
+			background: #EBEBEB;
+			width:100%;
+			height:1px;
+		}
+		.linetop{
+			margin-left:72px;
+			width: 90%;
+		}
 		.showzoun{
-			.line{
-				background: #EBEBEB;
-				margin-bottom:16px;
-				width:998px;
-				height:1px;
-			}
+			width:97%;
 			.title{
 				font-size: 14px;
 				color: #333333;
