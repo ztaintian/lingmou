@@ -111,6 +111,8 @@ export default {
 			line-height:60px;
 			span{
 				margin-left: 37px;
+				font-family: 'Microsoft YaHei';
+				color: #333333;
 			}
 			.use{
 				float:right;
