@@ -2,6 +2,10 @@
   <div class="login">
 		<Login :src = "srcurl" :aa.sync='pname' :srcA="srca" key="v.id" v-for="v in list"></Login>
 		<button type="" @click="add">添加</button>
+  <el-time-select
+    v-model="time"
+    placeholder="请指定打印日期">
+  </el-time-select>
   </div>
 </template>
 
@@ -14,6 +18,7 @@ export default {
   components:{Login},
   data () {
     return {
+      time:'',
     	srca:iconradio,
     	srcurl:iconradioActive,
     	list:[{}],

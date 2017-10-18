@@ -3,13 +3,14 @@
   	<div class="zune">
 	  	<span class="name">问卷名称</span>
 	  	<div class="right">
-		  	<input class="nameipt" v-model="nameQuestion" type="" name="">
-	  		<span :class="[nameQuestion.length>35?'errorRed':'','count']">{{nameQuestion.length}}/35</span>
+		  	<input class="nameipt"   v-model="nameQuestion" type="" name="">
+		  	<span class="errorRed count errorTip" v-show="fishFlag&&nameQuestion.length==0">（请填写问题的选项）</span>
+	  		<span :class="[(fishFlag&&nameQuestion.length==0)?'errorRed':'','count']">{{nameQuestion.length}}/35</span>
 	  	</div>
   	</div>
   	<div class="zune datetime">
 	  	<span class="name">截止时间</span>
-	  	<div class="right">
+	  	<div class="right bc">
 		  	<el-date-picker
 		      v-model="value1"
 		      type="date"
@@ -19,11 +20,14 @@
 		      :editable = 'false'
 		     >
     		</el-date-picker>
-    		<div class="szune">
-	    		<select class="selecttime" name="" :style="bacStyles">
-	    			<option v-for="v in timeDate" value="">{{v}}时</option>
-	    		</select>
-    		</div>
+			  <el-select class="selecttimee" v-model="selecttime" placeholder="请选择">
+			    <el-option
+			      v-for="item in timeDate"
+			      :key="item.id"
+			      :label="item"
+			      :value="item">
+			    </el-option>
+			  </el-select>
 	  	</div>
   	</div>
   	<div class="line linetop"></div>
@@ -62,6 +66,9 @@
   	<div class="addquestion" @click="addQuestion">
   		<a href="javascript:;" >＋添加问题</a>
   	</div>
+  	<div style="cursor:pointer;" @click="finshed">
+  		完成
+  	</div>
   </div>
 </template>
 
@@ -74,6 +81,7 @@ export default {
   name: 'Questionnaire',
   data () {
     return {
+    	fishFlag:false,
     	value1: new Date(),
     	nameQuestion:'',
     	imgUrl:icon,
@@ -82,6 +90,7 @@ export default {
     	radioaimgUrl:iconradioActive,
     	radioShow:false,
     	timeDate:[],
+    	selecttime:'00时',
     	radio:false,
     	questionList:[{radioShow1:false,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceList:[{delCe:false,choiceIpt:''}],delShow:false}],
     	bacStyles:'background:  #F5F5F5 url('+icon+')  no-repeat;background-position:95% 40%;'
@@ -91,15 +100,35 @@ export default {
   	document.querySelector('#left').style.height = document.querySelector('#right').offsetHeight+'px'
   	for(var i=0;i<24;i++){
   		if(i>9){
-  			this.timeDate.push(i)
+  			this.timeDate.push(i+'时')
   		}else{
-  			this.timeDate.push('0'+i)
+  			this.timeDate.push('0'+i+'时')
   		}
   	}
   },
+	computed: {
+	},
   watch:{
+  	nameQuestion(){
+  		this.nameQuestion = this.nameQuestion.slice(0,35)
+  	},
+  	questionList:{
+  		handler:function(val,oldval){
+  			console.log(val)
+  			for(var i=0;i<val.length;i++){
+  				this.questionList[i].title = 	this.questionList[i].title.slice(0,35);
+  				for(var j=0;j<this.questionList[i].choiceList.length;j++){
+  					this.questionList[i].choiceList[j].choiceIpt = this.questionList[i].choiceList[j].choiceIpt.slice(0,35)
+  				}
+  			}
+  		},
+  		deep:true
+  	}
   },
   methods:{
+  	finshed:function(){
+  		this.fishFlag = true;
+  	},
   	radioQus:function(index,num,bb){
   		if(num === 1){
   			this.questionList[index].radioShow1 = true
@@ -121,7 +150,6 @@ export default {
   			this.questionList[this.questionList.length-2].delShow = false;
   			this.questionList[this.questionList.length-1].delShow = true;
   		}
-  		console.log(this.questionList)
   	},
   	addChoice:function(index){
   		this.questionList[index].choiceList.push({delCe:false,choiceIpt:''})
@@ -167,10 +195,20 @@ export default {
 		}
 		.right{
 			float:left;
+			width:600px;
+			background:#F5F5F5;
 			position: relative;
+			border: 1px solid #E0E0E0;
+			border-radius: 4px;
+			.nameipt{
+				height:40px;
+				width:550px;
+			}
 			.count{
+				height:40px;
+				font-family:'Microsoft YaHei';
 				position: absolute;
-				right:10px;
+				right:8px;
 				top:15px;
 				font-size: 14px;
 				color: #C4C4C4;
@@ -178,9 +216,27 @@ export default {
 			.errorRed{
 				color:#D61E2A;
 			}
-			img{
-
+			.errorTip{
+				right:40px;
 			}
+			.selecttimee .el-input{
+	    	.el-scrollbar{
+	    		width:150px;
+	    	}
+	    	.el-input__icon:before{
+	    		color:#8C8C8C;
+	    	}
+				.el-input__inner{
+					height: 42px;
+	    		border: 1px solid #E0E0E0;
+	    		width:150px;
+				}
+
+				}
+		}
+		.bc{
+			background:#fff;
+			border:0;
 		}
 		.name{
 			font-family: "Microsoft YaHei";
@@ -197,12 +253,6 @@ export default {
 			font-weight:normal;
 			color: #333333;
 		}
-		.nameipt{
-			height:40px;
-			width:595px;
-			border: 1px solid #E0E0E0;
-			border-radius: 4px;
-		}
 		.data{
 			width:150px;
 			height:40px;
@@ -211,6 +261,7 @@ export default {
 			border: 1px solid #E0E0E0;
 			border-radius: 4px;
 			float:left;
+			margin-right:10px;
 			.el-input__inner{
 				font-size: 14px;
 				color: #333333;
@@ -248,6 +299,8 @@ export default {
 			border-radius: 4px;
 			color: #333333;
 			font-size: 14px;
+ 			transition: width 2s, height 20s;
+ 			outline: none;
 			option{
 				font-size: 14px;
 				color: #333333;
@@ -287,9 +340,8 @@ export default {
 				color: #2D78B3;
 			}
 			.choiceOne{
-				margin:16px 0 0 48px;
+				margin:0 0 8px 48px;
 				font-weight: normal;
-				margin-bottom: 8px;
 			}
 			.addchoice{
 				border: 1px  dotted #C4C4C4;
@@ -344,6 +396,7 @@ export default {
 		.choice{
 			overflow: hidden;
 			margin-top:19px;
+			margin-bottom:16px;
 			input[type="radio"] {
        	opacity: 0;
       }
