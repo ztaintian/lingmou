@@ -426,6 +426,7 @@ export default {
       }
       img{
       	vertical-align: middle;
+      	cursor:pointer;
       }
       .el-radio__inner::after{
       	background:url();
