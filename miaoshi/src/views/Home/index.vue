@@ -21,6 +21,7 @@
   				<span>123456</span>
   			</div>
   		</div>
+  		<div class="centerLine"></div>
   		<div class="routerchild">
 	  		<router-view/>
   		</div>
@@ -57,6 +58,14 @@ export default {
 	min-width:1150px;
 	margin:0 auto;
 	display:flex;
+	.centerLine{
+		height:24px;
+		margin-top:60px;
+		width:87%;
+		z-index: 9999;
+		position: fixed;
+		background:#F0F0F0;
+	}
 	.left{
 		z-index: 999;
 		float:left;
@@ -101,11 +110,17 @@ export default {
 		margin-left:140px;
 		width:89.5%;
 		.routerchild{
+			margin-top:60px;
 			overflow: hidden;
 			background: #F0F0F0;
 			padding:24px;
 		}
 		.top{
+			z-index:9999;
+			position: fixed;
+			background:#fff;
+			min-width: 600px;
+			width:89.5%;
 		  height:60px;
 			font-size: 14px;
 			line-height:60px;
@@ -114,13 +129,28 @@ export default {
 				font-family: 'Microsoft YaHei';
 				color: #333333;
 			}
+			@media only screen and (min-width:1000px) {
+				.use{
+					margin-right:50px;
+				}
+			}
+			@media only screen and (min-width:800px) and (max-width: 1000px) {
+				.use{
+					margin-right:10%;
+				}
+			}
+			@media only screen and (max-width: 800px) {
+				.use{
+					margin-right:12.5%;
+				}
+			}
 			.use{
 				float:right;
-				margin-right:30px;
 				img{
 					width:30px;
 					vertical-align: middle;
 					height:30px;
+					border-radius: 50%;
 				}
 				span{
 					margin-left:10px;

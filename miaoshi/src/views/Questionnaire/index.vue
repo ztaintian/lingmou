@@ -35,12 +35,14 @@
   		<span class="one">{{indexQ|questionToString}}</span>
   		<span class="ifShow" @click="show(v)">{{v.show?'收起':'展开'}}</span>
   		<span class="ifShow del" v-show="v.delShow" @click="delQuestion(indexQ)">删除问题</span>
+  		<span class="ifShow" v-if="v.mustAddFlag" style="color:#D61E2A;margin-right:30px;cursor:default;">（问题填写完整才能添加下一个问题）</span>
   		<div class="showzoun" v-show="v.show">
 		  	<div class="zune">
 			  	<span class="name title" style="font-family:'Microsoft YaHei'">标题</span>
 			  	<div class="right">
 				  	<input class="nameipt" type="" v-model="v.title" name="">
-			  		<span :class="[v.title.length>35?'errorRed':'','count']">{{v.title.length}}/35</span>
+				  	<span class="errorRed count errorTip" v-show="(fishFlag||choiceFlag)&&v.title.length==0">（请填写问题的选项）</span>
+			  		<span :class="[(v.title.length==0&&(fishFlag||choiceFlag))?'errorRed':'','count']">{{v.title.length}}/35</span>
 			  	</div>
 		  	</div>
 		  	<div class="choice">
@@ -53,7 +55,8 @@
 			  	<span class="name choiceSpan" style="font-family: 'Microsoft YaHei'">选项{{indexC+1}}</span>
 			  	<div class="right">
 				  	<input class="nameipt" type="" v-model="v.choiceIpt" name="">
-			  		<span class="count" :class="[v.choiceIpt.length>35?'errorRed':'','count']">{{v.choiceIpt.length}}/35</span>
+				  	<span class="errorRed count errorTip" v-show="(fishFlag||choiceFlag)&&v.choiceIpt.length==0">（请填写问题的选项）</span>
+			  		<span class="count" :class="[((fishFlag||choiceFlag)&&v.choiceIpt.length==0)?'errorRed':'','count']">{{v.choiceIpt.length}}/35</span>
 			  	</div>
 			  	<span class="delchoice" @click="delChoice(indexC,indexQ)" v-if="v.delCe">删除选项</span>
 		  	</div>
@@ -63,8 +66,8 @@
   		</div>
   		<div class="line"></div>
   	</div>
-  	<div class="addquestion" @click="addQuestion">
-  		<a href="javascript:;" >＋添加问题</a>
+  	<div class="addquestion">
+  		<a href="javascript:;" @click="addQuestion">＋添加问题</a>
   	</div>
   	<div style="cursor:pointer;" @click="finshed">
   		完成
@@ -82,6 +85,7 @@ export default {
   data () {
     return {
     	fishFlag:false,
+    	choiceFlag:false,
     	value1: new Date(),
     	nameQuestion:'',
     	imgUrl:icon,
@@ -92,7 +96,7 @@ export default {
     	timeDate:[],
     	selecttime:'00时',
     	radio:false,
-    	questionList:[{radioShow1:false,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceList:[{delCe:false,choiceIpt:''}],delShow:false}],
+    	questionList:[{radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceList:[{delCe:false,choiceIpt:''}],delShow:false,mustAddFlag:false}],
     	bacStyles:'background:  #F5F5F5 url('+icon+')  no-repeat;background-position:95% 40%;'
     }
   },
@@ -114,13 +118,18 @@ export default {
   	},
   	questionList:{
   		handler:function(val,oldval){
-  			console.log(val)
   			for(var i=0;i<val.length;i++){
   				this.questionList[i].title = 	this.questionList[i].title.slice(0,35);
   				for(var j=0;j<this.questionList[i].choiceList.length;j++){
   					this.questionList[i].choiceList[j].choiceIpt = this.questionList[i].choiceList[j].choiceIpt.slice(0,35)
   				}
   			}
+	  		var questionList = this.questionList[this.questionList.length-1]
+	  		for(var j=0;j<questionList.choiceList.length;j++){
+	  			if(questionList.title!=null && questionList.title!=''&&questionList.choiceList[j].choiceIpt != '' && questionList.choiceList[j].choiceIpt!=null){
+	  				questionList.mustAddFlag = false
+	  			}
+	  		}
   		},
   		deep:true
   	}
@@ -145,7 +154,17 @@ export default {
   		}
   	},
   	addQuestion(){
-  		this.questionList.push({radioShow1:false,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio'+this.questionList.length,choiceList:[{delCe:false,choiceIpt:''}],delShow:false})
+  		this.choiceFlag = true
+  		var questionList = this.questionList[this.questionList.length-1]
+  		for(var i=0;i<questionList.choiceList.length;i++){
+  			if(questionList.title==null||questionList.title==''||questionList.title==undefined||questionList.choiceList[i].choiceIpt == '' || questionList.choiceList[i].choiceIpt==null||questionList.choiceList[i].choiceIpt == undefined){
+  				questionList.mustAddFlag = true
+  				return
+  			}
+  		}
+			this.fishFlag = false
+			this.choiceFlag = false
+  		this.questionList.push({radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio'+this.questionList.length,choiceList:[{delCe:false,choiceIpt:''}],delShow:false})
   		if(this.questionList.length > 1){
   			this.questionList[this.questionList.length-2].delShow = false;
   			this.questionList[this.questionList.length-1].delShow = true;
@@ -361,11 +380,10 @@ export default {
 			}
 		}
 		.addquestion{
-			margin: 12px 0 163px 76px;
+			margin: 0 0 163px 76px;
 			width:89.5%;
 			cursor:pointer;
 			height:40px;
-			border: 1px dotted #C4C4C4;
 			border-radius: 4px;
 			a{
 				line-height:40px;
