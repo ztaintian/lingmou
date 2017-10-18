@@ -116,7 +116,6 @@ export default {
   		}
   	},
   	addQuestion(){
-
   		this.questionList.push({radioShow1:false,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio'+this.questionList.length,choiceList:[{delCe:false,choiceIpt:''}],delShow:false})
   		if(this.questionList.length > 1){
   			this.questionList[this.questionList.length-2].delShow = false;
@@ -199,7 +198,6 @@ export default {
 			color: #333333;
 		}
 		.nameipt{
-			padding-left:5px;
 			height:40px;
 			width:595px;
 			border: 1px solid #E0E0E0;
@@ -367,7 +365,7 @@ export default {
 			.type{
 				font-size: 14px;
 				color: #333333;
-				margin-right:18px;
+				margin-right:10px;
 			}
 		}
 	}
