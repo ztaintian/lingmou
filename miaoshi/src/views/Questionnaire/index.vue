@@ -4,7 +4,7 @@
 	  	<span class="name">问卷名称</span>
 	  	<div class="right">
 		  	<input class="nameipt" v-model="nameQuestion" type="" name="">
-	  		<span class="count">{{nameQuestion.length}}/35</span>
+	  		<span :class="[nameQuestion.length>35?'errorRed':'','count']">{{nameQuestion.length}}/35</span>
 	  	</div>
   	</div>
   	<div class="zune datetime">
@@ -36,14 +36,11 @@
 			  	<span class="name title" style="font-family:'Microsoft YaHei'">标题</span>
 			  	<div class="right">
 				  	<input class="nameipt" type="" v-model="v.title" name="">
-			  		<span :class="[v.error?'errorRed':'','count']">{{v.title.length}}/35</span>
+			  		<span :class="[v.title.length>35?'errorRed':'','count']">{{v.title.length}}/35</span>
 			  	</div>
 		  	</div>
 		  	<div class="choice">
 		  		<span class="type">类型</span>
-		  		<!-- <el-radio class="radio" v-model="v.radio" label="1">单选</el-radio>
-		  		<el-radio class="radio" v-model="v.radio" label="2">多选</el-radio>
-		  		<el-radio class="radio" v-model="v.radio" label="3">填空</el-radio> -->
 		  		<img  :src="v.radioShow1?radioaimgUrl:radioimgUrl" alt="" @click="radioQus(indexQ,1,v)"><span class="radioText">单选</span>
 		  		<img :src="v.radioShow2?radioaimgUrl:radioimgUrl" alt="" @click="radioQus(indexQ,2,v)"><span class="radioText">多选</span>
 		  		<img :src="v.radioShow3?radioaimgUrl:radioimgUrl" alt="" @click="radioQus(indexQ,3,v)"><span class="radioText">填空</span>
@@ -52,7 +49,7 @@
 			  	<span class="name choiceSpan" style="font-family: 'Microsoft YaHei'">选项{{indexC+1}}</span>
 			  	<div class="right">
 				  	<input class="nameipt" type="" v-model="v.choiceIpt" name="">
-			  		<span class="count">{{v.choiceIpt.length}}/35</span>
+			  		<span class="count" :class="[v.choiceIpt.length>35?'errorRed':'','count']">{{v.choiceIpt.length}}/35</span>
 			  	</div>
 			  	<span class="delchoice" @click="delChoice(indexC,indexQ)" v-if="v.delCe">删除选项</span>
 		  	</div>
@@ -119,11 +116,13 @@ export default {
   		}
   	},
   	addQuestion(){
+
   		this.questionList.push({radioShow1:false,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio'+this.questionList.length,choiceList:[{delCe:false,choiceIpt:''}],delShow:false})
   		if(this.questionList.length > 1){
   			this.questionList[this.questionList.length-2].delShow = false;
   			this.questionList[this.questionList.length-1].delShow = true;
   		}
+  		console.log(this.questionList)
   	},
   	addChoice:function(index){
   		this.questionList[index].choiceList.push({delCe:false,choiceIpt:''})
