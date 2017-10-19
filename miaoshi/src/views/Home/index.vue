@@ -5,7 +5,7 @@
   			<img :src="imgurl" alt="">
   		</div>
   		<div class="nav">
-	  		<div class="navli" v-for="v in imgurlicon">
+	  		<div :class="[v.iconShow?'navlibc':'','navli']" @click="iconClikc(index)" v-for="(v,index) in imgurlicon">
   				<a href="javascript:;">
 	  				<img :src="v.icon" alt="">
 	  				<span>{{v.text}}</span>
@@ -15,7 +15,7 @@
   	</div>
   	<div class="right" id="right">
   		<div class="top">
-  			<span>场景管理 > 新建问卷</span>
+  			<span>场景管理</span>
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>123456</span>
@@ -45,8 +45,21 @@ export default {
     return {
     	imgurl:logo,
     	useimg:useimg,
-    	imgurlicon:[{icon:icon1,text:'概况'},{icon:icon2,text:'报告'},{icon:icon3,text:'数据'},{icon:icon4,text:'售点'},{icon:icon5,text:'场景'},{icon:icon6,text:'SKU'},{icon:icon7,text:'设置'}],
+    	imgurlicon:[{icon:icon1,text:'概况',iconShow:false},{icon:icon2,text:'报告',iconShow:false},{icon:icon3,text:'数据',iconShow:false},{icon:icon4,text:'售点',iconShow:false},{icon:icon5,text:'场景',iconShow:true},{icon:icon6,text:'SKU',iconShow:false},{icon:icon7,text:'设置',iconShow:false}],
     }
+  },
+  methods:{
+  	iconClikc(index){
+  		for(var i=0;i<this.imgurlicon.length;i++){
+  			this.imgurlicon[i].iconShow = false
+  		}
+  		this.imgurlicon[index].iconShow = true
+  		if(index === 4){
+  			this.$router.push('/home/questionnaire')
+  		}else if(index === 1){
+  			this.$router.push('/home/questionnaire')
+  		}
+  	}
   }
 }
 </script>
@@ -101,6 +114,9 @@ export default {
 						font-size: 14px;
 					}
 				}
+			}
+			.navlibc{
+				background:rgba(255,255,255,0.10);
 			}
 		}
 	}

@@ -37,8 +37,8 @@
   	<div class="questionOne" v-for="(v,indexQ) in questionList">
   		<span class="one">{{indexQ|questionToString}}</span>
   		<span class="ifShow" @click="show(v)">{{v.show?'收起':'展开'}}</span>
-  		<span class="ifShow del" v-show="v.delShow" @click="delQuestion(indexQ)">删除问题</span>
-  		<span class="ifShow" v-if="v.mustAddFlag" style="color:#D61E2A;margin-right:30px;cursor:default;">（问题填写完整才能添加下一个问题）</span>
+  		<span class="ifShow del" v-show="v.delShow&&v.show" @click="delQuestion(indexQ)">删除问题</span>
+  		<span class="ifShow" v-if="v.mustAddFlag&&choiceFlag" style="color:#D61E2A;margin-right:30px;cursor:default;">（问题填写完整才能添加下一个问题）</span>
   		<div class="showzoun" v-show="v.show">
 		  	<div class="zune">
 			  	<span class="name title" style="font-family:'Microsoft YaHei'">标题</span>
@@ -54,14 +54,14 @@
 		  		<img :src="v.radioShow2?radioaimgUrl:radioimgUrl" alt="" @click="radioQus(indexQ,2,v)"><span class="radioText">多选</span>
 		  		<img :src="v.radioShow3?radioaimgUrl:radioimgUrl" alt="" @click="radioQus(indexQ,3,v)"><span class="radioText">填空</span>
 		  	</div>
-		  	<div class="zune choiceOne" v-for="(v,indexC) in v.choiceList">
+		  	<div class="zune choiceOne" v-for="(vC,indexC) in v.choiceList">
 			  	<span class="name choiceSpan" style="font-family: 'Microsoft YaHei'">选项{{indexC+1}}</span>
 			  	<div class="right">
-				  	<input class="nameipt" type="" v-model="v.choiceIpt" name="">
-				  	<span class="errorRed count errorTip" v-show="(fishFlag||choiceFlag)&&v.choiceIpt.length==0">（请填写问题的选项）</span>
-			  		<span class="count" :class="[((fishFlag||choiceFlag)&&v.choiceIpt.length==0)?'errorRed':'','count']">{{v.choiceIpt.length}}/35</span>
+				  	<input class="nameipt" type="" v-model="vC.choiceIpt" @focus="getFocus(vC,indexC,indexQ)"  name="">
+				  	<span class="errorRed count errorTip" v-show="(fishFlag||choiceFlag)&&vC.choiceIpt.length==0">（请填写问题的选项）</span>
+			  		<span class="count" :class="[((fishFlag||choiceFlag)&&vC.choiceIpt.length==0)?'errorRed':'','count']">{{vC.choiceIpt.length}}/35</span>
 			  	</div>
-			  	<span class="delchoice" @click="delChoice(indexC,indexQ)" v-if="v.delCe">删除选项</span>
+			  	<span class="delchoice" @click="delChoice(indexC,indexQ)" v-if="vC.delCe">删除选项</span>
 		  	</div>
 		  	<div class="addchoice" @click="addChoice(indexQ)">
 		  		<a href="javascript:;" >＋添加选项</a>
@@ -96,7 +96,7 @@ export default {
     	timeDate:[],
     	selecttime:'00时',
     	radio:false,
-    	questionList:[{radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceList:[{delCe:false,choiceIpt:''}],delShow:false,mustAddFlag:false}],
+    	questionList:[{radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceList:[{delCe:false,choiceIpt:''},{delCe:false,choiceIpt:''},{delCe:false,choiceIpt:''}],delShow:true,mustAddFlag:false}],
     	bacStyles:'background:  #F5F5F5 url('+icon+')  no-repeat;background-position:95% 40%;'
     }
   },
@@ -109,6 +109,7 @@ export default {
   			this.timeDate.push('0'+i+'时')
   		}
   	}
+  	this.lastone()
   },
 	computed: {
 	},
@@ -124,19 +125,30 @@ export default {
   					this.questionList[i].choiceList[j].choiceIpt = this.questionList[i].choiceList[j].choiceIpt.slice(0,35)
   				}
   			}
-	  		var questionList = this.questionList[this.questionList.length-1]
-	  		for(var j=0;j<questionList.choiceList.length;j++){
-	  			if(questionList.title!=null && questionList.title!=''&&questionList.choiceList[j].choiceIpt != '' && questionList.choiceList[j].choiceIpt!=null){
-	  				questionList.mustAddFlag = false
-	  			}
-	  		}
   		},
   		deep:true
   	}
   },
   methods:{
+  	getFocus:function(v,index,indexQ){
+  		for(var i=0;i<this.questionList[indexQ].choiceList.length;i++){
+  			this.questionList[indexQ].choiceList[i].delCe=false
+  		}
+  		v.delCe = true
+  		this.lastoneC(indexQ)
+  	},
   	saved:function(){
   		this.fishFlag = true;
+  	},
+  	lastone:function(){
+  		if(this.questionList.length === 1){
+  			this.questionList[0].delShow = false
+  		}
+  	},
+  	lastoneC:function(indexQ){
+  		if(this.questionList[indexQ].choiceList.length === 1){
+  			this.questionList[indexQ].choiceList[0].delCe = false
+  		}
   	},
   	radioQus:function(index,num,bb){
   		if(num === 1){
@@ -156,6 +168,9 @@ export default {
   	addQuestion(){
   		this.choiceFlag = true
   		var questionList = this.questionList[this.questionList.length-1]
+  		for(var j=0;j<this.questionList.length;j++){
+  			this.questionList[j].mustAddFlag = false
+  		}
   		for(var i=0;i<questionList.choiceList.length;i++){
   			if(questionList.title==null||questionList.title==''||questionList.title==undefined||questionList.choiceList[i].choiceIpt == '' || questionList.choiceList[i].choiceIpt==null||questionList.choiceList[i].choiceIpt == undefined){
   				questionList.mustAddFlag = true
@@ -164,25 +179,20 @@ export default {
   		}
 			this.fishFlag = false
 			this.choiceFlag = false
-  		this.questionList.push({radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio'+this.questionList.length,choiceList:[{delCe:false,choiceIpt:''}],delShow:false})
+  		this.questionList.push({radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceList:[{delCe:false,choiceIpt:''},{delCe:false,choiceIpt:''},{delCe:false,choiceIpt:''}],delShow:true,mustAddFlag:false})
   		if(this.questionList.length > 1){
-  			this.questionList[this.questionList.length-2].delShow = false;
-  			this.questionList[this.questionList.length-1].delShow = true;
+  			this.questionList[0].delShow = true;
   		}
+  		this.lastone()
+
   	},
   	addChoice:function(index){
   		this.questionList[index].choiceList.push({delCe:false,choiceIpt:''})
-  		if(this.questionList[index].choiceList.length > 1){
-  			this.questionList[index].choiceList[this.questionList[index].choiceList.length-2].delCe = false;
-  			this.questionList[index].choiceList[this.questionList[index].choiceList.length-1].delCe = true;
-  		}
+  		this.lastoneC(index)
   	},
   	delChoice:function(indexC,indexQ){
   		this.questionList[indexQ].choiceList.splice(indexC,1)
-  		if(this.questionList[indexQ].choiceList.length > 1){
-  			this.questionList[indexQ].choiceList[this.questionList[indexQ].choiceList.length-2].delCe = false;
-  			this.questionList[indexQ].choiceList[this.questionList[indexQ].choiceList.length-1].delCe = true;
-  		}
+  		this.lastoneC(indexQ)
   	},
   	show:function(v){
   		v.show = !v.show
@@ -190,9 +200,9 @@ export default {
   	delQuestion:function(index){
   		this.questionList.splice(index,1)
   		if(this.questionList.length > 1){
-  			this.questionList[this.questionList.length-2].delShow = false;
-  			this.questionList[this.questionList.length-1].delShow = true;
+  			this.questionList[0].delShow = true;
   		}
+  		this.lastone()
   	}
   }
 }
@@ -214,6 +224,7 @@ export default {
 		    border-radius: 4px;
 		    height: 30px;
 		    width:100px;
+		    cursor:pointer;
 		    line-height:30px;
 		    text-align: center;
 		    color:#FFFFFF;
