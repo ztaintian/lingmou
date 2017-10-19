@@ -1,12 +1,15 @@
 <template>
   <div class="questionnaire">
-  	<div class="zune">
+  	<div class="zune questionnairename">
 	  	<span class="name">问卷名称</span>
 	  	<div class="right">
 		  	<input class="nameipt"   v-model="nameQuestion" type="" name="">
 		  	<span class="errorRed count errorTip" v-show="fishFlag&&nameQuestion.length==0">（请填写问题的选项）</span>
 	  		<span :class="[(fishFlag&&nameQuestion.length==0)?'errorRed':'','count']">{{nameQuestion.length}}/35</span>
 	  	</div>
+	  	<div class="save" @click="saved">
+  			保存
+  		</div>
   	</div>
   	<div class="zune datetime">
 	  	<span class="name">截止时间</span>
@@ -68,9 +71,6 @@
   	</div>
   	<div class="addquestion">
   		<a href="javascript:;" @click="addQuestion">＋添加问题</a>
-  	</div>
-  	<div style="cursor:pointer;" @click="finshed">
-  		完成
   	</div>
   </div>
 </template>
@@ -135,7 +135,7 @@ export default {
   	}
   },
   methods:{
-  	finshed:function(){
+  	saved:function(){
   		this.fishFlag = true;
   	},
   	radioQus:function(index,num,bb){
@@ -207,10 +207,24 @@ export default {
 		background: #FFFFFF;
 		.zune{
 			overflow: hidden;
+			.save{
+				margin-top:10px;
+				float: right;
+				background: #2D78B3;
+		    border-radius: 4px;
+		    height: 30px;
+		    width:100px;
+		    line-height:30px;
+		    text-align: center;
+		    color:#FFFFFF;
+			}
 		}
 		input{
 			border: none;
 			background:#F5F5F5;
+		}
+		.questionnairename{
+			width:97%
 		}
 		.right{
 			float:left;
