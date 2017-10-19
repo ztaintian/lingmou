@@ -73,7 +73,7 @@
         <div class="W70 publicCss">场景数</div>
         <div class="W70 publicCss">状态</div>
       </div>
-      <div v-for="v in tableList" @mouseenter="enter" class="tablelist">
+      <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']">
         <div class="W170 publicCss">时间</div>
         <div class="W100 publicCss">售点报告编号</div>
         <div class="W160 publicCss">售点</div>
@@ -112,12 +112,20 @@ export default {
       ing:false,
       reportNumber:'',
       statusVal:'',
-      tableList:[1,2,2,2,2,2,2,2,2]
+      tableList:[{showBc:false},{showBc:false},{showBc:false}]
     }
   },
   methods:{
-    enter(){
-      console.log(999)
+    enter(v,index){
+      for(var i=0;i<this.tableList.length;i++){
+        this.tableList[i].showBc = false
+      }
+      v.showBc = true
+    },
+    leave(v,index){
+      for(var i=0;i<this.tableList.length;i++){
+        this.tableList[i].showBc = false
+      }
     },
     choiceData(num){
       if(num === 1){
@@ -267,6 +275,8 @@ export default {
     .table{
       margin:0 auto;
       width:1120px;
+      padding-bottom: 200px;
+      box-sizing:border-box;
       .W170{
         width:170px;
       }
@@ -302,7 +312,12 @@ export default {
       }
     }
     .tablelist{
+      overflow: hidden;
       cursor: pointer;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    .tablelistBc{
+      background: #F5F5F5;
     }
   }
 </style>
