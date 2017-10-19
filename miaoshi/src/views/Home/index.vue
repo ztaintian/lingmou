@@ -14,8 +14,16 @@
   		</div>
   	</div>
   	<div class="right" id="right">
-  		<div class="top">
+  		<div class="top" v-if="type==4">
   			<span>场景管理</span>
+  			<div class="use">
+  				<img :src="useimg" alt="">
+  				<span>123456</span>
+  			</div>
+  		</div>
+  		<div class="top" v-else-if="type==1">
+  			<span :class="[activeF?'bgActive':'','forcereport']" @click="fouceRepeot">焦点报告</span>
+  			<span :class="[activeC?'bgActive':'','forcereport','tv']" @click="cenen">场景报告</span>
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>123456</span>
@@ -43,21 +51,47 @@ export default {
   name: 'Home',
   data () {
     return {
+    	type:1,
+    	activeF:true,
+    	activeC:false,
     	imgurl:logo,
     	useimg:useimg,
-    	imgurlicon:[{icon:icon1,text:'概况',iconShow:false},{icon:icon2,text:'报告',iconShow:false},{icon:icon3,text:'数据',iconShow:false},{icon:icon4,text:'售点',iconShow:false},{icon:icon5,text:'场景',iconShow:true},{icon:icon6,text:'SKU',iconShow:false},{icon:icon7,text:'设置',iconShow:false}],
+    	imgurlicon:[{icon:icon1,text:'概况',iconShow:false},{icon:icon2,text:'报告',iconShow:true},{icon:icon3,text:'数据',iconShow:false},{icon:icon4,text:'售点',iconShow:false},{icon:icon5,text:'场景',iconShow:false},{icon:icon6,text:'SKU',iconShow:false},{icon:icon7,text:'设置',iconShow:false}],
     }
   },
+  mounted(){
+  	console.log(this.$router.currentRoute.path)
+  	switch (this.$router.currentRoute.path){
+  		case '/home/focusrepor':
+  		this.type = 1
+  		break;
+  		case '/home/questionnaire':
+  		this.type = 4
+  		break;
+  		default:
+  		break;
+  	}
+  	this.iconClikc(this.type)
+  },
   methods:{
+  	fouceRepeot(){
+  		this.activeF = true
+  		this.activeC = false
+  	},
+  	cenen(){
+  		this.activeF = false
+  		this.activeC = true
+  	},
   	iconClikc(index){
+  		this.type = index
   		for(var i=0;i<this.imgurlicon.length;i++){
   			this.imgurlicon[i].iconShow = false
   		}
-  		this.imgurlicon[index].iconShow = true
+  		this.imgurlicon[this.type].iconShow = true
   		if(index === 4){
-  			this.$router.push('/home/questionnaire')
+  			this.$router.push({path:'/home/questionnaire', params: { type: index }})
   		}else if(index === 1){
-  			this.$router.push('/home/questionnaire')
+  			this.$router.push({ path:'/home/focusreport', params: { type: index }})
   		}
   	}
   }
@@ -67,8 +101,7 @@ export default {
 <style lang="scss" scoped>
 .home{
 	height: 100%;
-	max-width:1336px;
-	min-width:1150px;
+	width:1336px;
 	margin:0 auto;
 	display:flex;
 	.centerLine{
@@ -82,9 +115,10 @@ export default {
 	.left{
 		z-index: 999;
 		float:left;
+		height:100%;
 		position: fixed;
 		overflow: hidden;
-		width:140px;
+		width:120px;
 		.imglogo{
 			background: #D61E2A;
 			height:60px;
@@ -123,8 +157,8 @@ export default {
 	.right{
 		overflow: hidden;
 		float:left;
-		margin-left:140px;
-		width:89.5%;
+		margin-left:120px;
+		width:91%;
 		.routerchild{
 			margin-top:60px;
 			overflow: hidden;
@@ -140,6 +174,24 @@ export default {
 		  height:60px;
 			font-size: 14px;
 			line-height:60px;
+			.forcereport{
+				display:inline-block;
+				width:110px;
+				height:60px;
+				line-height:60px;
+				margin-left: 24px;
+				text-align: center;
+				cursor: pointer;
+				float: left;
+			}
+			.tv{
+				margin-left:0;
+				float: left;
+			}
+			.bgActive{
+				color:#2D78B3;
+				background: #F5F5F5;
+			}
 			span{
 				margin-left: 37px;
 				font-family: 'Microsoft YaHei';

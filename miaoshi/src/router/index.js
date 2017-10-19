@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/views/Login'
 import Home from '@/views/Home'
 import Questionnaire from '@/views/Questionnaire'
+import Focusreport from '@/views/Focusreport'
 import Test from '@/views/Test'
 
 Vue.use(Router)
@@ -26,7 +27,13 @@ export default new Router({
        children: [
         {
           path: 'questionnaire',
-          component: Questionnaire
+          component: Questionnaire,
+          query: { type: 4 }
+        },
+        {
+          path: 'focusreport',
+          component: Focusreport,
+          query: { type: 1 }
         }
       ]
     }

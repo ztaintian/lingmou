@@ -214,6 +214,7 @@ export default {
 		overflow: hidden;
 		padding:30px 0 0 40px;
 		width:96.6%;
+		border-radius: 4px;
 		background: #FFFFFF;
 		.zune{
 			overflow: hidden;

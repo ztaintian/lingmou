@@ -2,9 +2,12 @@
 	  font-family: 'Microsoft YaHei',微软雅黑,'Avenir', Helvetica, Arial, sans-serif;
 	}
 	input{
-		outline: none;
 		font-family: "Microsoft YaHei";
 	}
 	a{
 		text-decoration: none;
+	}
+	tbody,thead,tr,td,th{
+		margin:0;
+		padding:0;
 	}
