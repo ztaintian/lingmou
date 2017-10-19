@@ -239,6 +239,7 @@ export default {
 				right:40px;
 			}
 			.selecttimee .el-input{
+				cursor:pointer;
 	    	.el-scrollbar{
 	    		width:150px;
 	    	}
