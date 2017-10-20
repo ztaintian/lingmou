@@ -362,7 +362,6 @@ export default {
 			appearance: none;
 			margin-left: 10px;
 			padding:0 0 0 16px;
-			outline: none;
 			height:40px;
 			width:134px;
 			background: #F5F5F5;
@@ -371,7 +370,6 @@ export default {
 			color: #333333;
 			font-size: 14px;
  			transition: width 2s, height 20s;
- 			outline: none;
 			option{
 				font-size: 14px;
 				color: #333333;

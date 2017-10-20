@@ -320,19 +320,39 @@ export default {
 				font-family: 'Microsoft YaHei';
 				color: #333333;
 			}
-			@media only screen and (min-width:1000px) {
+			@media only screen and (min-width:1336px) {
 				.use{
 					margin-right:30px;
 				}
 			}
-			@media only screen and (min-width:800px) and (max-width: 1000px) {
+			@media only screen and (min-width:1300px) and (max-width: 1336px) {
+				.use{
+					margin-right:5%;
+				}
+			}
+			@media only screen and (min-width:1250px) and (max-width: 1300px) {
+				.use{
+					margin-right:8%;
+				}
+			}
+			@media only screen and (min-width:1100px) and (max-width: 1250px) {
 				.use{
 					margin-right:10%;
 				}
 			}
-			@media only screen and (max-width: 800px) {
+			@media only screen and (min-width:900px) and (max-width: 1200px) {
 				.use{
-					margin-right:12.5%;
+					margin-right:12%;
+				}
+			}
+			@media only screen and (min-width:600px) and (max-width: 900px) {
+				.use{
+					margin-right:20%;
+				}
+			}
+			@media only screen and (max-width:600px) {
+				.use{
+					margin-right:40%;
 				}
 			}
 			.use{
