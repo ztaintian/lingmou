@@ -8,6 +8,9 @@ import Scenereport from '@/views/Scenereport'
 import Distinguishsku from '@/views/Distinguishsku'
 import Mustsku from '@/views/Mustsku'
 import Importsku from '@/views/Importsku'
+import Administratorsettings from '@/views/Administratorsettings'
+import Usermanagement from '@/views/Usermanagement'
+import Sellpoint from '@/views/Sellpoint'
 import Test from '@/views/Test'
 
 Vue.use(Router)
@@ -55,6 +58,18 @@ export default new Router({
         {
           path: 'importsku',
           component: Importsku
+        },
+        {
+          path: 'usermanagement',
+          component: Usermanagement
+        },
+        {
+          path: 'administratorsettings',
+          component: Administratorsettings
+        },
+        {
+          path: 'sellpoint',
+          component: Sellpoint
         }
       ]
     }

@@ -10,7 +10,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
   @import '~normalize.css/normalize.css';
-  @import './styles/index.css';
+  @import './styles/index.scss';
 </style>

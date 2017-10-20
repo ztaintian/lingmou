@@ -38,6 +38,21 @@
   				<span>123456</span>
   			</div>
   		</div>
+  		<div class="top" v-else-if="type==6">
+  			<span :class="[activeAS?'bgActive':'','forcereport']" @click="admin(1)">管理员设置</span>
+  			<span :class="[activeUS?'bgActive':'','forcereport','tv']" @click="admin(2)">用户管理</span>
+  			<div class="use">
+  				<img :src="useimg" alt="">
+  				<span>123456</span>
+  			</div>
+  		</div>
+  		<div class="top" v-else-if="type==3">
+  			<span class="forcereport">售点设置</span>
+  			<div class="use">
+  				<img :src="useimg" alt="">
+  				<span>123456</span>
+  			</div>
+  		</div>
   		<div class="centerLine"></div>
   		<div class="routerchild">
 	  		<router-view/>
@@ -66,6 +81,8 @@ export default {
     	activeR:true,
     	activeM:false,
     	activeI:false,
+    	activeAS:true,
+    	activeUS:false,
     	imgurl:logo,
     	topStatus:Number,
     	useimg:useimg,
@@ -77,7 +94,6 @@ export default {
   },
   methods:{
   	nowRoute(){
-  		console.log(this.$router.currentRoute)
 	  	switch (this.$router.currentRoute.path){
 	  		case '/home/focusrepor':
 	  		this.type = 1
@@ -108,9 +124,37 @@ export default {
 	  		this.iconShow()
 	  		this.skuStatus(3)
 	  		break;
+	  		case '/home/administratorsettings':
+	  		this.type = 6
+	  		this.iconShow()
+	  		this.adminStatus(1)
+	  		break;
+	  		case '/home/usermanagement':
+	  		this.type = 6
+	  		this.iconShow()
+	  		this.adminStatus(2)
+	  		break;
+	  		case '/home/sellpoint':
+	  		this.type = 3
+	  		this.iconShow()
+	  		break;
 	  		default:
 	  		break;
 	  	}
+  	},
+  	adminStatus(num){
+  		if(num === 1){
+				this.activeAS = true
+				this.activeUS = false
+				this.$router.push('/home/administratorsettings')
+  		}else{
+				this.activeAS = false
+				this.activeUS = true
+				this.$router.push('/home/usermanagement')
+  		}
+  	},
+  	admin(num){
+  		this.adminStatus(num)
   	},
   	skuStatus(num){
   		this.topStatus = num
@@ -165,6 +209,11 @@ export default {
   		}else if(index === 5){
   			this.$router.push('/home/distinguishsku')
   			this.skuStatus(1)
+  		}else if(index ===6){
+  			this.$router.push('/home/administratorsettings')
+  			this.adminStatus(1)
+  		}else if(index ===3){
+  			this.$router.push('/home/sellpoint')
   		}
   	}
   }
