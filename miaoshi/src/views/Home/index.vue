@@ -229,7 +229,7 @@ export default {
 	.centerLine{
 		height:24px;
 		margin-top:60px;
-		width:87%;
+		width:89%;
 		z-index: 9999;
 		position: fixed;
 		background:#F0F0F0;
@@ -280,7 +280,7 @@ export default {
 		overflow: hidden;
 		float:left;
 		margin-left:120px;
-		width:91%;
+		width:92%;
 		.routerchild{
 			margin-top:60px;
 			overflow: hidden;
@@ -292,7 +292,8 @@ export default {
 			position: fixed;
 			background:#fff;
 			min-width: 600px;
-			width:89.5%;
+			max-width: 1216px;
+			width:99%;
 		  height:60px;
 			font-size: 14px;
 			line-height:60px;
@@ -321,7 +322,7 @@ export default {
 			}
 			@media only screen and (min-width:1000px) {
 				.use{
-					margin-right:50px;
+					margin-right:30px;
 				}
 			}
 			@media only screen and (min-width:800px) and (max-width: 1000px) {
