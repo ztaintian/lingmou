@@ -10,7 +10,7 @@
 	  	<div class="error" >{{accountShow}}</div>
   	</div>
   	<div>
-	  	<input type="" name="pass"   v-model="pass" class="iptSct" placeholder="请输入密码">
+	  	<input type="password" name="pass"   v-model="pass" class="iptSct" placeholder="请输入密码">
 	  	<div ref="pass" :class="[passFlag?'linelast':'line']"></div>
 	  	<div class="error">{{passShow}}</div>
   	</div>

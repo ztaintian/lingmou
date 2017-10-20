@@ -14,6 +14,7 @@
         <el-date-picker
           v-model="dataTime2"
           type="datetime"
+          :editable = 'false'
           :clearable='false'
           placeholder="选择日期时间">
         </el-date-picker>
@@ -252,6 +253,9 @@ export default {
       .el-input__icon:after{
         content:'';
       }
+      .el-input__icon:before{
+        content:'';
+      }
       .el-icon-time{
         background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAIBJREFUSA3tklEKwCAMQ93YkXsM77zNz9VnK3SFDRT8aGqaJljKOp9OoNZ6tjta0us33j4iv4VvepC1sX5LtYg8ZqY7SBfoXEYiIm66A1NAf0Ov7uK4AVOACGGMcpwdStx0B6aAl7nuk1NTgAhhjHKcHUrcdAcHbUeb0LuF/SOBC6IJQL9DepUnAAAAAElFTkSuQmCC) no-repeat center;
       }
@@ -266,6 +270,7 @@ export default {
         margin-left: 10px;
         img{
           vertical-align: middle;
+          cursor:pointer;
         }
         .radioText{
           margin-right: 20px;
