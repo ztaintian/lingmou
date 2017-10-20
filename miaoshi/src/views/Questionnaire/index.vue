@@ -2,10 +2,12 @@
   <div class="questionnaire">
   	<div class="zune questionnairename">
 	  	<span class="name">问卷名称</span>
-	  	<div class="right">
-		  	<input class="nameipt"   v-model="nameQuestion" type="" name="">
-		  	<span class="errorRed count errorTip" v-show="fishFlag&&nameQuestion.length==0">（请填写问题的选项）</span>
-	  		<span :class="[(fishFlag&&nameQuestion.length==0)?'errorRed':'','count']">{{nameQuestion.length}}/35</span>
+	  	<div style="height:46px;">
+		  	<div :class="[nameGetColor?'fontColor':'','right']">
+			  	<input class="nameipt" @focus="nameGetFocus" @blur="nameGetblur" v-model="nameQuestion" type="" name="">
+			  	<span class="errorRed count errorTip" v-show="fishFlag&&nameQuestion.length==0">（请填写问题的选项）</span>
+		  		<span :class="[(fishFlag&&nameQuestion.length==0)?'errorRed':'','count']">{{nameQuestion.length}}/35</span>
+		  	</div>
 	  	</div>
   	</div>
   	<div class="zune datetime">
@@ -39,10 +41,12 @@
   		<div class="showzoun" v-show="v.show">
 		  	<div class="zune">
 			  	<span class="name title" style="font-family:'Microsoft YaHei'">标题</span>
-			  	<div class="right">
-				  	<input class="nameipt" type="" v-model="v.title" name="">
-				  	<span class="errorRed count errorTip" v-show="(fishFlag||choiceFlag)&&v.title.length==0">（请填写问题的选项）</span>
-			  		<span :class="[(v.title.length==0&&(fishFlag||choiceFlag))?'errorRed':'','count']">{{v.title.length}}/35</span>
+			  	<div  style="height:46px;">
+				  	<div :class="[v.titleGetColcor?'fontColor':'','right']">
+					  	<input class="nameipt" type="" @focus="titleFocus(v)" @blur="titleBlur(v)" v-model="v.title" name="">
+					  	<span class="errorRed count errorTip" v-show="(fishFlag||choiceFlag)&&v.title.length==0">（请填写问题的选项）</span>
+				  		<span :class="[(v.title.length==0&&(fishFlag||choiceFlag))?'errorRed':'','count']">{{v.title.length}}/35</span>
+				  	</div>
 			  	</div>
 		  	</div>
 		  	<div class="choice">
@@ -53,12 +57,14 @@
 		  	</div>
 		  	<div class="zune choiceOne" v-for="(vC,indexC) in v.choiceList">
 			  	<span class="name choiceSpan" style="font-family: 'Microsoft YaHei'">选项{{indexC+1}}</span>
-			  	<div class="right">
-				  	<input class="nameipt" type="" v-model="vC.choiceIpt" @focus="getFocus(vC,indexC,indexQ)"  name="">
-				  	<span class="errorRed count errorTip" v-show="(fishFlag||choiceFlag)&&vC.choiceIpt.length==0">（请填写问题的选项）</span>
-			  		<span class="count" :class="[((fishFlag||choiceFlag)&&vC.choiceIpt.length==0)?'errorRed':'','count']">{{vC.choiceIpt.length}}/35</span>
+			  	<div style="height:46px;">
+				  	<div :class="[vC.choiceGetColcor?'fontColor':'','right']">
+					  	<input class="nameipt" type="" v-model="vC.choiceIpt" @blur="getBlur(vC)" @focus="getFocus(vC,indexC,indexQ)"  name="">
+					  	<span class="errorRed count errorTip" v-show="(fishFlag||choiceFlag)&&vC.choiceIpt.length==0">（请填写问题的选项）</span>
+				  		<span class="count" :class="[((fishFlag||choiceFlag)&&vC.choiceIpt.length==0)?'errorRed':'','count']">{{vC.choiceIpt.length}}/35</span>
+				  	</div>
+				  	<span class="delchoice" @click="delChoice(indexC,indexQ)" v-if="vC.delCe">删除选项</span>
 			  	</div>
-			  	<span class="delchoice" @click="delChoice(indexC,indexQ)" v-if="vC.delCe">删除选项</span>
 		  	</div>
 		  	<div class="addchoice" @click="addChoice(indexQ)">
 		  		<a href="javascript:;" >＋添加选项</a>
@@ -84,6 +90,7 @@ export default {
   name: 'Questionnaire',
   data () {
     return {
+    	nameGetColor:false,
     	fishFlag:false,
     	choiceFlag:false,
     	value1: new Date(),
@@ -96,7 +103,7 @@ export default {
     	timeDate:[],
     	selecttime:'00时',
     	radio:false,
-    	questionList:[{radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceList:[{delCe:false,choiceIpt:''},{delCe:false,choiceIpt:''},{delCe:false,choiceIpt:''}],delShow:true,mustAddFlag:false}],
+    	questionList:[{titleGetColcor:false,radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceList:[{delCe:false,choiceIpt:'',choiceGetColcor:false},{delCe:false,choiceIpt:'',choiceGetColcor:false},{delCe:false,choiceIpt:'',choiceGetColcor:false}],delShow:true,mustAddFlag:false}],
     	bacStyles:'background:  #F5F5F5 url('+icon+')  no-repeat;background-position:95% 40%;'
     }
   },
@@ -130,12 +137,28 @@ export default {
   	}
   },
   methods:{
+  	titleFocus(v){
+  		v.titleGetColcor = true
+  	},
+  	titleBlur(v){
+  		v.titleGetColcor = false
+  	},
+  	nameGetFocus(){
+  		this.nameGetColor = true
+  	},
+  	nameGetblur(){
+  		this.nameGetColor = false
+  	},
   	getFocus:function(v,index,indexQ){
+  		v.choiceGetColcor = true
   		for(var i=0;i<this.questionList[indexQ].choiceList.length;i++){
   			this.questionList[indexQ].choiceList[i].delCe=false
   		}
   		v.delCe = true
   		this.lastoneC(indexQ)
+  	},
+  	getBlur(v){
+  		v.choiceGetColcor =false
   	},
   	saved:function(){
   		this.fishFlag = true;
@@ -278,6 +301,9 @@ export default {
 				}
 
 				}
+		}
+		.fontColor{
+			border:2px solid #77B5E5;
 		}
 		.bc{
 			background:#fff;
