@@ -40,6 +40,10 @@
           <span class="time twoTime">售点报告编号:</span>
           <input class="nameipt"   v-model="reportNumber" type="" name="">
         </div>
+        <div class="salereport">
+          <span class="time twoTime" style="width:56px;">备注名:</span>
+          <input class="nameipt"   v-model="reportNumber" type="" name="">
+        </div>
       </div>
       <div class="sameBlock">
         <div class="salereport">
@@ -62,30 +66,20 @@
     </div>
     <div class="table">
       <div class="Theaded">
-        <div class="W170 publicCss">时间</div>
-        <div class="W100 publicCss">售点报告编号</div>
-        <div class="W160 publicCss">售点</div>
-        <div class="W100 publicCss">营业所＋线路</div>
-        <div class="W90 publicCss">售点SKU</div>
-        <div class="W90 publicCss">必备SKU</div>
-        <div class="W90 publicCss">重点SKU</div>
-        <div class="W90 publicCss">冰柜纯净度</div>
-        <div class="W90 publicCss">冰柜饱和度</div>
-        <div class="W70 publicCss">场景数</div>
-        <div class="W70 publicCss">状态</div>
+        <div class="W200 publicCss">时间</div>
+        <div class="W140 publicCss">场景报告编号</div>
+        <div class="W300 publicCss">场景</div>
+        <div class="W140 publicCss">图像数量</div>
+        <div class="W200 publicCss">售点</div>
+        <div class="W140 publicCss">营业所＋线路</div>
       </div>
       <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']">
-        <div class="W170 publicCss">2017-12-20  23:49:59</div>
-        <div class="W100 publicCss">99990000222</div>
-        <div class="W160 publicCss">快客便利店(徐汇区店…</div>
-        <div class="W100 publicCss">888999 000</div>
-        <div class="W90 publicCss">19</div>
-        <div class="W90 publicCss">12/20</div>
-        <div class="W90 publicCss">11/23</div>
-        <div class="W90 publicCss">90%</div>
-        <div class="W90 publicCss">11%</div>
-        <div class="W70 publicCss">99</div>
-        <div class="W70 publicCss">进行中</div>
+        <div class="W200 publicCss">2017-12-20  23:49:59</div>
+        <div class="W140 publicCss">99990000222</div>
+        <div class="W300 publicCss">可乐冰柜（备注名）</div>
+        <div class="W140 publicCss">22</div>
+        <div class="W200 publicCss">快客便利店(徐汇区店）</div>
+        <div class="W140 publicCss">888999 000</div>
       </div>
     </div>
   </div>
@@ -282,21 +276,6 @@ export default {
       width:1120px;
       padding-bottom: 200px;
       box-sizing:border-box;
-      .W170{
-        width:170px;
-      }
-      .W100{
-        width:100px;
-      }
-      .W160{
-        width:160px;
-      }
-      .W90{
-        width:90px;
-      }
-      .W70{
-        width:70px;
-      }
       .Theaded{
         overflow:hidden;
         color: #000000;

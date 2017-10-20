@@ -4,8 +4,10 @@ import Login from '@/views/Login'
 import Home from '@/views/Home'
 import Questionnaire from '@/views/Questionnaire'
 import Focusreport from '@/views/Focusreport'
+import Scenereport from '@/views/Scenereport'
 import Distinguishsku from '@/views/Distinguishsku'
 import Mustsku from '@/views/Mustsku'
+import Importsku from '@/views/Importsku'
 import Test from '@/views/Test'
 
 Vue.use(Router)
@@ -38,6 +40,10 @@ export default new Router({
           query: { type: 1 }
         },
         {
+          path: 'scenereport',
+          component: Scenereport
+        },
+        {
           path: 'distinguishsku',
           component: Distinguishsku,
           query: { type: 5 }
@@ -45,6 +51,10 @@ export default new Router({
         {
           path: 'mustsku',
           component: Mustsku
+        },
+        {
+          path: 'importsku',
+          component: Importsku
         }
       ]
     }

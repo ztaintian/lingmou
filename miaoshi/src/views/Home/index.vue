@@ -22,8 +22,8 @@
   			</div>
   		</div>
   		<div class="top" v-else-if="type==1">
-  			<span :class="[activeF?'bgActive':'','forcereport']" @click="fouceRepeot">焦点报告</span>
-  			<span :class="[activeC?'bgActive':'','forcereport','tv']" @click="cenen">场景报告</span>
+  			<span :class="[activeF?'bgActive':'','forcereport']" @click="repeot(1)">焦点报告</span>
+  			<span :class="[activeC?'bgActive':'','forcereport','tv']" @click="repeot(2)">场景报告</span>
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>123456</span>
@@ -82,6 +82,12 @@ export default {
 	  		case '/home/focusrepor':
 	  		this.type = 1
 	  		this.iconShow()
+	  		this.reportStatus(1)
+	  		break;
+	  		case '/home/scenereport':
+	  		this.type = 1
+	  		this.iconShow()
+	  		this.reportStatus(2)
 	  		break;
 	  		case '/home/questionnaire':
 	  		this.type = 4
@@ -96,6 +102,11 @@ export default {
 	  		this.type = 5
 	  		this.iconShow()
 	  		this.skuStatus(2)
+	  		break;
+	  		case '/home/importsku':
+	  		this.type = 5
+	  		this.iconShow()
+	  		this.skuStatus(3)
 	  		break;
 	  		default:
 	  		break;
@@ -117,18 +128,25 @@ export default {
 					this.activeR = false
 					this.activeM = false
 					this.activeI = true
+					this.$router.push('/home/importsku')
 			}
   	},
   	Sku(num){
   		this.skuStatus(num)
   	},
-  	fouceRepeot(){
-  		this.activeF = true
-  		this.activeC = false
+  	reportStatus(num){
+  		if(num === 1){
+	  		this.activeF = true
+	  		this.activeC = false
+	  		this.$router.push('/home/focusreport')
+  		}else{
+	  		this.activeF = false
+	  		this.activeC = true
+	  		this.$router.push('/home/scenereport')
+  		}
   	},
-  	cenen(){
-  		this.activeF = false
-  		this.activeC = true
+  	repeot(num){
+  		this.reportStatus(num)
   	},
   	iconShow(){
   		for(var i=0;i<this.imgurlicon.length;i++){
@@ -138,10 +156,12 @@ export default {
   	},
   	iconClikc(index){
   		this.type = index
+  		this.iconShow()
   		if(index === 4){
   			this.$router.push('/home/questionnaire')
   		}else if(index === 1){
   			this.$router.push('/home/focusreport')
+  			this.reportStatus(1)
   		}else if(index === 5){
   			this.$router.push('/home/distinguishsku')
   			this.skuStatus(1)

@@ -6,16 +6,16 @@
         <div class="W120 publicCss">图片</div>
         <div class="W360 publicCss">sku名</div>
         <div class="W200 publicCss">父品牌</div>
-        <div class="W120 publicCss">必备</div>
-        <div class="W120 publicCss">重点</div>
+        <div class="W120 publicCss">状态</div>
+        <div class="W120 publicCss"></div>
       </div>
       <div v-for="(v,index) in tableList" class="tablelist">
         <div class="W200 publicCss">9990000</div>
         <div class="W120 publicCss"><img  class="img" src="" alt=""></div>
         <div class="W360 publicCss">可口可乐330ml罐装</div>
         <div class="W200 publicCss">可口可乐</div>
-        <div class="W120 publicCss"><img class="imgHook" :src="hookUrl" alt=""></div>
-        <div class="W120 publicCss"><img class="imgHook" :src="hookUrl" alt=""></div>
+        <div class="W120 publicCss">生效中</div>
+        <div class="W120 publicCss" style="cursor: pointer;color:#2D78B3;">编辑</div>
       </div>
     </div>
     <div class="pagination">
@@ -34,6 +34,7 @@ import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
 import ic_next from '@/assets/ic_next_normal@1x.png'
 import pic_next from '@/assets/ic_pre_normal@1x.png'
 import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
+
 export default {
   name: 'Distinguishsku',
   data () {
@@ -43,7 +44,7 @@ export default {
       pnextUrl:pic_next,
       pnextUrlA:pic_nextActive,
       hookUrl:hookicon,
-      tableList:[{showBc:false},{showBc:false},{showBc:false},{showBc:false}]
+      tableList:[{showBc:false},{showBc:false},{showBc:false}]
     }
   },
   methods:{
@@ -64,15 +65,6 @@ export default {
       width:1120px;
       padding-bottom: 200px;
       box-sizing:border-box;
-      .W360{
-        width:360px;
-      }
-      .W200{
-        width:200px;
-      }
-      .W120{
-        width:120px;
-      }
       .Theaded{
         overflow:hidden;
         color: #000000;
@@ -100,53 +92,6 @@ export default {
         height:36px;
         vertical-align: middle;
         background:red;
-      }
-      .imgHook{
-        vertical-align: middle;
-        width:24px;
-        height:24px;
-      }
-    }
-    .tablelistBc{
-      background: #F5F5F5;
-    }
-    .pagination{
-      float: right;
-      margin-bottom: 30px;
-      margin-right: 60px;
-      .totle{
-        font-size: 14px;
-        color: #8C8C8C;
-        margin-right: 20px;
-      }
-      .img{
-        vertical-align: middle;
-        cursor: pointer;
-      }
-      .num{
-        margin:0 5px 0 8px;
-      }
-      input{
-        background: #F5F5F5;
-        border: 1px solid #E0E0E0;
-        border-radius: 4px;
-        width:56px;
-        height:20px;
-        margin-right: 8px;
-      }
-      .jump{
-        font-size: 14px;
-        color: #333333;
-        background: #F5F5F5;
-        display: inline-block;
-        width:40px;
-        height:24px;
-        line-height: 24px;
-        border-radius: 4px;
-        text-align: center;
-        cursor:pointer;
-        font-size: 14px;
-        color:#333;
       }
     }
   }

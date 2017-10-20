@@ -11,3 +11,75 @@
 		margin:0;
 		padding:0;
 	}
+	.pagination{
+    float: right;
+    margin-bottom: 30px;
+    margin-right: 60px;
+    .totle{
+      font-size: 14px;
+      color: #8C8C8C;
+      margin-right: 20px;
+    }
+    .img{
+      vertical-align: middle;
+      cursor: pointer;
+    }
+    .num{
+      margin:0 5px 0 8px;
+    }
+    input{
+      background: #F5F5F5;
+      border: 1px solid #E0E0E0;
+      border-radius: 4px;
+      width:56px;
+      height:20px;
+      margin-right: 8px;
+    }
+    .jump{
+      font-size: 14px;
+      color: #333333;
+      background: #F5F5F5;
+      display: inline-block;
+      width:40px;
+      height:24px;
+      line-height: 24px;
+      border-radius: 4px;
+      text-align: center;
+      cursor:pointer;
+      font-size: 14px;
+      color:#333;
+    }
+  }
+  .W170{
+    width:170px;
+  }
+  .W100{
+    width:100px;
+  }
+  .W160{
+    width:160px;
+  }
+  .W90{
+    width:90px;
+  }
+  .W70{
+    width:70px;
+  }
+  .W360{
+    width:360px;
+  }
+  .W200{
+    width:200px;
+  }
+  .W140{
+    width:140px;
+  }
+  .W120{
+    width:120px;
+  }
+  .W300{
+    width:300px;
+  }
+  .W56{
+    width:56px;
+  }

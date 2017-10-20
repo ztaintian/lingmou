@@ -18,15 +18,31 @@
         <div class="W120 publicCss" style="cursor: pointer;color:#2D78B3;">删除</div>
       </div>
     </div>
+    <div class="pagination">
+      <span class="totle">共190条，每页20条</span>
+      <img class="img" :src="pnextUrl" alt=""><span class="num">2/20</span>
+      <img class="img" :src="nextUrl" alt="">
+      <input type="" name="">
+      <span class="jump">跳转</span>
+    </div>
   </div>
 </template>
 
 <script>
 import hookicon from '@/assets/ic_yes@1x.png'
+import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
+import ic_next from '@/assets/ic_next_normal@1x.png'
+import pic_next from '@/assets/ic_pre_normal@1x.png'
+import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
+
 export default {
   name: 'Distinguishsku',
   data () {
     return {
+      nextUrl:ic_next,
+      nextUrlA:ic_nextActive,
+      pnextUrl:pic_next,
+      pnextUrlA:pic_nextActive,
       hookUrl:hookicon,
       tableList:[{showBc:false},{showBc:false},{showBc:false}]
     }
@@ -49,15 +65,6 @@ export default {
       width:1120px;
       padding-bottom: 200px;
       box-sizing:border-box;
-      .W360{
-        width:360px;
-      }
-      .W200{
-        width:200px;
-      }
-      .W120{
-        width:120px;
-      }
       .Theaded{
         overflow:hidden;
         color: #000000;
@@ -85,11 +92,6 @@ export default {
         height:36px;
         vertical-align: middle;
         background:red;
-      }
-    }
-    .W120 .publicCss .del{
-      span{
-       
       }
     }
   }
