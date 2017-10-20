@@ -29,6 +29,15 @@
   				<span>123456</span>
   			</div>
   		</div>
+  		<div class="top" v-else-if="type==5">
+  			<span :class="[activeR?'bgActive':'','forcereport']" @click="Sku(1)">可识别sku</span>
+  			<span :class="[activeM?'bgActive':'','forcereport','tv']" @click="Sku(2)">必备sku</span>
+  			<span :class="[activeI?'bgActive':'','forcereport','tv']" @click="Sku(3)">重点sku</span>
+  			<div class="use">
+  				<img :src="useimg" alt="">
+  				<span>123456</span>
+  			</div>
+  		</div>
   		<div class="centerLine"></div>
   		<div class="routerchild">
 	  		<router-view/>
@@ -54,26 +63,65 @@ export default {
     	type:1,
     	activeF:true,
     	activeC:false,
+    	activeR:true,
+    	activeM:false,
+    	activeI:false,
     	imgurl:logo,
+    	topStatus:Number,
     	useimg:useimg,
     	imgurlicon:[{icon:icon1,text:'概况',iconShow:false},{icon:icon2,text:'报告',iconShow:true},{icon:icon3,text:'数据',iconShow:false},{icon:icon4,text:'售点',iconShow:false},{icon:icon5,text:'场景',iconShow:false},{icon:icon6,text:'SKU',iconShow:false},{icon:icon7,text:'设置',iconShow:false}],
     }
   },
   mounted(){
-  	console.log(this.$router.currentRoute.path)
-  	switch (this.$router.currentRoute.path){
-  		case '/home/focusrepor':
-  		this.type = 1
-  		break;
-  		case '/home/questionnaire':
-  		this.type = 4
-  		break;
-  		default:
-  		break;
-  	}
-  	this.iconClikc(this.type)
+  	this.nowRoute()
   },
   methods:{
+  	nowRoute(){
+  		console.log(this.$router.currentRoute)
+	  	switch (this.$router.currentRoute.path){
+	  		case '/home/focusrepor':
+	  		this.type = 1
+	  		this.iconShow()
+	  		break;
+	  		case '/home/questionnaire':
+	  		this.type = 4
+	  		this.iconShow()
+	  		break;
+	  		case '/home/distinguishsku':
+	  		this.type = 5
+	  		this.iconShow()
+	  		this.skuStatus(1)
+	  		break;
+	  		case '/home/mustsku':
+	  		this.type = 5
+	  		this.iconShow()
+	  		this.skuStatus(2)
+	  		break;
+	  		default:
+	  		break;
+	  	}
+  	},
+  	skuStatus(num){
+  		this.topStatus = num
+			if(num === 1){
+					this.activeR = true
+					this.activeM = false
+					this.activeI = false
+					this.$router.push('/home/distinguishsku')
+			}else if(num === 2){
+					this.activeR = false
+					this.activeM = true
+					this.activeI = false
+					this.$router.push('/home/mustsku')
+			}else{
+					this.activeR = false
+					this.activeM = false
+					this.activeI = true
+			}
+  	},
+  	Sku(num){
+  		this.skuStatus(num)
+  	},
   	fouceRepeot(){
   		this.activeF = true
   		this.activeC = false
@@ -82,16 +130,21 @@ export default {
   		this.activeF = false
   		this.activeC = true
   	},
-  	iconClikc(index){
-  		this.type = index
+  	iconShow(){
   		for(var i=0;i<this.imgurlicon.length;i++){
   			this.imgurlicon[i].iconShow = false
   		}
   		this.imgurlicon[this.type].iconShow = true
+  	},
+  	iconClikc(index){
+  		this.type = index
   		if(index === 4){
-  			this.$router.push({path:'/home/questionnaire', params: { type: index }})
+  			this.$router.push('/home/questionnaire')
   		}else if(index === 1){
-  			this.$router.push({ path:'/home/focusreport', params: { type: index }})
+  			this.$router.push('/home/focusreport')
+  		}else if(index === 5){
+  			this.$router.push('/home/distinguishsku')
+  			this.skuStatus(1)
   		}
   	}
   }
