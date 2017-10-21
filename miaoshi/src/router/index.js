@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/views/Login'
 import Home from '@/views/Home'
 import Questionnaire from '@/views/Questionnaire'
+import Scenemanagement from '@/views/Scenemanagement'
 import Focusreport from '@/views/Focusreport'
 import Scenereport from '@/views/Scenereport'
 import Distinguishsku from '@/views/Distinguishsku'
@@ -70,6 +71,10 @@ export default new Router({
         {
           path: 'sellpoint',
           component: Sellpoint
+        },
+        {
+          path: 'scenemanagement',
+          component: Scenemanagement
         }
       ]
     }

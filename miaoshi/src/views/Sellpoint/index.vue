@@ -1,6 +1,6 @@
 <template>
   <div class="sellpoint">
-    <div class="export">
+    <div class="export" @click="exportFile">
       <img :src="exportUrl" alt="">
       <span>导入并更新所有售点</span>
     </div>
@@ -35,6 +35,35 @@
       <input type="" name="">
       <span class="jump">跳转</span>
     </div>
+    <div class="messagebox" v-if="boxShow">
+      <div class="messagecont">
+        <div class="addGY">
+          上传文件
+        </div>
+        <div class="upFile">
+          <input type="file" name=""  style="width:100%;height:100%;" placeholder="用户名">
+        </div>
+        <div class="tip">
+          最大支持 1 MB CSV的文件。
+        </div>
+        <div class="p">导入的文件数据需要同模板文件保持一致。<span>下载模版</span></div>
+        <div class="p">导入后将会覆盖原先的售点数据。售点数据全部来源于新文件。</div>
+        <div class="p">导入售点后需要一段时间同步售点信息，之后才会出现，请耐心等待。</div>
+       <!--  <el-upload
+          class="upload-demo upFile"
+          ref="upload"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :on-preview="handlePreview"
+          :file-list="fileList"
+          :auto-upload="false">
+          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload> -->
+        <div @click="addsuccess" :class="[bntIf?'bntlast':'bnt','addPublic']">
+          确定上传
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -50,6 +79,8 @@ export default {
   name: 'Sellpoint',
   data () {
     return {
+      bntIf:false,
+      boxShow:false,
       nextUrl:ic_next,
       nextUrlA:ic_nextActive,
       pnextUrl:pic_next,
@@ -60,6 +91,15 @@ export default {
     }
   },
   methods:{
+    exportFile(){
+      this.boxShow = true
+       document.body.style.overflow='hidden';
+       document.body.style.height='100%';
+    },
+    addsuccess(){
+      this.boxShow = false
+      document.body.style.overflow='scroll';
+    }
   }
 }
 </script>
@@ -72,7 +112,83 @@ export default {
     background: #FFFFFF;
     border-radius: 4px;
     font-size: 14px;
+    .messagebox{
+      position: absolute;
+      top:0;
+      left:0;
+      height:100%;
+      z-index: 9999;
+      background: rgba(0,0,0,0.40);
+      width:100%;
+      .messagecont{
+        overflow:hidden;
+        position:absolute;
+        top:50%;
+        margin-top:-162px;
+        left:50%;
+        margin-left: -260px;
+        .p{
+          height:20px;
+          line-height:20px;
+          font-size: 14px;
+          color: #333333;
+          margin-left: 40px;
+          margin-bottom: 4px;
+          span{
+            color: #2D78B3;
+            cursor:pointer;
+          }
+        }
+        .tip{
+          font-size: 14px;
+          color: #8C8C8C;
+          margin:10px 0 20px 40px;
+        }
+        .addGY{
+          font-family: MicrosoftYaHei;
+          margin:0 auto;
+          width:102px;
+          height:26px;
+          line-height:26px;
+          margin-top:26px;
+          font-size: 20px;
+          color: #000000;
+          font-weight:bold;
+        }
+        .addPublic{
+          background: #C1C7CC;
+          border-radius: 4px;
+          width:100px;
+          height:30px;
+          margin:0 auto;
+          margin-top:30px;
+          text-align: center;
+          line-height:30px;
+          color:#FFFFFF;
+        }
+        .bntlast{
+          background:#324656;
+          cursor:pointer;
+        }
+        .upFile{
+          margin:0 auto;
+          width:440px;
+          height:40px;
+          border: 1px dotted #C4C4C4;
+          border-radius: 4px;
+          input{
+            width:100%;
+            height:100%;
+          }
+        }
+        background:#fff;
+        border-radius: 4px;
+        height:324px;
+        width:520px;
+      }
+    }
     .export{
+      cursor: pointer;
       margin:24px 0 20px 30px;
       height:24px;
       img{
