@@ -73,7 +73,7 @@
         <div class="W200 publicCss">售点</div>
         <div class="W140 publicCss">营业所＋线路</div>
       </div>
-      <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']">
+      <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" @click="freezerdetails(v)" :class="[v.showBc?'tablelistBc':'','tablelist']">
         <div class="W200 publicCss">2017-12-20  23:49:59</div>
         <div class="W140 publicCss">99990000222</div>
         <div class="W300 publicCss">可乐冰柜（备注名）</div>
@@ -111,6 +111,9 @@ export default {
     }
   },
   methods:{
+    freezerdetails(){
+      this.$router.push('/home/freezerdetails')
+    },
     enter(v,index){
       for(var i=0;i<this.tableList.length;i++){
         this.tableList[i].showBc = false

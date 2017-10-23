@@ -13,6 +13,7 @@ import Administratorsettings from '@/views/Administratorsettings'
 import Usermanagement from '@/views/Usermanagement'
 import Sellpoint from '@/views/Sellpoint'
 import Freezerdetails from '@/views/Freezerdetails'
+import Pointofsaledetails from '@/views/Pointofsaledetails'
 import Test from '@/views/Test'
 
 Vue.use(Router)
@@ -80,6 +81,10 @@ export default new Router({
         {
           path: 'freezerdetails',
           component: Freezerdetails
+        },
+        {
+          path: 'pointofsaledetails',
+          component: Pointofsaledetails
         }
       ]
     }

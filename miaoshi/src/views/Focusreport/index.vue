@@ -74,7 +74,7 @@
         <div class="W70 publicCss">场景数</div>
         <div class="W70 publicCss">状态</div>
       </div>
-      <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']" @click="freezerdetails(v)">
+      <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']" @click="pointofsaledetails(v)" >
         <div class="W170 publicCss">2017-12-20  23:49:59</div>
         <div class="W100 publicCss">99990000222</div>
         <div class="W160 publicCss">快客便利店(徐汇区店…</div>
@@ -117,8 +117,8 @@ export default {
     }
   },
   methods:{
-    freezerdetails(){
-      this.$router.push('/home/freezerdetails')
+    pointofsaledetails(v){
+      this.$router.push('/home/pointofsaledetails')
     },
     enter(v,index){
       for(var i=0;i<this.tableList.length;i++){
