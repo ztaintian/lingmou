@@ -42,11 +42,11 @@
         </div>
         <div class="upFile">
           <a style="text-align: center;display: inline-block;width:100%;height:100%;position: relative;">
-            <input type="file" name="" style="position: absolute;width:100%;height:100%;opacity: 0;" placeholder="用户名"><span style="line-height:30px;display:inline-block;height:30px;color: #2D78B3;">选择文件</span>
+            <input type="file" @change="getFile" name=""  accept="application/vnd.ms-excel" style="left: 0;position: absolute;width:100%;height:100%;opacity: 0;" placeholder="用户名"><span style="line-height:30px;display:inline-block;height:30px;color: #2D78B3;">选择文件</span>
           </a>
         </div>
         <div class="tip">
-          最大支持 1 MB CSV的文件。
+          最大支持 3 MB XLS的文件。
         </div>
         <div class="p">导入的文件数据需要同模板文件保持一致。<span>下载模版</span></div>
         <div class="p">导入后将会覆盖原先的售点数据。售点数据全部来源于新文件。</div>
@@ -93,6 +93,9 @@ export default {
     }
   },
   methods:{
+    getFile(e){
+      console.log(e.target.files)
+    },
     exportFile(){
       this.boxShow = true
        document.body.style.overflow='hidden';

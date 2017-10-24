@@ -169,8 +169,9 @@ export default {
   		}
   	},
   	lastoneC:function(indexQ){
-  		if(this.questionList[indexQ].choiceList.length === 1){
+  		if(this.questionList[indexQ].choiceList.length <= 2){
   			this.questionList[indexQ].choiceList[0].delCe = false
+  			this.questionList[indexQ].choiceList[1].delCe = false
   		}
   	},
   	radioQus:function(index,num,bb){
@@ -196,9 +197,12 @@ export default {
   		}
   		for(var i=0;i<questionList.choiceList.length;i++){
   			if(questionList.title==null||questionList.title==''||questionList.title==undefined||questionList.choiceList[i].choiceIpt == '' || questionList.choiceList[i].choiceIpt==null||questionList.choiceList[i].choiceIpt == undefined){
-  				questionList.mustAddFlag = true
+  				 this.questionList[i].mustAddFlag = true
   				return
   			}
+  		}
+  		for(var k=0;k<this.questionList.length;k++){
+  			this.questionList[k].show = false
   		}
 			this.fishFlag = false
 			this.choiceFlag = false
@@ -218,7 +222,10 @@ export default {
   		this.lastoneC(indexQ)
   	},
   	show:function(v){
-  		v.show = !v.show
+			for(var i =0;i<this.questionList.length;i++){
+				this.questionList[i].show = false
+			}
+			v.show = !v.show
   	},
   	delQuestion:function(index){
   		this.questionList.splice(index,1)
