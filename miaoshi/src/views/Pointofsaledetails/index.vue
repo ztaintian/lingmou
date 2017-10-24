@@ -93,6 +93,7 @@
             <img :src="iconFlag?iconUrlA:iconUrl" @click="changeImg" alt="">
           </div>
           <span>显示全部</span>
+          <span class="">识别图片</span>
         </div>
         <div class="tree">
           <div class="left">
@@ -373,6 +374,14 @@ export default {
             color: #000000;
             float: left;
             font-weight: bold;
+          }
+          span:nth-of-type(3){
+            font-family: 'PingFangSC-Medium';
+            font-size: 16px;
+            color: #000000;
+            float: left;
+            font-weight: bold;
+            margin-left:30px;
           }
           .img{
             margin-left:44px;

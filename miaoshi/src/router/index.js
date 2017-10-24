@@ -14,6 +14,7 @@ import Usermanagement from '@/views/Usermanagement'
 import Sellpoint from '@/views/Sellpoint'
 import Freezerdetails from '@/views/Freezerdetails'
 import Pointofsaledetails from '@/views/Pointofsaledetails'
+import Questionnairedetails from '@/views/Questionnairedetails'
 import Test from '@/views/Test'
 
 Vue.use(Router)
@@ -85,6 +86,10 @@ export default new Router({
         {
           path: 'pointofsaledetails',
           component: Pointofsaledetails
+        },
+        {
+          path: 'questionnairedetails',
+          component: Questionnairedetails
         }
       ]
     }
