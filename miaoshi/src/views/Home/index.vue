@@ -18,7 +18,8 @@
   			<span>场景管理</span>
   			<div class="use">
   				<img :src="useimg" alt="">
-  				<span>123456</span>
+  				<span>{{useName}}</span>
+  				<span>退出</span>
   			</div>
   		</div>
   		<div class="top" v-else-if="type==1">
@@ -26,7 +27,8 @@
   			<span :class="[activeC?'bgActive':'','forcereport','tv']" @click="repeot(2)">场景报告</span>
   			<div class="use">
   				<img :src="useimg" alt="">
-  				<span>123456</span>
+  				<span>{{useName}}</span>
+  				<span>退出</span>
   			</div>
   		</div>
   		<div class="top" v-else-if="type==5">
@@ -35,7 +37,8 @@
   			<span :class="[activeI?'bgActive':'','forcereport','tv']" @click="Sku(3)">重点sku</span>
   			<div class="use">
   				<img :src="useimg" alt="">
-  				<span>123456</span>
+  				<span>{{useName}}</span>
+  				<span>退出</span>
   			</div>
   		</div>
   		<div class="top" v-else-if="type==6">
@@ -43,14 +46,16 @@
   			<span :class="[activeUS?'bgActive':'','forcereport','tv']" @click="admin(2)">用户管理</span>
   			<div class="use">
   				<img :src="useimg" alt="">
-  				<span>123456</span>
+  				<span>{{useName}}</span>
+  				<span>退出</span>
   			</div>
   		</div>
   		<div class="top" v-else-if="type==3">
   			<span class="forcereport">售点设置</span>
   			<div class="use">
   				<img :src="useimg" alt="">
-  				<span>123456</span>
+  				<span>{{useName}}</span>
+  				<span>退出</span>
   			</div>
   		</div>
   		<div class="centerLine"></div>
@@ -86,6 +91,7 @@ export default {
     	imgurl:logo,
     	topStatus:Number,
     	useimg:useimg,
+    	useName:'1234556770000000',
     	imgurlicon:[{icon:icon1,text:'概况',iconShow:false},{icon:icon2,text:'报告',iconShow:true},{icon:icon3,text:'数据',iconShow:false},{icon:icon4,text:'售点',iconShow:false},{icon:icon5,text:'场景',iconShow:false},{icon:icon6,text:'SKU',iconShow:false},{icon:icon7,text:'设置',iconShow:false}],
     }
   },
@@ -363,6 +369,7 @@ export default {
 			@media only screen and (max-width:600px) {
 				.use{
 					margin-right:40%;
+					display:none;
 				}
 			}
 			.use{
@@ -377,6 +384,11 @@ export default {
 					margin-left:10px;
 					color:#4D4D4D;
 					font-size:14px;
+				}
+				span:nth-of-type(2){
+					font-size: 14px;
+					margin-left:20px;
+					color: #D61E2A;
 				}
 			}
 		}

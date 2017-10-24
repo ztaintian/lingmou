@@ -118,7 +118,8 @@ export default {
   },
   methods:{
     pointofsaledetails(v){
-      this.$router.push('/home/pointofsaledetails')
+      var aa =11
+      this.$router.push(`/home/pointofsaledetails?aa=${aa}`)
     },
     enter(v,index){
       for(var i=0;i<this.tableList.length;i++){

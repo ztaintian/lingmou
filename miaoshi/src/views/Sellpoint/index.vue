@@ -41,7 +41,9 @@
           上传文件
         </div>
         <div class="upFile">
-          <input type="file" name=""  style="width:100%;height:100%;" placeholder="用户名">
+          <a style="text-align: center;display: inline-block;width:100%;height:100%;position: relative;">
+            <input type="file" name="" style="position: absolute;width:100%;height:100%;opacity: 0;" placeholder="用户名"><span style="line-height:30px;display:inline-block;height:30px;color: #2D78B3;">选择文件</span>
+          </a>
         </div>
         <div class="tip">
           最大支持 1 MB CSV的文件。
@@ -151,6 +153,7 @@ export default {
           height:26px;
           line-height:26px;
           margin-top:26px;
+          margin-bottom:30px;
           font-size: 20px;
           color: #000000;
           font-weight:bold;
@@ -173,7 +176,7 @@ export default {
         .upFile{
           margin:0 auto;
           width:440px;
-          height:40px;
+          height:30px;
           border: 1px dotted #C4C4C4;
           border-radius: 4px;
           input{

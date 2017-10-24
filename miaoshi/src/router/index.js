@@ -38,57 +38,70 @@ export default new Router({
        children: [
         {
           path: 'questionnaire',
+          name: 'questionnaire',
           component: Questionnaire,
           query: { type: 4 }
         },
         {
           path: 'focusreport',
+          name: 'focusreport',
           component: Focusreport,
           query: { type: 1 }
         },
         {
           path: 'scenereport',
+          name: 'scenereport',
           component: Scenereport
         },
         {
           path: 'distinguishsku',
+          name: 'distinguishsku',
           component: Distinguishsku,
           query: { type: 5 }
         },
         {
           path: 'mustsku',
+          name: 'mustsku',
           component: Mustsku
         },
         {
           path: 'importsku',
+          name: 'importsku',
           component: Importsku
         },
         {
           path: 'usermanagement',
+          name: 'usermanagement',
           component: Usermanagement
         },
         {
           path: 'administratorsettings',
+          name: 'administratorsettings',
           component: Administratorsettings
         },
         {
           path: 'sellpoint',
+          name: 'sellpoint',
           component: Sellpoint
         },
         {
           path: 'scenemanagement',
+          name: 'scenemanagement',
           component: Scenemanagement
         },
         {
           path: 'freezerdetails',
+          name: 'freezerdetails',
           component: Freezerdetails
         },
         {
           path: 'pointofsaledetails',
+          name: 'pointofsaledetails',
           component: Pointofsaledetails
         },
         {
           path: 'questionnairedetails',
+          name: 'questionnairedetails',
           component: Questionnairedetails
         }
       ]
