@@ -163,6 +163,38 @@ export default {
         }]
       },{
         title:'美汁源',
+        childShow:false,
+        childrenList:[{
+          children1:'果粒奶优300ml',childrenShow:false,childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
+        },{
+          children1:'果粒奶优400ml',childrenShow:false
+        }]
+      },{
+        title:'美汁源',
+        childShow:false,
+        childrenList:[{
+          children1:'果粒奶优300ml',childrenShow:false,childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
+        },{
+          children1:'果粒奶优400ml',childrenShow:false
+        }]
+      },{
+        title:'美汁源',
+        childShow:false,
+        childrenList:[{
+          children1:'果粒奶优300ml',childrenShow:false,childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
+        },{
+          children1:'果粒奶优400ml',childrenShow:false
+        }]
+      },{
+        title:'美汁源',
+        childShow:false,
+        childrenList:[{
+          children1:'果粒奶优300ml',childrenShow:false,childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
+        },{
+          children1:'果粒奶优400ml',childrenShow:false
+        }]
+      },{
+        title:'美汁源',
         childShow:false
       },{
         title:'美汁源',
@@ -357,6 +389,14 @@ export default {
         }
         .tree{
           overflow: hidden;
+          .left::-webkit-scrollbar{
+            width: 4px;
+            background-color: #fff;
+          }
+          .left::-webkit-scrollbar-thumb{
+            background:#ccc;
+            border-radius: 3px;
+          }
           .left{
             float: left;
             overflow-y: scroll;

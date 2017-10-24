@@ -105,6 +105,12 @@ export default {
 	  		this.iconShow()
 	  		this.reportStatus(2)
 	  		break;
+	  		case '/home/freezerdetails':
+	  		this.type = 1
+	  		this.iconShow()
+	  		this.activeF = false
+	  		this.activeC = true
+	  		break;
 	  		case '/home/questionnaire':
 	  		this.type = 4
 	  		this.iconShow()
