@@ -12,7 +12,7 @@ axios.post('/apis/image/list', {}).then(function (response) {
     console.log(response);
 }).catch(function (error) {
     console.log(error);
-  });
+});
 Vue.use(ElementUI)
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

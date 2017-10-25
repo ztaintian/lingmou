@@ -17,11 +17,42 @@
         <div class="W200 publicCss">2017-12-12  19:02:34</div>
         <div class="W200 publicCss">2017-12-12  19:02:34</div>
         <div class="W200 publicCss">已修改</div>
-        <div class="W120 publicCss">启用</div>
-        <div class="W240 publicCss operation">
+        <div class="W120 publicCss">已启用</div>
+        <div class="W240 publicCss operation" style="position:relative;">
           <div class="secrit" @click="passwordInit(v)">密码初始化</div>
-          <div @click="open(v)">禁用</div>
+          <div v-if="v.tipShow" class="messageBox ml76">
+              <div class="count">
+                账号：789334 106
+              </div>
+              <div class="decrite">
+                确定对该账号进行密码初始化？
+              </div>
+            <div @click="confimSecrit(v)" class="btnAA btnAAS">
+               确定
+            </div>
+            <div @click="canlve(v)" class="btnAA btnAAC">
+               取消
+            </div>
+          </div>
+          <div class="secrit" @click="Disable(v)">
+            禁用
+          </div>
+          <div v-if="v.openShow" class="messageBox">
+            <div class="count">
+              账号：789334 106
+            </div>
+            <div class="decrite">
+              确定对该账号进行密码初始化？
+            </div>
+            <div @click="confimOpen(v)" class="btnAA btnAAS">
+               确定
+            </div>
+            <div @click="canlve(v)" class="btnAA btnAAC">
+               取消
+            </div>
+          </div>
         </div>
+        <div style="clear: both;"></div>
       </div>
     </div>
     <div class="pagination">
@@ -30,42 +61,6 @@
       <img class="img" :src="nextUrl" alt="">
       <input type="" name="">
       <span class="jump">跳转</span>
-    </div>
-    <div class="messagebox" v-if="editBoxShow">
-      <div class="messagecont">
-        <div class="count">
-          账号：789334 106
-        </div>
-        <div class="decrite">
-          确定对该账号进行密码初始化？
-        </div>
-        <span>
-          <div @click="confim" class="btnAA btnAAS">
-             确定
-          </div>
-          <div @click="canlve" class="btnAA btnAAC">
-             取消
-          </div>
-        </span>
-      </div>
-    </div>
-    <div class="messagebox" v-if="BoxShow">
-      <div class="messagecont">
-        <div class="count">
-          账号：789334 106
-        </div>
-        <div class="decrite">
-         确定重新启用该帐号？
-        </div>
-        <span>
-          <div @click="confimOpen" class="btnAA btnAAS">
-             确定
-          </div>
-          <div @click="canlve" class="btnAA btnAAC">
-             取消
-          </div>
-        </span>
-      </div>
     </div>
   </div>
 </template>
@@ -89,34 +84,35 @@ export default {
       editBoxShow:false,
       BoxShow:false,
       countent:'',
-      tableList:[{showBc:false},{showBc:false},{showBc:false}]
+      tableList:[{showBc:false,tipShow:false,openShow:false},{showBc:false,tipShow:false,openShow:false},{showBc:false,tipShow:false,openShow:false}]
     }
   },
   methods:{
-    open(){
-      this.BoxShow = true
+    allHidden(){
+      for(var i=0;i<this.tableList.length;i++){
+        this.tableList[i].tipShow = false
+        this.tableList[i].openShow = false
+      }
+    },
+    Disable(v){
+      this.allHidden()
+      v.openShow = true
     },
     confim(){
-      this.editBoxShow = false
     },
-    canlve(){
-      this.editBoxShow = false
-      this.BoxShow = false
-      document.body.style.overflow='scroll';
-      document.body.style.height='100%';
+    canlve(v){
+      v.tipShow = false
+      v.openShow = false
     },
-    open(v){
-      this.BoxShow = true
-      document.body.style.overflow='hidden';
-      document.body.style.height='100%';
+    confimSecrit(v){
+      v.tipShow = false
     },
-    confimOpen(){
-      this.BoxShow = false
+    confimOpen(v){
+      v.openShow = false
     },
     passwordInit(v){
-      this.editBoxShow = true
-      document.body.style.overflow='hidden';
-      document.body.style.height='100%';
+      this.allHidden()
+      v.tipShow = true
     }
   }
 }
@@ -130,65 +126,6 @@ export default {
     background: #FFFFFF;
     border-radius: 4px;
     font-size: 14px;
-    .messagebox{
-      position: absolute;
-      top:0;
-      left:0;
-      height:100%;
-      z-index: 9999;
-      background: rgba(0,0,0,0.40);
-      width:100%;
-      .messagecont{
-        overflow:hidden;
-        position:absolute;
-        top:50%;
-        margin-top:-100px;
-        left:50%;
-        margin-left: -200px;
-        background:#fff;
-        border-radius: 4px;
-        height:200px;
-        width:400px;
-        text-align: center;
-        span{
-          overflow: hidden;
-          display: inline-block;
-        }
-        .count{
-          margin-top: 50px;
-          font-family: "Microsoft YaHei";
-          font-size: 14px;
-          color: #000000;
-          font-weight:bold;
-        }
-        .decrite{
-           margin-top: 20px;
-          font-weight:bold;
-        }
-        .btnAA{
-          float: left;
-          width:80px;
-          height:30px;
-          margin-top:30px;
-          line-height: 30px;
-        }
-        .btnAAS{
-          background: #2D78B3;
-          border-radius: 4px;
-          margin-right:20px;
-          border: 1px solid #E0E0E0;
-          font-size: 14px;
-          color: #FFFFFF;
-        }
-        .btnAAC{
-          background: #F5F5F5;
-          border: 1px solid #E0E0E0;
-          border-radius: 4px;
-          font-size: 14px;
-          color: #333333;
-        }
-      }
-    }
     .adminset{
       font-family:"Microsoft YaHei";
       font-weight: bold;
@@ -223,9 +160,24 @@ export default {
       }
     }
     .tablelist{
-      overflow: hidden;
       border-bottom: 1px solid #E0E0E0;
-       position:relative;
+      position:relative;
+      .messageBox{
+        position:absolute;
+        z-index:777;
+        width:280px;
+        height:145px;
+        background:#000;
+        background: #FFFFFF;
+        border: 1px solid #E0E0E0;
+        box-shadow: 0 4px 12px 0 rgba(0,0,0,0.12);
+        border-radius: 4px;top:30px;
+        right:20px;
+        text-align: center;
+      }
+      .ml76{
+        right:76px;
+      }
       .img{
         width:36px;
         height:36px;
@@ -234,12 +186,49 @@ export default {
       }
       .operation{
         text-align: right;
-        div{
+        .secrit{
           display:inline-block;
           cursor: pointer;
           color:#2D78B3;
           margin-right: 22px;
-         
+        }
+        .count{
+          font-family: "Microsoft YaHei";
+          font-size: 14px;
+          color: #000000;
+          font-weight:bold;
+          margin:20px 0 0 0;
+          line-height:20px;
+        }
+        .decrite{
+          font-weight:bold;
+          font-size: 14px;
+          color: #000000;
+        }
+        .btnAA{
+          float: left;
+          width:80px;
+          height:30px;
+          text-align: center;
+          line-height: 30px;
+          margin-top:10px;
+          cursor:pointer;
+        }
+        .btnAAS{
+          background: #2D78B3;
+          border-radius: 4px;
+          margin-right:10px;
+          margin-left:50px;
+          border: 1px solid #E0E0E0;
+          font-size: 14px;
+          color: #FFFFFF;
+        }
+        .btnAAC{
+          background: #F5F5F5;
+          border: 1px solid #E0E0E0;
+          border-radius: 4px;
+          font-size: 14px;
+          color: #333333;
         }
         .tipBox{
           position: absolute;
