@@ -32,6 +32,7 @@
     </div>
     <div class="top">
       <span class="tit">问卷场景</span><span class="tip">业代可添加进行中的问卷</span>
+      <span class="newQ" @click="newQuestion">新建问卷</span>
     </div>
     <div class="table">
       <div class="Theaded">
@@ -83,6 +84,9 @@ export default {
     }
   },
   methods:{
+    newQuestion(){
+      this.$router.push('/home/questionnaire')
+    }
   }
 }
 </script>
@@ -104,6 +108,18 @@ export default {
         color: #000000;
         margin-left: 6px;
         margin-right: 10px;
+      }
+      .newQ{
+        float:right;
+        width:100px;
+        height:30px;
+        line-height:30px;
+        text-align: center;
+        background: #2D78B3;
+        font-size: 14px;
+        color: #FFFFFF;
+        border-radius: 4px;
+        cursor:pointer;
       }
       .tip{
         font-size: 14px;

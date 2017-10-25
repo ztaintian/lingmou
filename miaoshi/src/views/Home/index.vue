@@ -19,7 +19,7 @@
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>{{useName}}</span>
-  				<span>退出</span>
+  				<span class="signout" @click="Signout">退出</span>
   			</div>
   		</div>
   		<div class="top" v-else-if="type==1">
@@ -28,7 +28,7 @@
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>{{useName}}</span>
-  				<span>退出</span>
+  				<span class="signout" @click="Signout">退出</span>
   			</div>
   		</div>
   		<div class="top" v-else-if="type==5">
@@ -38,7 +38,7 @@
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>{{useName}}</span>
-  				<span>退出</span>
+  				<span class="signout" @click="Signout">退出</span>
   			</div>
   		</div>
   		<div class="top" v-else-if="type==6">
@@ -47,7 +47,7 @@
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>{{useName}}</span>
-  				<span>退出</span>
+  				<span class="signout" @click="Signout">退出</span>
   			</div>
   		</div>
   		<div class="top" v-else-if="type==3">
@@ -55,7 +55,7 @@
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>{{useName}}</span>
-  				<span>退出</span>
+  				<span class="signout" @click="Signout">退出</span>
   			</div>
   		</div>
   		<div class="centerLine"></div>
@@ -99,6 +99,9 @@ export default {
   	this.nowRoute()
   },
   methods:{
+  	Signout(){
+  		this.$router.push('/')
+  	},
   	nowRoute(){
 	  	switch (this.$router.currentRoute.path){
 	  		case '/home/focusrepor':
@@ -218,7 +221,7 @@ export default {
   		this.type = index
   		this.iconShow()
   		if(index === 4){
-  			this.$router.push('/home/questionnaire')
+  			this.$router.push('/home/scenemanagement')
   		}else if(index === 1){
   			this.$router.push('/home/focusreport')
   			this.reportStatus(1)
@@ -371,6 +374,9 @@ export default {
 					margin-right:40%;
 					display:none;
 				}
+			}
+			.signout{
+				cursor:pointer;
 			}
 			.use{
 				float:right;

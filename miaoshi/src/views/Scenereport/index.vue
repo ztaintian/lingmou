@@ -96,7 +96,7 @@ export default {
       dataTime2:'',
       radioimgUrl:iconradio,
       radioaimgUrl:iconradioActive,
-      yestoday:true,
+      yestoday:false,
       lastSeven:false,
       lastMounth:false,
       salePoint:'',
@@ -111,6 +111,12 @@ export default {
     }
   },
   methods:{
+    getDate(num){
+      var nowDate = new Date().getTime()-24*60*60*1000
+      var nowDatelast = new Date().getTime()-24*60*60*1000*num
+      this.dataTime = new Date(nowDatelast).getFullYear()+'-'+new Date(nowDatelast).getMonth()+'-'+new Date(nowDatelast).getDate()+' 00:00:00'
+      this.dataTime2 = new Date(nowDate).getFullYear()+'-'+new Date(nowDate).getMonth()+'-'+new Date(nowDate).getDate()+' 23:59:59'
+    },
     freezerdetails(){
       this.$router.push('/home/freezerdetails')
     },
@@ -130,14 +136,17 @@ export default {
         this.yestoday = true
         this.lastSeven = false
         this.lastMounth = false
+        this.getDate(1)
       }else if(num === 2){
         this.yestoday = false
         this.lastSeven = true
         this.lastMounth = false
+        this.getDate(7)
       }else{
         this.yestoday = false
         this.lastSeven = false
         this.lastMounth = true
+        this.getDate(30)
       }
     },
     choiceStates(num){

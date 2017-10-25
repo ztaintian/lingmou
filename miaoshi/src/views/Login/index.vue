@@ -20,7 +20,7 @@
 
 <script>
 import logo from '@/assets/logo.png'
-
+import Cookies from 'js-cookie'
 export default {
   name: 'Login',
   data () {
@@ -58,6 +58,10 @@ export default {
 	  			this.accountShow = '账号不存在，请重新填写'
 	  		}
   		}
+  		Cookies.set('usename',this.account)
+  		Cookies.set('password',this.pass)
+  		console.log(Cookies.get('usename'))
+  		console.log(Cookies.get('password'))
   	}
   },
   watch:{

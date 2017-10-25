@@ -117,7 +117,8 @@
             <img class="img1" :src="iconNarrowUrl" alt="">
             <img class="img2" :src="iconEnlargeUrl" alt="">
             <div  class="imgMain">
-              <img :src="vueUrl" alt="">
+              <canvas id="bgCanvas"></canvas>
+              <canvas id="imgCanvas">您的浏览器不支持canvas标签，请您更换浏览器！！  </canvas>
             </div>
           </div>
         </div>
@@ -125,7 +126,15 @@
       <div class="bottom">
         <div class="title">原图（6）</div>
         <div class="img" v-for="v in imgList">
-          <img :src="vueUrl" alt="">
+          <img @click="img(v)"  style="cursor:pointer;" :src="vueUrl" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="messagebox" v-if="editBoxShow">
+      <div class="messagecont">
+         <img  style="height:500px;width:200px;" :src="vueUrl" alt="">
+        <div style="cursor:pointer;margin-left:94px;font-size:20px;color:#000;" @click="cancle">
+          X
         </div>
       </div>
     </div>
@@ -145,6 +154,7 @@ export default {
   name: 'Pointofsaledetails',
   data () {
     return {
+      editBoxShow:false,
       imgList:[{},{},{},{},{}],
       iconUrlA:hookiconA,
       iconUrl:hookicon,
@@ -207,6 +217,16 @@ export default {
     console.log(this.$router.currentRoute.query.aa)
   },
   methods:{
+    img(v){
+      this.editBoxShow = true
+       document.body.style.overflow='hidden';
+       document.body.style.height='100%';
+    },
+    cancle(){
+      this.editBoxShow = false
+       document.body.style.overflow='scroll';
+       document.body.style.height='100%';
+    },
     getGoods(v){
       console.log(v)
     },
@@ -234,6 +254,27 @@ export default {
     background: #FFFFFF;
     border-radius: 4px;
     font-size: 14px;
+    .messagebox{
+      position: absolute;
+      top:0;
+      left:0;
+      height:100%;
+      z-index: 9999;
+      background: rgba(0,0,0,0.40);
+      width:100%;
+      .messagecont{
+        position:absolute;
+        top:50%;
+        left:50%;
+        margin-left:-100px;
+        .bntlast{
+          background:#324656;
+          cursor:pointer;
+        }
+        height:254px;
+        width:520px;
+      }
+    }
     .content{
       padding:30px 30px 0 30px;
       .top{

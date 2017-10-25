@@ -68,14 +68,14 @@
 				  	<span class="delchoice" @click="delChoice(indexC,indexQ)" v-if="vC.delCe">删除选项</span>
 			  	</div>
 		  	</div>
-		  	<div class="addchoice"  @click="addChoice(indexQ)">
+		  	<div class="addchoice" v-if="v.choiceList.length<8"  @click="addChoice(indexQ)">
 		  		<a href="javascript:;" >＋添加选项</a>
 		  	</div>
   		</div>
   		<div class="line"></div>
   	</div>
   	<div class="addquestion">
-  		<a href="javascript:;" v-if="questionList.length<=16" @click="addQuestion">＋添加问题</a>
+  		<a href="javascript:;" v-if="questionList.length<16" @click="addQuestion">＋添加问题</a>
 	  	<div class="save" @click="saved">
 				完成
 			</div>
@@ -169,6 +169,17 @@ export default {
   	},
   	saved:function(){
   		this.fishFlag = true;
+  		for(var j=0;j<this.questionList.length;j++){
+  			this.questionList[j].mustAddFlag = false
+	  		for(var i=0;i<this.questionList[j].choiceList.length;i++){
+	  			if(this.questionList[j].title==null||this.questionList[j].title==''||this.questionList[j].choiceList[i].choiceIpt == '' || this.questionList[j].choiceList[i].choiceIpt==null){
+	  				this.questionList[j].mustAddFlag = true
+	  				console.log(this.questionList)
+	  				return
+	  			}
+	  		}
+  		}
+
   	},
   	lastone:function(){
   		if(this.questionList.length === 1){
