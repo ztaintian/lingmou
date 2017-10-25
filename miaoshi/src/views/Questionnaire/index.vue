@@ -18,8 +18,10 @@
 		      type="date"
 		      class="data"
 		      placeholder="选择日期"
+		      :disabledDate = 'true'
 		      :clearable = 'false'
 		      :editable = 'false'
+		      :picker-options="pickerOptions"
 		     >
     		</el-date-picker>
 			  <el-select class="selecttimee" v-model="selecttime" placeholder="请选择">
@@ -66,14 +68,14 @@
 				  	<span class="delchoice" @click="delChoice(indexC,indexQ)" v-if="vC.delCe">删除选项</span>
 			  	</div>
 		  	</div>
-		  	<div class="addchoice" @click="addChoice(indexQ)">
+		  	<div class="addchoice"  @click="addChoice(indexQ)">
 		  		<a href="javascript:;" >＋添加选项</a>
 		  	</div>
   		</div>
   		<div class="line"></div>
   	</div>
   	<div class="addquestion">
-  		<a href="javascript:;" @click="addQuestion">＋添加问题</a>
+  		<a href="javascript:;" v-if="questionList.length<=16" @click="addQuestion">＋添加问题</a>
 	  	<div class="save" @click="saved">
 				完成
 			</div>
@@ -90,6 +92,11 @@ export default {
   name: 'Questionnaire',
   data () {
     return {
+			pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() < Date.now() - 8.64e7;
+        }
+      },
     	nameGetColor:false,
     	fishFlag:false,
     	choiceFlag:false,
@@ -189,17 +196,16 @@ export default {
   			this.questionList[index].radioShow3 = true
   		}
   	},
-  	addQuestion(){
+  	addQuestion(){//添加问题
   		this.choiceFlag = true
-  		var questionList = this.questionList[this.questionList.length-1]
   		for(var j=0;j<this.questionList.length;j++){
   			this.questionList[j].mustAddFlag = false
-  		}
-  		for(var i=0;i<questionList.choiceList.length;i++){
-  			if(questionList.title==null||questionList.title==''||questionList.title==undefined||questionList.choiceList[i].choiceIpt == '' || questionList.choiceList[i].choiceIpt==null||questionList.choiceList[i].choiceIpt == undefined){
-  				 this.questionList[i].mustAddFlag = true
-  				return
-  			}
+	  		for(var i=0;i<this.questionList[j].choiceList.length;i++){
+	  			if(this.questionList[j].title==null||this.questionList[j].title==''||this.questionList[j].choiceList[i].choiceIpt == '' || this.questionList[j].choiceList[i].choiceIpt==null){
+	  				this.questionList[j].mustAddFlag = true
+	  				return
+	  			}
+	  		}
   		}
   		for(var k=0;k<this.questionList.length;k++){
   			this.questionList[k].show = false
