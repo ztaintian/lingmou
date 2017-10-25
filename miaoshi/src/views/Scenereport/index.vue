@@ -41,13 +41,13 @@
           <input class="nameipt"   v-model="reportNumber" type="" name="">
         </div>
         <div class="salereport">
-          <span class="time twoTime" style="width:56px;">备注名:</span>
+          <span class="time twoTime" style="width:56px;">线路:</span>
           <input class="nameipt"   v-model="reportNumber" type="" name="">
         </div>
       </div>
       <div class="sameBlock">
         <div class="salereport">
-          <span class="time twoTimeTwo">状态:</span>
+          <span class="time twoTimeTwo">类型:</span>
           <el-select class="salePoint" v-model="statusVal" placeholder="请选择">
             <el-option
               v-for="item in statusList"
@@ -58,7 +58,11 @@
           </el-select>
         </div>
         <div class="salereport">
-          <span class="time twoTime">营业所+线路:</span>
+          <span class="time twoTime">营业所:</span>
+          <input class="nameipt"   v-model="reportNumber" type="" name="">
+        </div>
+        <div class="salereport" style="margin-right: 50px">
+          <span class="time twoTime" style="width:56px;">备注名:</span>
           <input class="nameipt"   v-model="reportNumber" type="" name="">
         </div>
         <span class="search">刷选</span>
@@ -68,18 +72,20 @@
       <div class="Theaded">
         <div class="W200 publicCss">时间</div>
         <div class="W140 publicCss">场景报告编号</div>
-        <div class="W300 publicCss">场景</div>
+        <div class="W200 publicCss">场景</div>
         <div class="W140 publicCss">图像数量</div>
         <div class="W200 publicCss">售点</div>
-        <div class="W140 publicCss">营业所＋线路</div>
+        <div class="W120 publicCss">营业所</div>
+        <div class="W120 publicCss">线路</div>
       </div>
       <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" @click="freezerdetails(v)" :class="[v.showBc?'tablelistBc':'','tablelist']">
         <div class="W200 publicCss">2017-12-20  23:49:59</div>
         <div class="W140 publicCss">99990000222</div>
-        <div class="W300 publicCss">可乐冰柜（备注名）</div>
+        <div class="W200 publicCss">可乐冰柜（备注名）</div>
         <div class="W140 publicCss">22</div>
         <div class="W200 publicCss">快客便利店(徐汇区店）</div>
-        <div class="W140 publicCss">888999 000</div>
+        <div class="W120 publicCss">888999</div>
+        <div class="W120 publicCss">888999000</div>
       </div>
     </div>
   </div>
@@ -188,6 +194,7 @@ export default {
         .nameipt{
           width:200px;
           height:26px;
+          margin-left:5px;
           background: #FFFFFF;
           border: 1px solid #E0E0E0;
           border-radius: 5px;
@@ -244,6 +251,7 @@ export default {
         font-family: 'Microsoft YaHei';
         display:inline-block;
         width:98px;height:20px;
+        text-align: right;
       }
       .twoTimeTwo{
         font-family: 'Microsoft YaHei';

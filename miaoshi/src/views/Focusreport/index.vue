@@ -40,6 +40,10 @@
           <span class="time twoTime">售点报告编号:</span>
           <input class="nameipt"   v-model="reportNumber" type="" name="">
         </div>
+        <div class="salereport">
+          <span class="time twoTime" style="width:56px;">线路:</span>
+          <input class="nameipt"   v-model="reportNumber" type="" name="">
+        </div>
       </div>
       <div class="sameBlock">
         <div class="salereport">
@@ -54,7 +58,7 @@
           </el-select>
         </div>
         <div class="salereport">
-          <span class="time twoTime">营业所+线路:</span>
+          <span class="time twoTime">营业所:</span>
           <input class="nameipt"   v-model="reportNumber" type="" name="">
         </div>
         <span class="search">刷选</span>
@@ -64,11 +68,12 @@
       <div class="Theaded">
         <div class="W170 publicCss">时间</div>
         <div class="W100 publicCss">售点报告编号</div>
-        <div class="W160 publicCss">售点</div>
-        <div class="W100 publicCss">营业所＋线路</div>
-        <div class="W90 publicCss">售点SKU</div>
-        <div class="W90 publicCss">必备SKU</div>
-        <div class="W90 publicCss">重点SKU</div>
+        <div class="W150 publicCss">售点</div>
+        <div class="W70 publicCss">营业所</div>
+        <div class="W70 publicCss">线路</div>
+        <div class="W80 publicCss">售点SKU</div>
+        <div class="W80 publicCss">必备SKU</div>
+        <div class="W80 publicCss">重点SKU</div>
         <div class="W90 publicCss">冰柜纯净度</div>
         <div class="W90 publicCss">冰柜饱和度</div>
         <div class="W70 publicCss">场景数</div>
@@ -77,11 +82,12 @@
       <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']" @click="pointofsaledetails(v)" >
         <div class="W170 publicCss">2017-12-20  23:49:59</div>
         <div class="W100 publicCss">99990000222</div>
-        <div class="W160 publicCss">快客便利店(徐汇区店…</div>
-        <div class="W100 publicCss">888999 000</div>
-        <div class="W90 publicCss">19</div>
-        <div class="W90 publicCss">12/20</div>
-        <div class="W90 publicCss">11/23</div>
+        <div class="W150 publicCss">快客便利店(徐汇区店…</div>
+        <div class="W70 publicCss">888999</div>
+        <div class="W70 publicCss">000</div>
+        <div class="W80 publicCss">19</div>
+        <div class="W80 publicCss">12/20</div>
+        <div class="W80 publicCss">11/23</div>
         <div class="W90 publicCss">90%</div>
         <div class="W90 publicCss">11%</div>
         <div class="W70 publicCss">99</div>
@@ -195,6 +201,7 @@ export default {
         .nameipt{
           width:200px;
           height:26px;
+          margin-left:5px;
           background: #FFFFFF;
           border: 1px solid #E0E0E0;
           border-radius: 5px;
@@ -250,7 +257,12 @@ export default {
       .twoTime{
         font-family: 'Microsoft YaHei';
         display:inline-block;
-        width:98px;height:20px;
+        width:98px;
+        height:20px;
+        text-align:right;
+      }
+      .W40{
+        width:40px;
       }
       .twoTimeTwo{
         font-family: 'Microsoft YaHei';

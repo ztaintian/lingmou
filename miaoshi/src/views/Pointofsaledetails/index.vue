@@ -87,6 +87,14 @@
         </div>
       </div>
       <div class="picture">
+        <div class="sence">
+          场景（5）
+        </div>
+        <div class="nav">
+          <div v-for="v in navList" style="width:160px;height:40px;display:inline-block;">
+            <span @mouseover = "over(v)" @mouseleave = "leave(v)" @click="navClick(v)" :class="[v.navFlag?'navover':'',v.clickFlag?'navclick':'']">选中</span>
+          </div>
+        </div>
         <div class="title">
           <span>识别产品（共27，top8，重点1）</span>
           <div class="img">
@@ -154,6 +162,8 @@ export default {
   name: 'Pointofsaledetails',
   data () {
     return {
+      navList:[{navFlag:false,clickFlag:true},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false}],
+      navFlag:false,
       editBoxShow:false,
       imgList:[{},{},{},{},{}],
       iconUrlA:hookiconA,
@@ -217,6 +227,18 @@ export default {
     console.log(this.$router.currentRoute.query.aa)
   },
   methods:{
+    navClick(v){
+      for(var i=0;i<this.navList.length;i++){
+        this.navList[i].clickFlag = false
+      }
+      v.clickFlag = true
+    },
+    over(v){
+      v.navFlag=true
+    },
+    leave(v){
+      v.navFlag=false
+    },
     img(v){
       this.editBoxShow = true
        document.body.style.overflow='hidden';
@@ -408,11 +430,45 @@ export default {
       }
       .picture{
         margin-top:40px;
+        .nav{
+          margin:16px 0  30px 0;
+          background: #F5F5F5;
+          border-radius: 4px;
+          line-height:40px;
+          height: 40px;
+          div{
+            text-align: center;
+            cursor:pointer;
+          }
+          .navover{
+            background: #FAFAFA;
+            border: 2px solid #F5F5F5;
+            border-radius: 4px;
+          }
+          .navclick{
+             background: #fff;
+             color:#000;
+             font-weight:bold;
+          }
+          span{
+            display:inline-block;
+            height:36px;
+            width:156px;
+            line-height:36px;
+            text-align: center;
+          }
+        }
+        .sence{
+          font-size: 16px;
+          color: #000000;
+          font-weight:bold;
+        }
         .title{
           overflow: hidden;
+          margin-left:30px;
           span:nth-of-type(1){
             font-family: 'PingFangSC-Medium';
-            font-size: 16px;
+            font-size: 14px;
             color: #000000;
             float: left;
             font-weight: bold;
@@ -421,9 +477,9 @@ export default {
             font-family: 'PingFangSC-Medium';
             font-size: 16px;
             color: #000000;
-            float: left;
+            float: right;
             font-weight: bold;
-            margin-left:30px;
+            margin-right: 608px;
           }
           .img{
             margin-left:44px;
@@ -450,6 +506,7 @@ export default {
           }
           .left{
             float: left;
+            margin-left:30px;
             overflow-y: scroll;
             width:360px;
             height:480px;
@@ -492,7 +549,7 @@ export default {
           }
           .right{
             float: right;
-            width:718px;
+            width:670px;
             height:484px;
             background: #F5F5F5;
             border-radius: 4px;
