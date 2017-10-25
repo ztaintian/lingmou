@@ -1,4 +1,21 @@
 	html,body,#app {
+    .el-message{
+      width:320px;
+      top:60px;
+      img{
+        display:none;
+      }
+      background: #F7D2D5;
+      .el-message__group{
+        margin-left:0;
+        text-align:center;
+        p{
+          margin: 0 auto;
+          font-size: 14px;
+          color: #D61E2A;
+        }
+      }
+    }
     position:relative;
 	  font-family: "Microsoft YaHei","微软雅黑","PingFang SC","Helvetica Neue",Helvetica,"Hiragino Sans GB",Arial,sans-serif;
 	}

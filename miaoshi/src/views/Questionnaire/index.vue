@@ -168,13 +168,15 @@ export default {
   		v.choiceGetColcor =false
   	},
   	saved:function(){
+  		this.$message({
+  			message:'错误提示错误提示错误提示错误提示错误提示'
+  		});
   		this.fishFlag = true;
   		for(var j=0;j<this.questionList.length;j++){
   			this.questionList[j].mustAddFlag = false
 	  		for(var i=0;i<this.questionList[j].choiceList.length;i++){
 	  			if(this.questionList[j].title==null||this.questionList[j].title==''||this.questionList[j].choiceList[i].choiceIpt == '' || this.questionList[j].choiceList[i].choiceIpt==null){
 	  				this.questionList[j].mustAddFlag = true
-	  				console.log(this.questionList)
 	  				return
 	  			}
 	  		}
@@ -263,6 +265,10 @@ export default {
 		width:96.6%;
 		border-radius: 4px;
 		background: #FFFFFF;
+		.el-message{
+			background: #F7D2D5;
+			margin-top:30px;
+		}
 		.save{
 			margin-top:20px;
 			background: #2D78B3;

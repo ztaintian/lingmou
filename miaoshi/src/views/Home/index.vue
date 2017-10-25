@@ -249,7 +249,7 @@ export default {
 		height:24px;
 		margin-top:60px;
 		width:89%;
-		z-index: 9999;
+		z-index: 1222;
 		position: fixed;
 		background:#F0F0F0;
 	}
@@ -307,7 +307,7 @@ export default {
 			padding:24px;
 		}
 		.top{
-			z-index:9999;
+			z-index:1222;
 			position: fixed;
 			background:#fff;
 			min-width: 600px;
