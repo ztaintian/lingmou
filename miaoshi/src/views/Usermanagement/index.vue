@@ -21,12 +21,13 @@
         <div class="W240 publicCss operation" style="position:relative;">
           <div class="secrit" @click="passwordInit(v)">密码初始化</div>
           <div v-if="v.tipShow" class="messageBox ml76">
-              <div class="count">
-                账号：789334 106
-              </div>
-              <div class="decrite">
-                确定对该账号进行密码初始化？
-              </div>
+            <img class="img" :src="sanjiaoUrl" alt="">
+            <div class="count">
+              账号：789334 106
+            </div>
+            <div class="decrite">
+              确定对该账号进行密码初始化？
+            </div>
             <div @click="confimSecrit(v)" class="btnAA btnAAS">
                确定
             </div>
@@ -38,11 +39,12 @@
             禁用
           </div>
           <div v-if="v.openShow" class="messageBox">
+            <img class="img" :src="sanjiaoUrl" alt="">
             <div class="count">
               账号：789334 106
             </div>
             <div class="decrite">
-              确定对该账号进行密码初始化？
+              确定重新启用该帐号？
             </div>
             <div @click="confimOpen(v)" class="btnAA btnAAS">
                确定
@@ -71,6 +73,7 @@ import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
 import ic_next from '@/assets/ic_next_normal@1x.png'
 import pic_next from '@/assets/ic_pre_normal@1x.png'
 import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
+import sanjiao from '@/assets/sj@1x.png'
 
 export default {
   name: 'Usermanagement',
@@ -84,6 +87,7 @@ export default {
       editBoxShow:false,
       BoxShow:false,
       countent:'',
+      sanjiaoUrl:sanjiao,
       tableList:[{showBc:false,tipShow:false,openShow:false},{showBc:false,tipShow:false,openShow:false},{showBc:false,tipShow:false,openShow:false}]
     }
   },
@@ -171,7 +175,8 @@ export default {
         background: #FFFFFF;
         border: 1px solid #E0E0E0;
         box-shadow: 0 4px 12px 0 rgba(0,0,0,0.12);
-        border-radius: 4px;top:30px;
+        border-radius: 4px;
+        top:40px;
         right:20px;
         text-align: center;
       }
@@ -179,10 +184,9 @@ export default {
         right:76px;
       }
       .img{
-        width:36px;
-        height:36px;
-        vertical-align: middle;
-        background:red;
+        position:absolute;
+        top:-9px;
+        right:30px;
       }
       .operation{
         text-align: right;

@@ -5,7 +5,7 @@
   			<img :src="imgurl" alt="">
   		</div>
   		<div class="nav">
-	  		<div :class="[v.iconShow?'navlibc':'','navli']" @click="iconClikc(index)" v-for="(v,index) in imgurlicon">
+	  		<div :class="[v.iconShow?'navlibc':'','navli']" v-if="v.ifShow" @click="iconClikc(index)" v-for="(v,index) in imgurlicon">
   				<a href="javascript:;">
 	  				<img :src="v.icon" alt="">
 	  				<span>{{v.text}}</span>
@@ -92,7 +92,7 @@ export default {
     	topStatus:Number,
     	useimg:useimg,
     	useName:'1234556770000000',
-    	imgurlicon:[{icon:icon1,text:'概况',iconShow:false},{icon:icon2,text:'报告',iconShow:true},{icon:icon3,text:'数据',iconShow:false},{icon:icon4,text:'售点',iconShow:false},{icon:icon5,text:'场景',iconShow:false},{icon:icon6,text:'SKU',iconShow:false},{icon:icon7,text:'设置',iconShow:false}],
+    	imgurlicon:[{icon:icon1,text:'概况',iconShow:false,ifShow:false},{icon:icon2,text:'报告',iconShow:true,ifShow:true},{icon:icon3,text:'数据',iconShow:false,ifShow:false},{icon:icon4,text:'售点',iconShow:false,ifShow:true},{icon:icon5,text:'场景',iconShow:false,ifShow:true},{icon:icon6,text:'SKU',iconShow:false,ifShow:true},{icon:icon7,text:'设置',iconShow:false,ifShow:true}],
     }
   },
   mounted(){

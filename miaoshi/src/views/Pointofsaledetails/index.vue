@@ -105,7 +105,6 @@
         </div>
         <div class="tree">
           <div class="left">
-            <!-- <el-tree :data="data" @node-click="handleNodeClick"></el-tree> -->
             <div class="treeLi" v-for="(v,index) in dataList">
               <div class="li" @click="liClick(v)">
                 <img :src="iconFoldURl"  :class="v.childShow?'imgTranform':''" alt=""><span>{{v.title}}</span>
@@ -157,11 +156,15 @@ import iconEnlarge from '@/assets/ic_bigger_normal@1x.png'
 import iconNarrow from '@/assets/ic_smaller_normal@1x.png'
 import iconVue from '@/assets/vue.png'
 import iconUnqualified from '@/assets/ic_unqualified@2x.png'
+import viewIcon from '@/assets/view.jpeg'
 
 export default {
   name: 'Pointofsaledetails',
   data () {
     return {
+      showAllMark: true,
+      scale: 100,
+      bboxes: [],
       navList:[{navFlag:false,clickFlag:true},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false}],
       navFlag:false,
       editBoxShow:false,
@@ -174,6 +177,7 @@ export default {
       iconEnlargeUrl:iconEnlarge,
       iconNarrowUrl:iconNarrow,
       vueUrl:iconVue,
+      viewUrl:viewIcon,
       dataList:[{
         title:'美汁源',
         childShow:false,
@@ -225,8 +229,66 @@ export default {
   },
   mounted(){
     console.log(this.$router.currentRoute.query.aa)
+    this.initCanvas()
   },
   methods:{
+    initCanvas(){
+      var that = this;
+      var canvas = document.getElementById("bgCanvas");
+      var canvas1 = document.getElementById("imgCanvas");
+      var context = canvas.getContext("2d");
+      var image = new Image();
+      image.src = this.viewUrl;
+      image.onload = function () {
+          canvas.width = image.width * that.scale / 100;
+          canvas.height = image.height * that.scale / 100;
+          canvas1.width = canvas.width;
+          canvas1.height = canvas.height;
+          context.fillStyle = "black";
+          context.fillRect(0, 0, canvas.width, canvas.height);
+          var x = canvas.width / 2; //画布宽度的一半
+          var y = canvas.height / 2;//画布高度的一半
+          context.translate(x, y);//将绘图原点移到画布中点
+          context.rotate((Math.PI / 180) * (-that.rotated_degree));//旋转角度
+          context.drawImage(image, -x, -y, canvas.width, canvas.height);
+          context.restore();//绘制图片
+      };
+      setTimeout(function () {
+          if(!that.showAllMark){
+              that.showAllMark = true;
+          }
+          that.showAll();
+      }, 100);
+    },
+    showAll: function () {
+        this.bboxes = [{x1:200,y1:200,x2:300,y2:300,truncated:false,color:'red'}]
+        if (!(this.bboxes.length)) {
+            return;
+        }
+        var that = this;
+        var canvas = document.getElementById("imgCanvas");
+        var context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        setTimeout(function () {
+            for (var i = 0; i < that.bboxes.length; i++) {
+                that.draw_annotation(that.bboxes[i].x1, that.bboxes[i].y1, that.bboxes[i].x2, that.bboxes[i].y2, that.bboxes[i].truncated,that.bboxes[i].color);
+            }
+        }, 200);
+    },
+    draw_annotation: function (x1, y1, x2, y2, truncated,color) {
+        var that = this;
+        var canvas = document.getElementById("imgCanvas");
+        var context = canvas.getContext("2d");
+        context.beginPath();
+        if (truncated) {
+            context.setLineDash([4, 4]);
+        }else{
+            context.setLineDash([0,0]);
+        }
+        context.strokeStyle = color;
+        context.strokeRect(x1 * that.scale / 100, y1 * that.scale / 100, (x2 - x1) * that.scale / 100, (y2 - y1) * that.scale / 100);
+        context.closePath();
+    },
     navClick(v){
       for(var i=0;i<this.navList.length;i++){
         this.navList[i].clickFlag = false
@@ -498,6 +560,7 @@ export default {
           overflow: hidden;
           .left::-webkit-scrollbar{
             width: 4px;
+            height:5px;
             background-color: #fff;
           }
           .left::-webkit-scrollbar-thumb{
@@ -507,7 +570,7 @@ export default {
           .left{
             float: left;
             margin-left:30px;
-            overflow-y: scroll;
+            overflow: scroll;
             width:360px;
             height:480px;
             border: 2px solid #F5F5F5;
@@ -559,18 +622,42 @@ export default {
               position:absolute;
               right:48px;
               top:10px;
+              z-index: 99;
             }
             .img2{
               cursor:pointer;
               position:absolute;
               right:10px;
               top:10px;
+              z-index: 99;
+            }
+            .imgMain::-webkit-scrollbar{
+              width: 4px;
+              height:4px;
+              background-color: #fff;
+            }
+            .imgMain::-webkit-scrollbar-thumb{
+              background:#ccc;
+              border-radius: 3px;
             }
             .imgMain{
-              width:233.9px;
-              height:460px;
+              height:100%;
               margin:0 auto;
               vertical-align: middle;
+              position:relative;
+              overflow: scroll;
+              #bgCanvas,#imgCanvas{
+                position:absolute;
+                top:0;
+                left:50%;
+                transform: translateX(-50%);
+              }
+              #bgCanvas{
+                z-index:3;
+              }
+              #imgCanvas{
+                z-index:5;
+              }
             }
           }
         }
