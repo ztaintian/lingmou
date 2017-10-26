@@ -7,6 +7,7 @@ import * as filters from './filters'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import axios from 'axios'
+
 Vue.config.productionTip = false
 axios.post('/apis/image/list', {}).then(function (response) {
     console.log(response);

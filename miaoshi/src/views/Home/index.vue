@@ -60,7 +60,7 @@
   		</div>
   		<div class="centerLine"></div>
   		<div class="routerchild">
-	  		<router-view/>
+	  		<router-view :key="key" />
   		</div>
   	</div>
   </div>
@@ -95,6 +95,11 @@ export default {
     	imgurlicon:[{icon:icon1,text:'概况',iconShow:false,ifShow:false},{icon:icon2,text:'报告',iconShow:true,ifShow:true},{icon:icon3,text:'数据',iconShow:false,ifShow:false},{icon:icon4,text:'售点',iconShow:false,ifShow:true},{icon:icon5,text:'场景',iconShow:false,ifShow:true},{icon:icon6,text:'SKU',iconShow:false,ifShow:true},{icon:icon7,text:'设置',iconShow:false,ifShow:true}],
     }
   },
+	computed: {
+    key() {
+      return this.$route.name !== undefined? this.$route.name + +new Date(): this.$route + +new Date()
+    }
+ 	},
   mounted(){
   	this.nowRoute()
   },

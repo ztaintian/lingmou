@@ -88,16 +88,37 @@
         <div class="W120 publicCss">888999000</div>
       </div>
     </div>
+    <div class="pagination">
+      <span class="totle">共{{totlePages}}条，每页20条</span>
+      <img class="img" @click="preClick" :src="imgUrlPre?pnextUrl:pnextUrlA" alt=""><span class="num">{{nowPages}}/{{Math.ceil(totlePages/20)}}</span>
+      <img class="img" @click="nextClick"  :src="imgUrlNext?nextUrl:nextUrlA" alt="">
+      <input type="" name="" v-model="jumpPages">
+      <span class="jump" @click="jump">跳转</span>
+    </div>
   </div>
 </template>
 
 <script>
 import iconradio from '@/assets/ic_not selected@1x.png'
 import iconradioActive from '@/assets/ic_selected@1x.png'
+import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
+import ic_next from '@/assets/ic_next_normal@1x.png'
+import pic_next from '@/assets/ic_pre_normal@1x.png'
+import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
+
 export default {
   name: 'Focusreport',
   data () {
     return {
+      nextUrl:ic_next,
+      nextUrlA:ic_nextActive,
+      pnextUrl:pic_next,
+      pnextUrlA:pic_nextActive,
+      imgUrlPre:true,
+      imgUrlNext:true,
+      totlePages:'',
+      nowPages:'',
+      jumpPages:'',
       dataTime:'',
       dataTime2:'',
       radioimgUrl:iconradio,
@@ -116,7 +137,38 @@ export default {
       tableList:[{showBc:false},{showBc:false},{showBc:false}]
     }
   },
+  mounted(){
+    this.totlePages = 50
+    this.nowPages = 1
+  },
   methods:{
+    preClick(){
+      this.imgUrlNext = true
+      if(this.nowPages <=1){
+        return
+      }
+      this.nowPages--
+      this.imgUrlPre = false
+    },
+    nextClick(){
+      this.imgUrlPre = true
+      if(this.nowPages >= Math.ceil(this.totlePages/20)){
+        return
+      }
+      this.nowPages++
+      this.imgUrlNext = false
+    },
+    jump(){
+      if(isNaN(this.jumpPages)){
+        return
+      }
+      if(this.jumpPages<=0||this.jumpPages>Math.ceil(this.totlePages/20)){
+        return;
+      }
+      this.imgUrlNext = true
+      this.imgUrlPre = true
+      this.nowPages = this.jumpPages
+    },
     getDate(num){
       var nowDate = new Date().getTime()-24*60*60*1000
       var nowDatelast = new Date().getTime()-24*60*60*1000*num
@@ -294,7 +346,7 @@ export default {
     .table{
       margin:0 auto;
       width:1120px;
-      padding-bottom: 200px;
+      padding-bottom: 20px;
       box-sizing:border-box;
       .Theaded{
         overflow:hidden;

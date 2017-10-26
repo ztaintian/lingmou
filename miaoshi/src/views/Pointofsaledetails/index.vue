@@ -110,19 +110,19 @@
                 <img :src="iconFoldURl"  :class="v.childShow?'imgTranform':''" alt=""><span>{{v.title}}</span>
               </div>
               <div v-if="v.childShow"  v-for="(vC,indexC) in v.childrenList">
-                <div @click="childClick(vC)" class="li mgLeft10"  >
+                <div @click="childClick(vC)" :class="[vC.colorChange?'bgBlue':'','li mgLeft10']"  >
                   <img :src="iconFoldURl"  :class="vC.childrenShow?'imgTranform':''" alt="">
                   <span>{{vC.children1}}</span>
                 </div>
-                <div class="li mgLeft20" @click="getGoods(vCC)" v-for="(vCC,indexCC) in vC.childrenHave"  v-if="vC.childrenShow">
+                <div :class="[vC.colorChange?'bgBlue':'','li mgLeft20']" @click="getGoods(vCC)" v-for="(vCC,indexCC) in vC.childrenHave"  v-if="vC.childrenShow">
                   <span>{{vCC.title}}</span>
                 </div>
               </div>
             </div>
           </div>
           <div class="right">
-            <img class="img1" :src="iconNarrowUrl" alt="">
-            <img class="img2" :src="iconEnlargeUrl" alt="">
+            <img class="img1" :src="iconNarrowUrl"  @click="scaleImg(0)" alt="">
+            <img class="img2" :src="iconEnlargeUrl" @click="scaleImg(1)" alt="">
             <div  class="imgMain">
               <canvas id="bgCanvas"></canvas>
               <canvas id="imgCanvas">您的浏览器不支持canvas标签，请您更换浏览器！！  </canvas>
@@ -182,56 +182,38 @@ export default {
         title:'美汁源',
         childShow:false,
         childrenList:[{
-          children1:'果粒奶优300ml',childrenShow:false,childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
+          colorChange:false,
+          children1:'果粒奶优300ml',
+          childrenShow:false,
+          childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
         },{
-          children1:'果粒奶优400ml',childrenShow:false
+          colorChange:false,
+          children1:'果粒奶优300ml',
+          childrenShow:false,
+          childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
         }]
-      },{
-        title:'美汁源',
-        childShow:false,
-        childrenList:[{
-          children1:'果粒奶优300ml',childrenShow:false,childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        },{
-          children1:'果粒奶优400ml',childrenShow:false
-        }]
-      },{
-        title:'美汁源',
-        childShow:false,
-        childrenList:[{
-          children1:'果粒奶优300ml',childrenShow:false,childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        },{
-          children1:'果粒奶优400ml',childrenShow:false
-        }]
-      },{
-        title:'美汁源',
-        childShow:false,
-        childrenList:[{
-          children1:'果粒奶优300ml',childrenShow:false,childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        },{
-          children1:'果粒奶优400ml',childrenShow:false
-        }]
-      },{
-        title:'美汁源',
-        childShow:false,
-        childrenList:[{
-          children1:'果粒奶优300ml',childrenShow:false,childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        },{
-          children1:'果粒奶优400ml',childrenShow:false
-        }]
-      },{
-        title:'美汁源',
-        childShow:false
-      },{
-        title:'美汁源',
-        childShow:false
       }]
     }
   },
   mounted(){
-    console.log(this.$router.currentRoute.query.aa)
     this.initCanvas()
   },
   methods:{
+    scaleImg: function (state) {
+      if (state) {
+          if (this.scale >= 200) {
+              return;
+          }
+          this.scale += 10;
+          this.initCanvas();
+      } else {
+          if (this.scale <= 50) {
+              return;
+          }
+          this.scale -= 10;
+          this.initCanvas();
+      }
+    },
     initCanvas(){
       var that = this;
       var canvas = document.getElementById("bgCanvas");
@@ -314,16 +296,26 @@ export default {
     getGoods(v){
       console.log(v)
     },
+    colorChangeList(){
+      for(var i=0;i<this.dataList.length;i++){
+        for(var j=0;j<this.dataList[i].childrenList.length;j++){
+          this.dataList[i].childrenList[j].colorChange = false
+          this.dataList[i].childrenList[j].childrenShow = false
+        }
+      }
+    },
     childClick(v){
-      v.childrenShow = !v.childrenShow
+      this.colorChangeList()
+      v.colorChange = true
+      v.childrenShow = true
+      this.iconFlag = false
     },
     liClick(v){
       v.childShow = !v.childShow
-    },
-    handleNodeClick(data){
-      console.log(data)
+       this.iconFlag = false
     },
     changeImg(){
+      this.colorChangeList()
       this.iconFlag = !this.iconFlag
     }
   }
@@ -338,6 +330,9 @@ export default {
     background: #FFFFFF;
     border-radius: 4px;
     font-size: 14px;
+    .bgBlue{
+      background:#D0E4F2;
+    }
     .messagebox{
       position: absolute;
       top:0;
