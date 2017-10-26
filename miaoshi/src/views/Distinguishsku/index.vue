@@ -19,11 +19,11 @@
       </div>
     </div>
     <div class="pagination">
-      <span class="totle">共190条，每页20条</span>
-      <img class="img" :src="pnextUrl" alt=""><span class="num">2/20</span>
-      <img class="img" :src="nextUrl" alt="">
-      <input type="" name="">
-      <span class="jump">跳转</span>
+      <span class="totle">共{{totlePages}}条，每页20条</span>
+      <img class="img" @click="preClick" :src="imgUrlPre?pnextUrl:pnextUrlA" alt=""><span class="num">{{nowPages}}/{{Math.ceil(totlePages/20)}}</span>
+      <img class="img" @click="nextClick"  :src="imgUrlNext?nextUrl:nextUrlA" alt="">
+      <input type="" name="" v-model="jumpPages">
+      <span class="jump" @click="jump">跳转</span>
     </div>
   </div>
 </template>
@@ -38,6 +38,11 @@ export default {
   name: 'Distinguishsku',
   data () {
     return {
+      imgUrlPre:true,
+      imgUrlNext:true,
+      totlePages:'',
+      nowPages:'',
+      jumpPages:'',
       nextUrl:ic_next,
       nextUrlA:ic_nextActive,
       pnextUrl:pic_next,
@@ -46,7 +51,38 @@ export default {
       tableList:[{showBc:false},{showBc:false},{showBc:false},{showBc:false}]
     }
   },
+  mounted(){
+    this.totlePages = 50
+    this.nowPages = 1
+  },
   methods:{
+    preClick(){
+      this.imgUrlNext = true
+      if(this.nowPages <=1){
+        return
+      }
+      this.nowPages--
+      this.imgUrlPre = false
+    },
+    nextClick(){
+      this.imgUrlPre = true
+      if(this.nowPages >= Math.ceil(this.totlePages/20)){
+        return
+      }
+      this.nowPages++
+      this.imgUrlNext = false
+    },
+    jump(){
+      if(isNaN(this.jumpPages)){
+        return
+      }
+      if(this.jumpPages<=0||this.jumpPages>Math.ceil(this.totlePages/20)){
+        return;
+      }
+      this.imgUrlNext = true
+      this.imgUrlPre = true
+      this.nowPages = this.jumpPages
+    }
   }
 }
 </script>
@@ -62,7 +98,7 @@ export default {
     .table{
       margin:30px auto 0;
       width:1120px;
-      padding-bottom: 200px;
+      padding-bottom: 30px;
       box-sizing:border-box;
       .W360{
         width:360px;
