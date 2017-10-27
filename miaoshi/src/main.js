@@ -9,9 +9,16 @@ import 'element-ui/lib/theme-default/index.css'
 import axios from 'axios'
 
 Vue.config.productionTip = false
-axios.post('/apis/image/list', {}).then(function (response) {
+// axios.get('y2/backend/web/index.php?r=store/index', {}).then(function (response) {
+//     console.log(response);
+// }).catch(function (error) {
+//     console.log(error);
+// });
+axios.get('http://192.168.3.244/y2/backend/web/index.php?r=store/index').then(
+	function (response) {
     console.log(response);
-}).catch(function (error) {
+	}
+).catch(function (error) {
     console.log(error);
 });
 Vue.use(ElementUI)
