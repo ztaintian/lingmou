@@ -8,24 +8,14 @@ import axios from 'axios'
 Vue.config.productionTip = false
 Vue.prototype.Axios = axios
 
-  axios.post('/api/y2/frontend/web/index.php?r=store/index')
-	.then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+// axios.post('/api/y2/frontend/web/index.php?r=store/index')
+// 	.then(function (response) {
+//     console.log(response);
+//   })
+//   .catch(function (error) {
+//     console.log(error);
+//   });
 
-
-
-// http://www.yangang.com/sponsor/sponsor-list
- //  axios.get('/api/sponsor/sponsor-list')
- //  .then(function (response) {
- //    console.log(response);
- //  })
- //  .catch(function (error) {
- //    console.log(error);
- // });
 Vue.use(ElementUI)
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

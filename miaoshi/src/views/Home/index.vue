@@ -76,6 +76,7 @@ import icon4 from '@/assets/ic_store@1x.png'
 import icon5 from '@/assets/ic_scene@1x.png'
 import icon6 from '@/assets/ic_SKU@1x.png'
 import icon7 from '@/assets/ic_set@1x.png'
+import Cookies from 'js-cookie'
 export default {
   name: 'Home',
   data () {
@@ -102,10 +103,22 @@ export default {
  	},
   mounted(){
   	this.nowRoute()
+  	console.log(Cookies.get('user_name'))
+  	this.useName = Cookies.get('user_name')
   },
   methods:{
   	Signout(){
-  		this.$router.push('/')
+  		var that = this
+  		this.Axios.post('/api/y2/frontend/web/index.php?r=user/logout').then(function (data) {
+  			if(data.data.code === 200){
+		  		Cookies.remove('user_name')
+		  		that.$router.push('/')
+  			}else{
+  				console.log('退出不成功')
+  			}
+  		}).catch(function(error){
+  			console.log(error)
+  		})
   	},
   	nowRoute(){
 	  	switch (this.$router.currentRoute.path){

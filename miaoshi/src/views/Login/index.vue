@@ -32,7 +32,7 @@ export default {
     	passFlag:false,
     	accountShow:'',
     	passShow:'',
-    	accountMessage:'账号不存在，请重新填写',
+    	accountMessage:'',
     	bntIf:false
     }
   },
@@ -46,35 +46,28 @@ export default {
   	},
   	login(){
   		if(this.accountFlag && this.passFlag){
-	  		// if(this.account =='ztt'){
-	  		// 	this.accountShow = ''
-		  	// 	if(this.pass =='123456'){
-		  	// 		this.passShow = ''
-		  	// 		this.$router.push('/home/focusreport')
-		  	// 	}else{
-		  	// 		this.passShow = '账号密码不匹配，请重新填写'
-		  	// 	}
-	  		// }else{
-	  		// 	this.accountShow = '账号不存在，请重新填写'
-	  		// }
+  			var that = this
+  			that.passShow = ''
+  			that.accountShow = ''
 	  		this.Axios.post('/api/y2/frontend/web/index.php?r=user/login',{
 			    username: this.account,
 			    password: this.pass
 			  })
-				.then(function (response) {
-			    if(response){
-			    	console.log(response)
-			    	// this.$router.push('/home/focusreport')
+				.then(function (data) {
+			    if(data.data.code === 10004){
+			    	that.passShow = data.data.msg
+			    }else if(data.data.code === 200){
+			    	that.$router.push('/home/focusreport')
+			  		Cookies.set('user_name',data.data.data.user_name)
+			  		Cookies.set('user_id',data.data.data.user_id)
+			    }else if(data.data.code === 10003){
+			    	that.accountShow = data.data.msg
 			    }
 			  })
 			  .catch(function (error) {
 			    console.log(error);
 			  });
   		}
-  		Cookies.set('usename',this.account)
-  		Cookies.set('password',this.pass)
-  		console.log(Cookies.get('usename'))
-  		console.log(Cookies.get('password'))
   	}
   },
   watch:{
@@ -126,6 +119,7 @@ export default {
 			outline: none;
 			font-size: 18px;
 			padding:4px 0 ;
+			height: 35px;
 		}
 		.line{
 			width:100%;

@@ -42,7 +42,9 @@
         </div>
         <div class="upFile">
           <a style="text-align: center;display: inline-block;width:100%;height:100%;position: relative;">
-            <input type="file" @change="getFile" name=""  accept="application/vnd.ms-excel" style="left: 0;position: absolute;width:100%;height:100%;opacity: 0;" placeholder="用户名"><span style="line-height:30px;display:inline-block;height:30px;color: #2D78B3;">选择文件</span>
+            <form action="http://192.168.3.102:8080/y2/frontend/web/index.php?r=store/upload" method="post" accept-charset="utf-8">
+              <input type="file" @change="getFile" name="" id="mydata" accept="application/vnd.ms-excel" style="left: 0;position: absolute;width:100%;height:100%;opacity: 0;" placeholder="用户名"><span style="line-height:30px;display:inline-block;height:30px;color: #2D78B3;">选择文件</span>
+            </form>
           </a>
         </div>
         <div class="tip">
@@ -121,6 +123,38 @@ export default {
     },
     getFile(e){
       console.log(e.target.files)
+      var mydata = document.getElementById("mydata").files[0]; 
+      var formData = new FormData();
+      formData.append("mydata", mydata);
+      console.log(formData)
+      // this.Axios.post('/api/y2/frontend/web/index.php?r=store/upload',{
+      //   data:formData
+      // })
+      // .then(function (data) {
+      //   console.log(data)
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
+      axios({
+        url: '/user',
+        method: 'post',
+        data: {
+          firstName: 'Fred',
+          lastName: 'Flintstone'
+        },
+        transformRequest: [function (data) {
+          // Do whatever you want to transform the data
+          let ret = ''
+          for (let it in data) {
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+          }
+          return ret
+        }],
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
     },
     exportFile(){
       this.boxShow = true
