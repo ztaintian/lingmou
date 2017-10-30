@@ -135,37 +135,8 @@ export default {
     }
   },
   mounted(){
-    this.totlePages = 50
-    this.nowPages = 1
   },
   methods:{
-    preClick(){
-      this.imgUrlNext = true
-      if(this.nowPages <=1){
-        return
-      }
-      this.nowPages--
-      this.imgUrlPre = false
-    },
-    nextClick(){
-      this.imgUrlPre = true
-      if(this.nowPages >= Math.ceil(this.totlePages/20)){
-        return
-      }
-      this.nowPages++
-      this.imgUrlNext = false
-    },
-    jump(){
-      if(isNaN(this.jumpPages)){
-        return
-      }
-      if(this.jumpPages<=0||this.jumpPages>Math.ceil(this.totlePages/20)){
-        return;
-      }
-      this.imgUrlNext = true
-      this.imgUrlPre = true
-      this.nowPages = this.jumpPages
-    },
     getDate(num){
       var nowDate = new Date().getTime()-24*60*60*1000
       var nowDatelast = new Date().getTime()-24*60*60*1000*num
