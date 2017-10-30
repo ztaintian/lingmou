@@ -108,8 +108,16 @@
       </div>
       <div class="bottom">
         <div class="title">原图（6）</div>
-        <div class="img" v-for="v in imgList">
+        <div class="img" @click="img(v)" v-for="v in imgList">
           <img :src="vueUrl" alt="">
+        </div>
+      </div>
+    </div>
+    <div class="messagebox" v-if="editBoxShow">
+      <div class="messagecont">
+         <img  style="height:500px;width:200px;" :src="vueUrl" alt="">
+        <div style="cursor:pointer;margin-left:94px;font-size:20px;color:#000;" @click="cancle">
+          X
         </div>
       </div>
     </div>
@@ -129,6 +137,7 @@ export default {
   name: 'Freezerdetails',
   data () {
     return {
+      editBoxShow:false,
       showAllMark: true,
       scale: 100,
       bboxes: [],
@@ -166,6 +175,14 @@ export default {
     this.initCanvas()
   },
   methods:{
+    img(v){
+      this.editBoxShow = true
+    },
+    cancle(){
+      this.editBoxShow = false
+       document.body.style.overflow='scroll';
+       document.body.style.height='100%';
+    },
     scaleImg: function (state) {
       if (state) {
           if (this.scale >= 200) {
@@ -284,6 +301,26 @@ export default {
     font-size: 14px;
     .bgBlue{
       background:#D0E4F2;
+    }
+    .messagebox{
+      position: fixed;
+      top:0;
+      left:0;
+      height:100%;
+      z-index: 9999;
+      background: rgba(0,0,0,0.40);
+      width:100%;
+      .messagecont{
+        position:absolute;
+        left:50%;
+        margin-left:-100px;
+        .bntlast{
+          background:#324656;
+          cursor:pointer;
+        }
+        height:254px;
+        width:520px;
+      }
     }
     .content{
       padding:30px 30px 0 30px;

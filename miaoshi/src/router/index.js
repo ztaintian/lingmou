@@ -16,7 +16,7 @@ import Freezerdetails from '@/views/Freezerdetails'
 import Pointofsaledetails from '@/views/Pointofsaledetails'
 import Questionnairedetails from '@/views/Questionnairedetails'
 import Test from '@/views/Test'
-
+import axios from 'axios'
 Vue.use(Router)
 
 export default new Router({
@@ -40,7 +40,21 @@ export default new Router({
           path: 'questionnaire',
           name: 'questionnaire',
           component: Questionnaire,
-          query: { type: 4 }
+          query: { type: 4 },
+          beforeEnter:(to, from, next)=>{
+            axios.post('/api/y2/frontend/web/index.php?r=user/index')
+            .then(function (response) {
+              if(response.data.code === 401){
+                // next('/')
+                next()
+              }else{
+                next()
+              }
+            })
+            .catch(function (error) {
+              next('/')
+           });
+          }
         },
         {
           path: 'focusreport',

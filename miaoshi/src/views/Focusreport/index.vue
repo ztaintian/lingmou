@@ -94,13 +94,7 @@
         <div class="W70 publicCss">进行中</div>
       </div>
     </div>
-    <div class="pagination">
-      <span class="totle">共{{totlePages}}条，每页20条</span>
-      <img class="img" @click="preClick" :src="imgUrlPre?pnextUrl:pnextUrlA" alt=""><span class="num">{{nowPages}}/{{Math.ceil(totlePages/20)}}</span>
-      <img class="img" @click="nextClick"  :src="imgUrlNext?nextUrl:nextUrlA" alt="">
-      <input type="" name="" v-model="jumpPages">
-      <span class="jump" @click="jump">跳转</span>
-    </div>
+    <Pages :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
   </div>
 </template>
 
@@ -111,11 +105,14 @@ import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
 import ic_next from '@/assets/ic_next_normal@1x.png'
 import pic_next from '@/assets/ic_pre_normal@1x.png'
 import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
-
+import Pages from '@/components/pages'
 export default {
   name: 'Focusreport',
+  components:{Pages},
   data () {
     return {
+      totleNums:50,
+      nowNum:1,
       nextUrl:ic_next,
       nextUrlA:ic_nextActive,
       pnextUrl:pic_next,
@@ -143,40 +140,14 @@ export default {
       tableList:[{showBc:false},{showBc:false},{showBc:false}]
     }
   },
-  watch:{
-  },
   mounted(){
-    this.totlePages = 50
-    this.nowPages = 1
+  },
+  watch:{
+    bb(val){
+      console.log(val)
+    }
   },
   methods:{
-    preClick(){
-      this.imgUrlNext = true
-      if(this.nowPages <=1){
-        return
-      }
-      this.nowPages--
-      this.imgUrlPre = false
-    },
-    nextClick(){
-      this.imgUrlPre = true
-      if(this.nowPages >= Math.ceil(this.totlePages/20)){
-        return
-      }
-      this.nowPages++
-      this.imgUrlNext = false
-    },
-    jump(){
-      if(isNaN(this.jumpPages)){
-        return
-      }
-      if(this.jumpPages<=0||this.jumpPages>Math.ceil(this.totlePages/20)){
-        return;
-      }
-      this.imgUrlNext = true
-      this.imgUrlPre = true
-      this.nowPages = this.jumpPages
-    },
     pointofsaledetails(v){
       var aa =11
       this.$router.push(`/home/pointofsaledetails?aa=${aa}`)

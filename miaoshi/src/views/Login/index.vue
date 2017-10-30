@@ -46,17 +46,30 @@ export default {
   	},
   	login(){
   		if(this.accountFlag && this.passFlag){
-	  		if(this.account =='ztt'){
-	  			this.accountShow = ''
-		  		if(this.pass =='123456'){
-		  			this.passShow = ''
-		  			this.$router.push('/home/focusreport')
-		  		}else{
-		  			this.passShow = '账号密码不匹配，请重新填写'
-		  		}
-	  		}else{
-	  			this.accountShow = '账号不存在，请重新填写'
-	  		}
+	  		// if(this.account =='ztt'){
+	  		// 	this.accountShow = ''
+		  	// 	if(this.pass =='123456'){
+		  	// 		this.passShow = ''
+		  	// 		this.$router.push('/home/focusreport')
+		  	// 	}else{
+		  	// 		this.passShow = '账号密码不匹配，请重新填写'
+		  	// 	}
+	  		// }else{
+	  		// 	this.accountShow = '账号不存在，请重新填写'
+	  		// }
+	  		this.Axios.post('/api/y2/frontend/web/index.php?r=user/login',{
+			    username: this.account,
+			    password: this.pass
+			  })
+				.then(function (response) {
+			    if(response){
+			    	console.log(response)
+			    	// this.$router.push('/home/focusreport')
+			    }
+			  })
+			  .catch(function (error) {
+			    console.log(error);
+			  });
   		}
   		Cookies.set('usename',this.account)
   		Cookies.set('password',this.pass)
@@ -87,7 +100,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 	.login {
 		font-family: 'Microsoft YaHei';

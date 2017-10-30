@@ -285,8 +285,6 @@ export default {
     },
     img(v){
       this.editBoxShow = true
-       document.body.style.overflow='hidden';
-       document.body.style.height='100%';
     },
     cancle(){
       this.editBoxShow = false
@@ -334,7 +332,7 @@ export default {
       background:#D0E4F2;
     }
     .messagebox{
-      position: absolute;
+      position: fixed;
       top:0;
       left:0;
       height:100%;
@@ -343,7 +341,6 @@ export default {
       width:100%;
       .messagecont{
         position:absolute;
-        top:50%;
         left:50%;
         margin-left:-100px;
         .bntlast{
