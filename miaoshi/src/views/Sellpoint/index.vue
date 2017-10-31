@@ -179,9 +179,15 @@ export default {
     getFile(e){
       var files =  e.target.files[0]
       if(files){
-        this.haveFails = true
-        this.fileName =files.name+'('+(files.size/(1024*1024)).toFixed(2)+'M)'
-        this.bntIf = true
+        if(files.size/(1024*1024)>3){
+          this.errorMes = '文件大于3M'
+          return
+        }else{
+          this.errorMes = ''
+          this.haveFails = true
+          this.fileName =files.name+'('+(files.size/(1024*1024)).toFixed(2)+'M)'
+          this.bntIf = true
+        }
       }
     },
     exportFile(){

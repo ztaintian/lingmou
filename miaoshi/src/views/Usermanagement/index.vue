@@ -13,11 +13,11 @@
         <div class="W240 publicCss"></div>
       </div>
       <div v-for="(v,index) in tableList" class="tablelist">
-        <div class="W160 publicCss">299000 000</div>
-        <div class="W200 publicCss">2017-12-12  19:02:34</div>
-        <div class="W200 publicCss">2017-12-12  19:02:34</div>
-        <div class="W200 publicCss">已修改</div>
-        <div class="W120 publicCss">已启用</div>
+        <div class="W160 publicCss">{{v.username}}</div>
+        <div class="W200 publicCss">{{v.updated_at}}</div>
+        <div class="W200 publicCss">{{v.creaetd_at}}</div>
+        <div :class="[v.is_initial == 0?'redColor':'','W200 publicCss']">{{v.is_initial == 0?'未修改':'已修改'}}</div>
+        <div :class="[v.state==0?'redColor':'greenColor','W120 publicCss']">{{v.state==0?'已禁用':'已启用'}}</div>
         <div class="W240 publicCss operation" style="position:relative;">
           <div class="secrit" @click="passwordInit(v)">密码初始化</div>
           <div v-if="v.tipShow" class="messageBox ml76">
@@ -36,7 +36,7 @@
             </div>
           </div>
           <div class="secrit" @click="Disable(v)">
-            禁用
+            {{v.state==0?'启用':'禁用'}}
           </div>
           <div v-if="v.openShow" class="messageBox">
             <img class="img" :src="sanjiaoUrl" alt="">
@@ -93,10 +93,24 @@ export default {
       BoxShow:false,
       countent:'',
       sanjiaoUrl:sanjiao,
-      tableList:[{showBc:false,tipShow:false,openShow:false},{showBc:false,tipShow:false,openShow:false},{showBc:false,tipShow:false,openShow:false}]
+      tableList:[]
     }
   },
   mounted(){
+    var that  = this
+    this.Axios.post('/api/y2/frontend/web/index.php?r=user/userlist')
+    .then(function (data) {
+      data.data.data.forEach((val,index)=>{
+        val.showBc = false
+        val.tipShow = false
+        val.openShow = false
+      })
+      that.tableList = data.data.data
+      console.log(that.tableList)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
     this.totlePages = 50
     this.nowPages = 1
   },
@@ -204,6 +218,12 @@ export default {
         text-align: center;
         vertical-align: middle;
         color: #000000;
+      }
+      .redColor{
+        color:#D61E2A;
+      }
+      .greenColor{
+        color:#3DB866;
       }
     }
     .tablelist{
