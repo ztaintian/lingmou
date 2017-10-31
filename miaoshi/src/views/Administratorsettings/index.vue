@@ -228,7 +228,7 @@ export default {
     border-radius: 4px;
     font-size: 14px;
     .messagebox{
-      position: absolute;
+      position: fixed;
       top:0;
       left:0;
       height:100%;

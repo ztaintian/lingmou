@@ -115,7 +115,6 @@ export default {
     }
   },
   mounted:function(){
-  	document.querySelector('#left').style.height = document.querySelector('#right').offsetHeight+'px'
   	for(var i=0;i<24;i++){
   		if(i>9){
   			this.timeDate.push(i+'时')
@@ -168,19 +167,34 @@ export default {
   		v.choiceGetColcor =false
   	},
   	saved:function(){
-  		this.$message({
-  			message:'错误提示错误提示错误提示错误提示错误提示'
-  		});
-  		this.fishFlag = true;
-  		for(var j=0;j<this.questionList.length;j++){
-  			this.questionList[j].mustAddFlag = false
-	  		for(var i=0;i<this.questionList[j].choiceList.length;i++){
-	  			if(this.questionList[j].title==null||this.questionList[j].title==''||this.questionList[j].choiceList[i].choiceIpt == '' || this.questionList[j].choiceList[i].choiceIpt==null){
-	  				this.questionList[j].mustAddFlag = true
-	  				return
-	  			}
-	  		}
+  		// this.$message({
+  		// 	message:'错误提示错误提示错误提示错误提示错误提示'
+  		// });
+  		// this.fishFlag = true;
+  		// for(var j=0;j<this.questionList.length;j++){
+  		// 	this.questionList[j].mustAddFlag = false
+	  	// 	for(var i=0;i<this.questionList[j].choiceList.length;i++){
+	  	// 		if(this.questionList[j].title==null||this.questionList[j].title==''||this.questionList[j].choiceList[i].choiceIpt == '' || this.questionList[j].choiceList[i].choiceIpt==null){
+	  	// 			this.questionList[j].mustAddFlag = true
+	  	// 			return
+	  	// 		}
+	  	// 	}
+  		// }
+  		console.log(this.value1)
+  		var d = new Date(this.value1)
+  		var data = {
+  			title:this.nameQuestion,
+  			endtime:new Date(this.value1+''+this.selecttime.substr(0, 2)+':00'+':00').getTime()
   		}
+  		console.log(data.endtime)
+			this.Axios.post('/api/y2/frontend/web/index.php?r=question/addnaire',data)
+				.then(function (response) {
+			    console.log(response);
+			  })
+			  .catch(function (error) {
+			    console.log(error);
+			  });
+
 
   	},
   	lastone:function(){

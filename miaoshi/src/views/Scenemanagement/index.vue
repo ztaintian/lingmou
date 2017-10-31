@@ -42,83 +42,67 @@
         <div class="W280 publicCss"></div>
       </div>
       <div v-for="(v,index) in tableList" class="tablelist">
-        <div class="W584 txl publicCss">可口可乐双十一家乐福门店活动调查</div>
-        <div class="W120 publicCss">999</div>
-        <div class="W120 publicCss">进行中</div>
-        <div class="W280 publicCss" style="text-align:right;"><span style="cursor: pointer;color:#2D78B3;margin-right:30px;">详情</span><span style="cursor: pointer;color:#2D78B3;margin-right:16px;">删除</span></div>
+        <div class="W584 txl publicCss">{{v.title}}</div>
+        <div class="W120 publicCss">{{v.finish_n}}</div>
+        <div class="W120 publicCss">{{new Date().getTime()<(v.endtime*1000)?'过期':'进行中'}}</div>
+        <div class="W280 publicCss" style="text-align:right;"><span style="cursor: pointer;color:#2D78B3;margin-right:30px;" @click="questionnairedetails(v)">详情</span><span style="cursor: pointer;color:#2D78B3;margin-right:16px;" @click="del(v)">删除</span></div>
       </div>
     </div>
-    <div class="pagination">
-      <span class="totle">共{{totlePages}}条，每页20条</span>
-      <img class="img" @click="preClick" :src="imgUrlPre?pnextUrl:pnextUrlA" alt=""><span class="num">{{nowPages}}/{{Math.ceil(totlePages/20)}}</span>
-      <img class="img" @click="nextClick"  :src="imgUrlNext?nextUrl:nextUrlA" alt="">
-      <input type="" name="" v-model="jumpPages">
-      <span class="jump" @click="jump">跳转</span>
-    </div>
+    <Pages  v-if="totleNums/20>1"  :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
   </div>
 </template>
 
 <script>
 import hookicon from '@/assets/ic_yes@1x.png'
-import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
-import ic_next from '@/assets/ic_next_normal@1x.png'
-import pic_next from '@/assets/ic_pre_normal@1x.png'
-import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
 import freezerIcon from '@/assets/ic_scene_freezer@1x.png'
 import hotsaleIcon from '@/assets/ic_scene_hotsale@1x.png'
 import shelveIcon from '@/assets/ic_scene_shelve@1x.png'
+import Pages from '@/components/pages'
 
 export default {
   name: 'Scenemanagement',
+  components:{Pages},
   data () {
     return {
-      imgUrlPre:true,
-      imgUrlNext:true,
-      totlePages:'',
-      nowPages:'',
-      jumpPages:'',
+      totleNums:0,
+      nowNum:1,
       freezerUrl:freezerIcon,
       hotsaleUrl:hotsaleIcon,
       shelveUrl:shelveIcon,
-      nextUrl:ic_next,
-      nextUrlA:ic_nextActive,
-      pnextUrl:pic_next,
-      pnextUrlA:pic_nextActive,
       hookUrl:hookicon,
-      tableList:[{showBc:false},{showBc:false},{showBc:false}]
+      tableList:[]
     }
   },
   mounted(){
-    this.totlePages = 50
-    this.nowPages = 1
+    this.getAjaxList()
   },
   methods:{
-    preClick(){
-      this.imgUrlNext = true
-      if(this.nowPages <=1){
-        return
-      }
-      this.nowPages--
-      this.imgUrlPre = false
+    del(v){
+      var that = this
+      this.Axios.post(`/api/y2/frontend/web/index.php?r=question/delnaire`,{id:v.id})
+      .then(function (data) {
+        console.log(data)
+         that.getAjaxList()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     },
-    nextClick(){
-      this.imgUrlPre = true
-      if(this.nowPages >= Math.ceil(this.totlePages/20)){
-        return
-      }
-      this.nowPages++
-      this.imgUrlNext = false
+    getAjaxList(){
+      var that = this
+      this.Axios.get(`/api/y2/frontend/web/index.php?r=question/naire&page=${this.nowNum}&per-page=20`)
+      .then(function (data) {
+        that.tableList = data.data.data;
+        that.totleNums = data.data.pagelist.count
+        that.nowNum = data.data.pagelist.page
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     },
-    jump(){
-      if(isNaN(this.jumpPages)){
-        return
-      }
-      if(this.jumpPages<=0||this.jumpPages>Math.ceil(this.totlePages/20)){
-        return;
-      }
-      this.imgUrlNext = true
-      this.imgUrlPre = true
-      this.nowPages = this.jumpPages
+    questionnairedetails(v){
+      this.$router.push(`/home/questionnairedetails`)
     },
     newQuestion(){
       this.$router.push('/home/questionnaire')

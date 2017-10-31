@@ -103,7 +103,6 @@ export default {
  	},
   mounted(){
   	this.nowRoute()
-  	console.log(Cookies.get('user_name'))
   	this.useName = Cookies.get('user_name')
   },
   methods:{
@@ -143,6 +142,10 @@ export default {
 	  		this.iconShow()
 	  		break;
 	  		case '/home/scenemanagement':
+	  		this.type = 4
+	  		this.iconShow()
+	  		break;
+	  		case '/home/questionnairedetails':
 	  		this.type = 4
 	  		this.iconShow()
 	  		break;

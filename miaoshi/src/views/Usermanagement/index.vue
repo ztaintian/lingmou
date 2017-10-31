@@ -14,8 +14,8 @@
       </div>
       <div v-for="(v,index) in tableList" class="tablelist">
         <div class="W160 publicCss">{{v.username}}</div>
-        <div class="W200 publicCss">{{v.updated_at}}</div>
-        <div class="W200 publicCss">{{v.creaetd_at}}</div>
+        <div class="W200 publicCss">{{v.updated_at|dataForm}}</div>
+        <div class="W200 publicCss">{{v.creaetd_at|dataForm}}</div>
         <div :class="[v.is_initial == 0?'redColor':'','W200 publicCss']">{{v.is_initial == 0?'未修改':'已修改'}}</div>
         <div :class="[v.state==0?'redColor':'greenColor','W120 publicCss']">{{v.state==0?'已禁用':'已启用'}}</div>
         <div class="W240 publicCss operation" style="position:relative;">
@@ -23,7 +23,7 @@
           <div v-if="v.tipShow" class="messageBox ml76">
             <img class="img" :src="sanjiaoUrl" alt="">
             <div class="count">
-              账号：789334 106
+              账号：{{v.username}}
             </div>
             <div class="decrite">
               确定对该账号进行密码初始化？
@@ -36,15 +36,15 @@
             </div>
           </div>
           <div class="secrit" @click="Disable(v)">
-            {{v.state==0?'启用':'禁用'}}
+            禁用
           </div>
           <div v-if="v.openShow" class="messageBox">
             <img class="img" :src="sanjiaoUrl" alt="">
             <div class="count">
-              账号：789334 106
+              账号：{{v.username}}
             </div>
             <div class="decrite">
-              确定重新启用该帐号？
+              确定禁用该帐号？
             </div>
             <div @click="confimOpen(v)" class="btnAA btnAAS">
                确定
@@ -56,8 +56,10 @@
         </div>
         <div style="clear: both;"></div>
       </div>
+      <div style="height:60px;">
+        <Pages style="margin-top:30px;" v-if="totleNums/20>1?true:false" :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
+      </div>
     </div>
-    <Pages :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
   </div>
 </template>
 
@@ -70,7 +72,7 @@ export default {
   components:{Pages},
   data () {
     return {
-      totleNums:50,
+      totleNums:0,
       nowNum:1,
       hookUrl:hookicon,
       editBoxShow:false,
@@ -81,28 +83,35 @@ export default {
     }
   },
   mounted(){
-    var that  = this
-    this.Axios.post('/api/y2/frontend/web/index.php?r=user/userlist')
-    .then(function (data) {
-      data.data.data.forEach((val,index)=>{
-        val.showBc = false
-        val.tipShow = false
-        val.openShow = false
-      })
-      that.tableList = data.data.data
-      console.log(that.tableList)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    this.getAjaxList()
+  },
+  watch:{
+    nowNum(){
+      this.getAjaxList()
+    }
   },
   methods:{
+    getAjaxList(){
+      var that  = this
+      this.Axios.get(`/api/y2/frontend/web/index.php?r=user/userlist&page=${this.nowNum}&per-page=20`)
+      .then(function (data) {
+        data.data.data.forEach((val,index)=>{
+          val.showBc = false
+          val.tipShow = false
+          val.openShow = false
+        })
+        that.tableList = data.data.data
+        that.totleNums = data.data.pagelist.count
+        that.nowNum = data.data.pagelist.page
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
     edit(){
       this.editAccount = '';
       this.editPass = '';
       this.editBoxShow = true
-      document.body.style.overflow='hidden';
-      document.body.style.height='100%';
     },
     allHidden(){
       for(var i=0;i<this.tableList.length;i++){
@@ -121,10 +130,26 @@ export default {
       v.openShow = false
     },
     confimSecrit(v){
-      v.tipShow = false
+      var that  = this
+      this.Axios.post(`/api/y2/frontend/web/index.php?r=user/userinit`,{id:v.id})
+      .then(function (data) {
+        that.getAjaxList()
+        v.tipShow = false
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     },
     confimOpen(v){
-      v.openShow = false
+      var that  = this
+      this.Axios.post(`/api/y2/frontend/web/index.php?r=user/userstop`,{id:v.id})
+      .then(function (data) {
+        v.openShow = false
+        that.getAjaxList()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     },
     passwordInit(v){
       this.allHidden()
@@ -153,7 +178,7 @@ export default {
     .table{
       margin:30px auto 0;
       width:1120px;
-      padding-bottom: 30px;
+      padding-bottom: 100px;
       box-sizing:border-box;
       .Theaded{
         overflow:hidden;

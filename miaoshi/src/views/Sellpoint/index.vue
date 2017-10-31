@@ -28,13 +28,6 @@
         <div class="W100 publicCss ">周二／周五</div>
       </div>
     </div>
-<!--     <div class="pagination">
-      <span class="totle">共{{totlePages}}条，每页20条</span>
-      <img class="img" @click="preClick" :src="imgUrlPre?pnextUrl:pnextUrlA" alt=""><span class="num">{{nowPages}}/{{Math.ceil(totlePages/20)}}</span>
-      <img class="img" @click="nextClick"  :src="imgUrlNext?nextUrl:nextUrlA" alt="">
-      <input type="" name="" v-model="jumpPages">
-      <span class="jump" @click="jump">跳转</span>
-    </div> -->
     <Pages :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
     <div class="messagebox" v-if="boxShow">
       <iframe id="hiddenIframe" style="width:0;height:0;" name="posthere"></iframe>
@@ -92,9 +85,9 @@ export default {
   methods:{
     submit(){
       var that =this
-    if(!this.bntIf){
-      return
-    }
+      if(!this.bntIf){
+        return
+      }
      var iframe = document.getElementById("hiddenIframe");
      function iframeOnload(){
          var html = "",json = null;
@@ -203,8 +196,8 @@ export default {
           color: #8C8C8C;
           margin:10px 0 20px 40px;
           .errorShow{
-            font-family: PingFangSC-Regular;
-            font-size: 14px;
+            font-family:'PingFang SC-Regular';
+            font-size: 13px;
             color: #D61E2A;
             float: right;
             margin-right:40px;
