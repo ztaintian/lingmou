@@ -36,27 +36,28 @@
       <span class="jump" @click="jump">跳转</span>
     </div>
     <div class="messagebox" v-if="boxShow">
-      <div class="messagecont">
-        <div class="addGY">
-          上传文件
+      <iframe id="hiddenIframe" style="width:0;height:0;" name="posthere"></iframe>
+      <form target="posthere" action="/api/y2/frontend/web/index.php?r=store/upload" method="post" enctype="multipart/form-data">
+        <div class="messagecont">
+          <div class="addGY">
+            上传文件
+          </div>
+          <div class="upFile">
+            <a style="text-align: center;display: inline-block;width:100%;height:100%;position: relative;">
+                <input type="file"  @change="getFile" name="UploadForm[file]" id="mydata" accept="application/vnd.ms-excel" style="left: 0;position: absolute;width:100%;height:100%;opacity: 0; cursor:pointer;" placeholder="用户名"><span v-if="haveFails" style="font-family: 'Microsoft YaHei';font-size: 14px;color: #333333;float:left;line-height:30px;margin-left: 12px;">{{fileName}}</span><span style="line-height:30px;display:inline-block;height:30px;color: #2D78B3;" v-if="!haveFails">选择文件</span><span style="font-family: 'Microsoft YaHei';font-size:13px;color: #2D78B3;float:right;margin-right:12px;line-height:30px;" v-if="haveFails">重新上传</span>
+            </a>
+          </div>
+          <div class="tip">
+            最大支持 3 MB XLS的文件。<span  class="errorShow">{{errorMes}}</span>
+          </div>
+          <div class="p">导入的文件数据需要同模板文件保持一致。<span>下载模版</span></div>
+          <div class="p">导入后将会覆盖原先的售点数据。售点数据全部来源于新文件。</div>
+          <div class="p">导入售点后需要一段时间同步售点信息，之后才会出现，请耐心等待。</div>
+          <button type="submit" @click="submit" :class="[bntIf?'bntlast':'bnt','addPublic']">
+            确定上传
+          </button>
         </div>
-        <div class="upFile">
-          <a style="text-align: center;display: inline-block;width:100%;height:100%;position: relative;">
-            <form action="http://192.168.3.102:8080/y2/frontend/web/index.php?r=store/upload" method="post" accept-charset="utf-8">
-              <input type="file" @change="getFile" name="" id="mydata" accept="application/vnd.ms-excel" style="left: 0;position: absolute;width:100%;height:100%;opacity: 0;" placeholder="用户名"><span style="line-height:30px;display:inline-block;height:30px;color: #2D78B3;">选择文件</span>
-            </form>
-          </a>
-        </div>
-        <div class="tip">
-          最大支持 3 MB XLS的文件。
-        </div>
-        <div class="p">导入的文件数据需要同模板文件保持一致。<span>下载模版</span></div>
-        <div class="p">导入后将会覆盖原先的售点数据。售点数据全部来源于新文件。</div>
-        <div class="p">导入售点后需要一段时间同步售点信息，之后才会出现，请耐心等待。</div>
-        <div @click="addsuccess" :class="[bntIf?'bntlast':'bnt','addPublic']">
-          确定上传
-        </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>
@@ -73,6 +74,9 @@ export default {
   name: 'Sellpoint',
   data () {
     return {
+      errorMes:'',
+      errorFlag:false,
+      haveFails:false,
       imgUrlPre:true,
       imgUrlNext:true,
       totlePages:'',
@@ -86,7 +90,8 @@ export default {
       pnextUrlA:pic_nextActive,
       hookUrl:hookicon,
       exportUrl:exporticon,
-      tableList:[{showBc:false},{showBc:false},{showBc:false}]
+      tableList:[{showBc:false},{showBc:false},{showBc:false}],
+      fileName:''
     }
   },
   mounted(){
@@ -94,6 +99,56 @@ export default {
     this.nowPages = 1
   },
   methods:{
+    submit(){
+      var that =this
+    if(!this.bntIf){
+      return
+    }
+     var iframe = document.getElementById("hiddenIframe");
+     function iframeOnload(){
+         var html = "",json = null;
+         try{
+             var el = (iframe.contentWindow || iframe.contentDocument.parentWindow).document.body;
+             while(el &&  el.nodeType !== 3){
+                 el = el.firstChild;
+             }
+             html = el.nodeValue ;
+             json = html ? eval("(" + html + ")") : false;
+             console.log(json)
+             if(json.code === 401){
+              that.errorMes = json.msg
+             }else if(json.code === 400){
+              that.errorMes = json.msg
+             }else if(json.code === 402){
+              that.errorMes = json.msg
+             }else if(json.code === 200){
+              that.boxShow =false
+             }
+         }catch(e){}
+         if(json){
+             if(json.data && json.data){
+                 // alert(json.data);
+             }else if (json.error){
+                 // alert(json.error || "上传失败。");
+             }
+         }
+     }
+
+     if(iframe.attachEvent){
+         iframe.attachEvent("onload",iframeOnload);
+     }else{
+         iframe.onload = iframeOnload;
+     }
+     //处理页面编码问题
+     if(navigator.userAgent.indexOf("MSIE") !== -1){
+         form.onsubmit = function(e){
+             document.charset='GBK';
+         }
+         window.onbeforeunload = function(){
+              document.charset='UTF-8';
+         }
+     }
+  },
     preClick(){
       this.imgUrlNext = true
       if(this.nowPages <=1){
@@ -122,48 +177,17 @@ export default {
       this.nowPages = this.jumpPages
     },
     getFile(e){
-      console.log(e.target.files)
-      var mydata = document.getElementById("mydata").files[0]; 
-      var formData = new FormData();
-      formData.append("mydata", mydata);
-      console.log(formData)
-      // this.Axios.post('/api/y2/frontend/web/index.php?r=store/upload',{
-      //   data:formData
-      // })
-      // .then(function (data) {
-      //   console.log(data)
-      // })
-      // .catch(function (error) {
-      //   console.log(error);
-      // });
-      axios({
-        url: '/user',
-        method: 'post',
-        data: {
-          firstName: 'Fred',
-          lastName: 'Flintstone'
-        },
-        transformRequest: [function (data) {
-          // Do whatever you want to transform the data
-          let ret = ''
-          for (let it in data) {
-            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-          }
-          return ret
-        }],
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
+      var files =  e.target.files[0]
+      if(files){
+        this.haveFails = true
+        this.fileName =files.name+'('+(files.size/(1024*1024)).toFixed(2)+'M)'
+        this.bntIf = true
+      }
     },
     exportFile(){
       this.boxShow = true
        document.body.style.overflow='hidden';
        document.body.style.height='100%';
-    },
-    addsuccess(){
-      this.boxShow = false
-      document.body.style.overflow='scroll';
     }
   }
 }
@@ -178,7 +202,7 @@ export default {
     border-radius: 4px;
     font-size: 14px;
     .messagebox{
-      position: absolute;
+      position: fixed;
       top:0;
       left:0;
       height:100%;
@@ -208,6 +232,13 @@ export default {
           font-size: 14px;
           color: #8C8C8C;
           margin:10px 0 20px 40px;
+          .errorShow{
+            font-family: PingFangSC-Regular;
+            font-size: 14px;
+            color: #D61E2A;
+            float: right;
+            margin-right:40px;
+          }
         }
         .addGY{
           font-family: MicrosoftYaHei;
@@ -222,6 +253,9 @@ export default {
           font-weight:bold;
         }
         .addPublic{
+          display: inline-block;
+          border:none;
+          outline: none;
           background: #C1C7CC;
           border-radius: 4px;
           width:100px;
@@ -231,9 +265,13 @@ export default {
           text-align: center;
           line-height:30px;
           color:#FFFFFF;
+          margin-left: 210px;
+          font-family:'PingFangSC-Regular';
+          font-size: 14px;
+          color: #FFFFFF;
         }
         .bntlast{
-          background:#324656;
+          background:#2D78B3;
           cursor:pointer;
         }
         .upFile{
