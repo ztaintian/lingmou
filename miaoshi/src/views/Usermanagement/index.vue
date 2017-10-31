@@ -57,37 +57,21 @@
         <div style="clear: both;"></div>
       </div>
     </div>
-    <div class="pagination">
-      <span class="totle">共{{totlePages}}条，每页20条</span>
-      <img class="img" @click="preClick" :src="imgUrlPre?pnextUrl:pnextUrlA" alt=""><span class="num">{{nowPages}}/{{Math.ceil(totlePages/20)}}</span>
-      <img class="img" @click="nextClick"  :src="imgUrlNext?nextUrl:nextUrlA" alt="">
-      <input type="" name="" v-model="jumpPages">
-      <span class="jump" @click="jump">跳转</span>
-    </div>
+    <Pages :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
   </div>
 </template>
 
 <script>
 import hookicon from '@/assets/ic_yes@1x.png'
-import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
-import ic_next from '@/assets/ic_next_normal@1x.png'
-import pic_next from '@/assets/ic_pre_normal@1x.png'
-import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
 import sanjiao from '@/assets/sj@1x.png'
-
+import Pages from '@/components/pages'
 export default {
   name: 'Usermanagement',
+  components:{Pages},
   data () {
     return {
-      imgUrlPre:true,
-      imgUrlNext:true,
-      totlePages:'',
-      nowPages:'',
-      jumpPages:'',
-      nextUrl:ic_next,
-      nextUrlA:ic_nextActive,
-      pnextUrl:pic_next,
-      pnextUrlA:pic_nextActive,
+      totleNums:50,
+      nowNum:1,
       hookUrl:hookicon,
       editBoxShow:false,
       BoxShow:false,
@@ -111,37 +95,8 @@ export default {
     .catch(function (error) {
       console.log(error);
     });
-    this.totlePages = 50
-    this.nowPages = 1
   },
   methods:{
-    preClick(){
-      this.imgUrlNext = true
-      if(this.nowPages <=1){
-        return
-      }
-      this.nowPages--
-      this.imgUrlPre = false
-    },
-    nextClick(){
-      this.imgUrlPre = true
-      if(this.nowPages >= Math.ceil(this.totlePages/20)){
-        return
-      }
-      this.nowPages++
-      this.imgUrlNext = false
-    },
-    jump(){
-      if(isNaN(this.jumpPages)){
-        return
-      }
-      if(this.jumpPages<=0||this.jumpPages>Math.ceil(this.totlePages/20)){
-        return;
-      }
-      this.imgUrlNext = true
-      this.imgUrlPre = true
-      this.nowPages = this.jumpPages
-    },
     edit(){
       this.editAccount = '';
       this.editPass = '';

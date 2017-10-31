@@ -49,6 +49,7 @@ export default {
   },
   methods:{
     preClick(){
+      this.jumpPages = ''
       this.imgUrlNext = true
       if(this.mynowPages <=1){
         return
@@ -57,6 +58,7 @@ export default {
       this.imgUrlPre = false
     },
     nextClick(){
+      this.jumpPages = ''
       this.imgUrlPre = true
       if(this.mynowPages >= Math.ceil(this.mytotlePages/20)){
         return

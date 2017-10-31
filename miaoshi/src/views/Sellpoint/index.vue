@@ -28,13 +28,14 @@
         <div class="W100 publicCss ">周二／周五</div>
       </div>
     </div>
-    <div class="pagination">
+<!--     <div class="pagination">
       <span class="totle">共{{totlePages}}条，每页20条</span>
       <img class="img" @click="preClick" :src="imgUrlPre?pnextUrl:pnextUrlA" alt=""><span class="num">{{nowPages}}/{{Math.ceil(totlePages/20)}}</span>
       <img class="img" @click="nextClick"  :src="imgUrlNext?nextUrl:nextUrlA" alt="">
       <input type="" name="" v-model="jumpPages">
       <span class="jump" @click="jump">跳转</span>
-    </div>
+    </div> -->
+    <Pages :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
     <div class="messagebox" v-if="boxShow">
       <iframe id="hiddenIframe" style="width:0;height:0;" name="posthere"></iframe>
       <form target="posthere" action="/api/y2/frontend/web/index.php?r=store/upload" method="post" enctype="multipart/form-data">
@@ -64,30 +65,21 @@
 
 <script>
 import hookicon from '@/assets/ic_yes@1x.png'
-import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
-import ic_next from '@/assets/ic_next_normal@1x.png'
-import pic_next from '@/assets/ic_pre_normal@1x.png'
-import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
 import exporticon from '@/assets/ic_import@1x.png'
+import Pages from '@/components/pages'
 
 export default {
   name: 'Sellpoint',
+  components:{Pages},
   data () {
     return {
+      totleNums:50,
+      nowNum:1,
       errorMes:'',
       errorFlag:false,
       haveFails:false,
-      imgUrlPre:true,
-      imgUrlNext:true,
-      totlePages:'',
-      nowPages:'',
-      jumpPages:'',
       bntIf:false,
       boxShow:false,
-      nextUrl:ic_next,
-      nextUrlA:ic_nextActive,
-      pnextUrl:pic_next,
-      pnextUrlA:pic_nextActive,
       hookUrl:hookicon,
       exportUrl:exporticon,
       tableList:[{showBc:false},{showBc:false},{showBc:false}],
@@ -95,8 +87,7 @@ export default {
     }
   },
   mounted(){
-    this.totlePages = 50
-    this.nowPages = 1
+
   },
   methods:{
     submit(){
@@ -148,36 +139,9 @@ export default {
               document.charset='UTF-8';
          }
      }
-  },
-    preClick(){
-      this.imgUrlNext = true
-      if(this.nowPages <=1){
-        return
-      }
-      this.nowPages--
-      this.imgUrlPre = false
-    },
-    nextClick(){
-      this.imgUrlPre = true
-      if(this.nowPages >= Math.ceil(this.totlePages/20)){
-        return
-      }
-      this.nowPages++
-      this.imgUrlNext = false
-    },
-    jump(){
-      if(isNaN(this.jumpPages)){
-        return
-      }
-      if(this.jumpPages<=0||this.jumpPages>Math.ceil(this.totlePages/20)){
-        return;
-      }
-      this.imgUrlNext = true
-      this.imgUrlPre = true
-      this.nowPages = this.jumpPages
     },
     getFile(e){
-      var files =  e.target.files[0]
+    var files =  e.target.files[0]
       if(files){
         if(files.size/(1024*1024)>3){
           this.errorMes = '文件大于3M'
