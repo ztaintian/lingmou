@@ -143,19 +143,19 @@ export default {
   	}
   },
   methods:{
-  	titleFocus(v){
+  	titleFocus(v){//标题得到焦点
   		v.titleGetColcor = true
   	},
-  	titleBlur(v){
+  	titleBlur(v){//标题失去焦点
   		v.titleGetColcor = false
   	},
-  	nameGetFocus(){
+  	nameGetFocus(){//名称得到焦点
   		this.nameGetColor = true
   	},
-  	nameGetblur(){
+  	nameGetblur(){//名称失去焦点
   		this.nameGetColor = false
   	},
-  	getFocus:function(v,index,indexQ){
+  	getFocus:function(v,index,indexQ){//input 等到焦点
   		v.choiceGetColcor = true
   		for(var i=0;i<this.questionList[indexQ].choiceList.length;i++){
   			this.questionList[indexQ].choiceList[i].delCe=false
@@ -163,14 +163,16 @@ export default {
   		v.delCe = true
   		this.lastoneC(indexQ)
   	},
-  	getBlur(v){
+  	getBlur(v){//input 失去焦点
   		v.choiceGetColcor =false
   	},
-  	saved:function(){
-  		this.$message({
-  			message:'错误提示错误提示错误提示错误提示错误提示'
-  		});
-  		this.fishFlag = true;
+  	saved:function(){//完成
+  		// this.$message({
+  		// 	message:'错误提示错误提示错误提示错误提示错误提示'
+  		// });
+
+  		this.fishFlag = true; 
+  		//input值判断
   		for(var j=0;j<this.questionList.length;j++){
   			this.questionList[j].mustAddFlag = false
 	  		for(var i=0;i<this.questionList[j].choiceList.length;i++){
@@ -180,16 +182,17 @@ export default {
 	  			}
 	  		}
   		}
+  		//后台数据处理
   		var d = new Date(this.value1)
   		var YMD = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
   		if(this.nameQuestion == null || this.nameQuestion == ''){
   			return
   		}
-  		if( (new Date().getTime()) > (new Date(YMD+' '+this.selecttime.substr(0, 2)+':00'+':00').getTime())){
+  		if((new Date().getTime()) > (new Date(YMD+' '+this.selecttime.substr(0, 2)+':00'+':00').getTime())){
   			this.$message({
   				message:'截止时间不能小于当前时间'
   			});
-
+  			return
   		}
   		var data = {
   			title:this.nameQuestion,
@@ -215,28 +218,36 @@ export default {
   			objArr.push(objList)
   		}
   		data.question = objArr
+  		var that = this
 			this.Axios.post('/api/y2/frontend/web/index.php?r=question/addnaire',data)
-				.then(function (response) {
-			    console.log(response);
-			  })
-			  .catch(function (error) {
-			    console.log(error);
-			  });
-
-
+			.then(function (response) {
+				if(response.data.code === 200){
+		  		that.$message({
+		  			message:response.data.msg
+		  		});
+		  		that.$router.push('home/scenemanagement')
+				}else{
+		  		that.$message({
+		  			message:response.data.msg
+		  		});
+				}
+		  })
+		  .catch(function (error) {
+		    console.log(error);
+		  });
   	},
-  	lastone:function(){
+  	lastone:function(){//问题删除按钮显示
   		if(this.questionList.length === 1){
   			this.questionList[0].delShow = false
   		}
   	},
-  	lastoneC:function(indexQ){
+  	lastoneC:function(indexQ){//选项删除按钮显示
   		if(this.questionList[indexQ].choiceList.length <= 2){
   			this.questionList[indexQ].choiceList[0].delCe = false
   			this.questionList[indexQ].choiceList[1].delCe = false
   		}
   	},
-  	radioQus:function(index,num,bb){
+  	radioQus:function(index,num,bb){//单选、多选判断
   		if(num === 1){
   			this.questionList[index].radioShow1 = true
   			this.questionList[index].radioShow2 = false
@@ -274,21 +285,21 @@ export default {
   		this.lastone()
 
   	},
-  	addChoice:function(index){
+  	addChoice:function(index){//添加选项
   		this.questionList[index].choiceList.push({delCe:false,choiceIpt:''})
   		this.lastoneC(index)
   	},
-  	delChoice:function(indexC,indexQ){
+  	delChoice:function(indexC,indexQ){//删除选项
   		this.questionList[indexQ].choiceList.splice(indexC,1)
   		this.lastoneC(indexQ)
   	},
-  	show:function(v){
+  	show:function(v){//展开逻辑
 			for(var i =0;i<this.questionList.length;i++){
 				this.questionList[i].show = false
 			}
 			v.show = !v.show
   	},
-  	delQuestion:function(index){
+  	delQuestion:function(index){//删除问题
   		this.questionList.splice(index,1)
   		if(this.questionList.length > 1){
   			this.questionList[0].delShow = true;
