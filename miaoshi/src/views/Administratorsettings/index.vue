@@ -16,55 +16,48 @@
         <div class="W240 publicCss"></div>
       </div>
       <div v-for="(v,index) in tableList" class="tablelist">
-        <div class="W160 publicCss">bellcha</div>
-        <div class="W200 publicCss">192.349.294.223</div>
-        <div class="W200 publicCss">2017-12-12  19:02:34</div>
-        <div class="W200 publicCss">2017-12-12  19:02:34</div>
-        <div class="W120 publicCss">已拉黑</div>
+        <div class="W160 publicCss">{{v.username}}</div>
+        <div class="W200 publicCss">{{v.loginip}}</div>
+        <div class="W200 publicCss">{{v.updated_at|dataForm}}</div>
+        <div class="W200 publicCss">{{v.created_at|dataForm}}</div>
+        <div :class="[v.status==0?'redColor':'greenColor','W120 publicCss']">{{v.status==0?'已拉黑':'正常'}}</div>
         <div class="W240 publicCss operation">
           <span @click="edit(v)">编辑</span>
-          <span>删除</span>
-          <span>启用</span>
+          <span @click="firbid(v)">{{v.status==0?'启用':'禁用'}}</span>
+        </div>
+        <div class="messagebox" v-show="v.editBoxShow" @click="v.editBoxShow=false">
+        </div>
+        <div class="messagecont"  v-show="v.editBoxShow">
+          <div class="addGY">
+            编辑管理员
+          </div>
+          <div class="use">
+            <input  v-model="v.username" disabled="disabled" :class="[editAccountFlag?'linelast':'']" type="" name="" placeholder="用户名">
+          </div>
+          <div class="use">
+            <input type="password"  :class="[editPassFlag?'linelast':'']"   v-model="editPass" name="" placeholder="密码">
+          </div>
+          <div @click="save(v)" :class="[editBntIf?'bntlast':'bnt','addPublic']">
+            保存
+          </div>
         </div>
       </div>
     </div>
-    <div class="pagination">
-      <span class="totle">共{{totlePages}}条，每页20条</span>
-      <img class="img" @click="preClick" :src="imgUrlPre?pnextUrl:pnextUrlA" alt=""><span class="num">{{nowPages}}/{{Math.ceil(totlePages/20)}}</span>
-      <img class="img" @click="nextClick"  :src="imgUrlNext?nextUrl:nextUrlA" alt="">
-      <input type="" name="" v-model="jumpPages">
-      <span class="jump" @click="jump">跳转</span>
+    <Pages v-if="totleNums/20>1?true:false" :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
+    <div class="messagebox" v-if="boxShow" @click="boxShow=false">
     </div>
-    <div class="messagebox" v-if="boxShow">
-      <div class="messagecont">
-        <div class="addGY">
-          添加管理员
-        </div>
-        <div class="use">
-          <input  v-model="account"  :class="[accountFlag?'linelast':'']" type="" name="" placeholder="用户名">
-        </div>
-        <div class="use">
-          <input type="password"  :class="[passFlag?'linelast':'']"   v-model="pass" name="" placeholder="密码">
-        </div>
-        <div @click="addsuccess" :class="[bntIf?'bntlast':'bnt','addPublic']">
-          添加
-        </div>
+    <div class="messagecont" v-if="boxShow">
+      <div class="addGY">
+        添加管理员
       </div>
-    </div>
-    <div class="messagebox" v-if="editBoxShow">
-      <div class="messagecont">
-        <div class="addGY">
-          编辑管理员
-        </div>
-        <div class="use">
-          <input  v-model="editAccount"  :class="[editAccountFlag?'linelast':'']" type="" name="" placeholder="用户名">
-        </div>
-        <div class="use">
-          <input type="password"  :class="[editPassFlag?'linelast':'']"   v-model="editPass" name="" placeholder="密码">
-        </div>
-        <div @click="save" :class="[editBntIf?'bntlast':'bnt','addPublic']">
-          保存
-        </div>
+      <div class="use">
+        <input  v-model="account"  :class="[accountFlag?'linelast':'']" type="" name="" placeholder="用户名">
+      </div>
+      <div class="use">
+        <input type="password"  :class="[passFlag?'linelast':'']"   v-model="pass" name="" placeholder="密码">
+      </div>
+      <div @click="addsuccess" :class="[bntIf?'bntlast':'bnt','addPublic']">
+        添加
       </div>
     </div>
   </div>
@@ -72,26 +65,17 @@
 
 <script>
 import hookicon from '@/assets/ic_yes@1x.png'
-import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
-import ic_next from '@/assets/ic_next_normal@1x.png'
-import pic_next from '@/assets/ic_pre_normal@1x.png'
-import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
+import Pages from '@/components/pages'
 
 export default {
   name: 'Administratorsettings',
+  components:{Pages},
   data () {
     return {
-      imgUrlPre:true,
-      imgUrlNext:true,
-      totlePages:'',
-      nowPages:'',
-      jumpPages:'',
-      nextUrl:ic_next,
-      nextUrlA:ic_nextActive,
-      pnextUrl:pic_next,
-      pnextUrlA:pic_nextActive,
+      totleNums:1,
+      nowNum:1,
       hookUrl:hookicon,
-      tableList:[{showBc:false},{showBc:false},{showBc:false}],
+      tableList:[],
       boxShow:false,
       account:'',
       pass:'',
@@ -102,51 +86,53 @@ export default {
       editAccount:'',
       editPass:'',
       editBntIf:false,
-      editAccountFlag:false,
+      editAccountFlag:true,
       editPassFlag:false
-
     }
   },
   mounted(){
-    this.totlePages = 50
-    this.nowPages = 1
+    this.getAjaxList()
   },
   methods:{
-    preClick(){
-      this.imgUrlNext = true
-      if(this.nowPages <=1){
-        return
-      }
-      this.nowPages--
-      this.imgUrlPre = false
+    getAjaxList(){
+      var that  = this
+      this.Axios.get(`/api/y2/frontend/web/index.php?r=user/adminlist&page=${this.nowNum}&per-page=20`)
+      .then(function (data) {
+        data.data.data.forEach((val,index)=>{
+          val.editBoxShow = false
+        })
+        that.tableList = data.data.data
+        that.totleNums = data.data.pagelist.count
+        that.nowNum = data.data.pagelist.page
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     },
-    nextClick(){
-      this.imgUrlPre = true
-      if(this.nowPages >= Math.ceil(this.totlePages/20)){
-        return
-      }
-      this.nowPages++
-      this.imgUrlNext = false
+    firbidAjax(url,id){
+      var that = this
+      this.Axios.post(url,{id:id})
+      .then(function (data) {
+        that.getAjaxList()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     },
-    jump(){
-      if(isNaN(this.jumpPages)){
-        return
+    firbid(v){//'启用':'禁用'
+      console.log(v)
+      if(v.status == 0){
+        this.firbidAjax(`/api/y2/frontend/web/index.php?r=user/adminopen`,v.id)
+      }else{
+        this.firbidAjax(`/api/y2/frontend/web/index.php?r=user/admindel`,v.id)
       }
-      if(this.jumpPages<=0||this.jumpPages>Math.ceil(this.totlePages/20)){
-        return;
-      }
-      this.imgUrlNext = true
-      this.imgUrlPre = true
-      this.nowPages = this.jumpPages
     },
-    edit(){
+    edit(v){//编辑
       this.editAccount = '';
       this.editPass = '';
-      this.editBoxShow = true
-      document.body.style.overflow='hidden';
-      document.body.style.height='100%';
+      v.editBoxShow = true
     },
-    addAdmin(){
+    addAdmin(){//添加管理员
       this.account = '';
       this.pass = '';
       this.boxShow = true
@@ -160,10 +146,18 @@ export default {
         this.bntIf = false
       }
     },
-    addsuccess(){
-       this.boxShow = false
-       document.body.style.overflow='scroll';
-       document.body.style.height='100%';
+    addsuccess(){//添加管理员账号
+      if(this.bntIf){
+        var that  = this
+        this.Axios.post(`/api/y2/frontend/web/index.php?r=user/adminadd`,{username:this.account,password:this.pass})
+        .then(function (data) {
+          that.boxShow = false
+          that.getAjaxList()
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
     },
     editIfBnt(){
       if(this.editAccountFlag && this.editPassFlag){
@@ -172,13 +166,24 @@ export default {
         this.editBntIf = false
       }
     },
-    save(){
-       this.editBoxShow = false
-       document.body.style.overflow='scroll';
-       document.body.style.height='100%';
+    save(v){//编辑管理员保存
+      if(this.editBntIf){
+        var that  = this
+        this.Axios.post(`/api/y2/frontend/web/index.php?r=user/adminupdate`,{id:v.id,password:this.editPass})
+        .then(function (data) {
+          v.editBoxShow = false
+          that.getAjaxList()
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
     }
   },
   watch:{
+    nowNum(){
+      this.getAjaxList()
+    },
     account:function(val){
       if(val==null || val==undefined || val==''){
         this.accountFlag = false
@@ -232,15 +237,17 @@ export default {
       top:0;
       left:0;
       height:100%;
-      z-index: 9999;
+      z-index: 3333;
       background: rgba(0,0,0,0.40);
       width:100%;
-      .messagecont{
+    }
+    .messagecont{
         overflow:hidden;
-        position:absolute;
+        position:fixed;
         top:50%;
         margin-top:-127px;
         left:50%;
+        z-index: 5555;
         margin-left: -260px;
         .addGY{
           font-family: MicrosoftYaHei;
@@ -286,7 +293,6 @@ export default {
         border-radius: 4px;
         height:254px;
         width:520px;
-      }
     }
     .addadmin{
       float: right;
@@ -311,8 +317,8 @@ export default {
     .table{
       margin:30px auto 0;
       width:1120px;
-      padding-bottom:30px;
       box-sizing:border-box;
+      padding-bottom: 30px;
       .Theaded{
         overflow:hidden;
         color: #000000;
@@ -330,6 +336,12 @@ export default {
         text-align: center;
         vertical-align: middle;
         color: #000000;
+      }
+      .redColor{
+        color:#D61E2A;
+      }
+      .greenColor{
+        color:#3DB866;
       }
     }
     .tablelist{

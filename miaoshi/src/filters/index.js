@@ -66,7 +66,7 @@ export function questionToString(num) {
   }
 }
 export function dataForm(date){
-  if(date == null || date == ''){
+  if(date == null || date == '' || date == 0){
     return ''
   }else{
     var d = new Date(Number(date)*1000);

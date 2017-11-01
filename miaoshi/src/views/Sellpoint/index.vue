@@ -16,7 +16,7 @@
         <div class="W100 publicCss">拜访频率</div>
         <div class="W100 publicCss">星期几</div>
       </div>
-      <div v-for="(v,index) in tableList" class="tablelist">
+      <div v-for="(v,index) in tableList"  @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']" @click="pointofsaledetails(v)">
         <div class="W100 publicCss">123444</div>
         <div class="W100 publicCss">101</div>
         <div class="W100 publicCss">92019203</div>
@@ -29,28 +29,28 @@
       </div>
     </div>
     <Pages :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
-    <div class="messagebox" v-if="boxShow">
-      <iframe id="hiddenIframe" style="width:0;height:0;" name="posthere"></iframe>
+    <div class="messagebox" v-if="boxShow" @click="boxShow=false">
+    </div>
+    <div class="messagecont" v-if="boxShow">
+      <iframe id="hiddenIframe" style="border-width:0;width:0;height:0;" name="posthere"></iframe>
       <form target="posthere" action="/api/y2/frontend/web/index.php?r=store/upload" method="post" enctype="multipart/form-data">
-        <div class="messagecont">
-          <div class="addGY">
-            上传文件
-          </div>
-          <div class="upFile">
-            <a style="text-align: center;display: inline-block;width:100%;height:100%;position: relative;">
-                <input type="file"  @change="getFile" name="UploadForm[file]" id="mydata" accept="application/vnd.ms-excel" style="left: 0;position: absolute;width:100%;height:100%;opacity: 0; cursor:pointer;" placeholder="用户名"><span v-if="haveFails" style="font-family: 'Microsoft YaHei';font-size: 14px;color: #333333;float:left;line-height:30px;margin-left: 12px;">{{fileName}}</span><span style="line-height:30px;display:inline-block;height:30px;color: #2D78B3;" v-if="!haveFails">选择文件</span><span style="font-family: 'Microsoft YaHei';font-size:13px;color: #2D78B3;float:right;margin-right:12px;line-height:30px;" v-if="haveFails">重新上传</span>
-            </a>
-          </div>
-          <div class="tip">
-            最大支持 3 MB XLS的文件。<span  class="errorShow">{{errorMes}}</span>
-          </div>
-          <div class="p">导入的文件数据需要同模板文件保持一致。<span>下载模版</span></div>
-          <div class="p">导入后将会覆盖原先的售点数据。售点数据全部来源于新文件。</div>
-          <div class="p">导入售点后需要一段时间同步售点信息，之后才会出现，请耐心等待。</div>
-          <button type="submit" @click="submit" :class="[bntIf?'bntlast':'bnt','addPublic']">
-            确定上传
-          </button>
+        <div class="addGY">
+          上传文件
         </div>
+        <div class="upFile">
+          <a style="text-align: center;display: inline-block;width:100%;height:100%;position: relative;">
+              <input type="file"  @change="getFile" name="UploadForm[file]" id="mydata" accept="application/vnd.ms-excel" style="left: 0;position: absolute;width:100%;height:100%;opacity: 0; cursor:pointer;" placeholder="用户名"><span v-if="haveFails" style="font-family: 'Microsoft YaHei';font-size: 14px;color: #333333;float:left;line-height:30px;margin-left: 12px;">{{fileName}}</span><span style="line-height:30px;display:inline-block;height:30px;color: #2D78B3;" v-if="!haveFails">选择文件</span><span style="font-family: 'Microsoft YaHei';font-size:13px;color: #2D78B3;float:right;margin-right:12px;line-height:30px;" v-if="haveFails">重新上传</span>
+          </a>
+        </div>
+        <div class="tip">
+          最大支持 3 MB XLS的文件。<span  class="errorShow">{{errorMes}}</span>
+        </div>
+        <div class="p">导入的文件数据需要同模板文件保持一致。<span>下载模版</span></div>
+        <div class="p">导入后将会覆盖原先的售点数据。售点数据全部来源于新文件。</div>
+        <div class="p">导入售点后需要一段时间同步售点信息，之后才会出现，请耐心等待。</div>
+        <button type="submit" @click="submit" :class="[bntIf?'bntlast':'bnt','addPublic']">
+          确定上传
+        </button>
       </form>
     </div>
   </div>
@@ -80,9 +80,23 @@ export default {
     }
   },
   mounted(){
-
   },
   methods:{
+    pointofsaledetails(v){
+      var aa =11
+      // this.$router.push(`/home/pointofsaledetails?aa=${aa}`)
+    },
+    enter(v,index){
+      for(var i=0;i<this.tableList.length;i++){
+        this.tableList[i].showBc = false
+      }
+      v.showBc = true
+    },
+    leave(v,index){
+      for(var i=0;i<this.tableList.length;i++){
+        this.tableList[i].showBc = false
+      }
+    },
     submit(){
       var that =this
       if(!this.bntIf){
@@ -106,7 +120,8 @@ export default {
              }else if(json.code === 402){
               that.errorMes = json.msg
              }else if(json.code === 200){
-              that.boxShow =false
+              // that.boxShow =false
+              that.errorMes = json.msg
              }
          }catch(e){}
          if(json){
@@ -148,9 +163,10 @@ export default {
       }
     },
     exportFile(){
+      this.bntIf =false
+      this.errorMes=''
+      this.haveFails = false
       this.boxShow = true
-       document.body.style.overflow='hidden';
-       document.body.style.height='100%';
     }
   }
 }
@@ -169,90 +185,91 @@ export default {
       top:0;
       left:0;
       height:100%;
-      z-index: 9999;
+      z-index: 3333;
       background: rgba(0,0,0,0.40);
       width:100%;
-      .messagecont{
-        overflow:hidden;
-        position:absolute;
-        top:50%;
-        margin-top:-162px;
-        left:50%;
-        margin-left: -260px;
-        .p{
-          height:20px;
-          line-height:20px;
-          font-size: 14px;
-          color: #333333;
-          margin-left: 40px;
-          margin-bottom: 4px;
-          span{
-            color: #2D78B3;
-            cursor:pointer;
-          }
-        }
-        .tip{
-          font-size: 14px;
-          color: #8C8C8C;
-          margin:10px 0 20px 40px;
-          .errorShow{
-            font-family:'PingFang SC-Regular';
-            font-size: 13px;
-            color: #D61E2A;
-            float: right;
-            margin-right:40px;
-          }
-        }
-        .addGY{
-          font-family: MicrosoftYaHei;
-          margin:0 auto;
-          width:102px;
-          height:26px;
-          line-height:26px;
-          margin-top:26px;
-          margin-bottom:30px;
-          font-size: 20px;
-          color: #000000;
-          font-weight:bold;
-        }
-        .addPublic{
-          display: inline-block;
-          border:none;
-          outline: none;
-          background: #C1C7CC;
-          border-radius: 4px;
-          width:100px;
-          height:30px;
-          margin:0 auto;
-          margin-top:30px;
-          text-align: center;
-          line-height:30px;
-          color:#FFFFFF;
-          margin-left: 210px;
-          font-family:'PingFangSC-Regular';
-          font-size: 14px;
-          color: #FFFFFF;
-        }
-        .bntlast{
-          background:#2D78B3;
+    }
+    .messagecont{
+      overflow:hidden;
+      position:fixed;
+      top:50%;
+      z-index: 5555;
+      margin-top:-162px;
+      left:50%;
+      margin-left: -260px;
+      .p{
+        height:20px;
+        line-height:20px;
+        font-size: 14px;
+        color: #333333;
+        margin-left: 40px;
+        margin-bottom: 4px;
+        span{
+          color: #2D78B3;
           cursor:pointer;
         }
-        .upFile{
-          margin:0 auto;
-          width:440px;
-          height:30px;
-          border: 1px dotted #C4C4C4;
-          border-radius: 4px;
-          input{
-            width:100%;
-            height:100%;
-          }
-        }
-        background:#fff;
-        border-radius: 4px;
-        height:324px;
-        width:520px;
       }
+      .tip{
+        font-size: 14px;
+        color: #8C8C8C;
+        margin:10px 0 20px 40px;
+        .errorShow{
+          font-family:'PingFang SC-Regular';
+          font-size: 13px;
+          color: #D61E2A;
+          float: right;
+          margin-right:40px;
+        }
+      }
+      .addGY{
+        font-family: MicrosoftYaHei;
+        margin:0 auto;
+        width:102px;
+        height:26px;
+        line-height:26px;
+        margin-top:26px;
+        margin-bottom:30px;
+        font-size: 20px;
+        color: #000000;
+        font-weight:bold;
+      }
+      .addPublic{
+        display: inline-block;
+        border:none;
+        outline: none;
+        background: #C1C7CC;
+        border-radius: 4px;
+        width:100px;
+        height:30px;
+        margin:0 auto;
+        margin-top:30px;
+        text-align: center;
+        line-height:30px;
+        color:#FFFFFF;
+        margin-left: 210px;
+        font-family:'PingFangSC-Regular';
+        font-size: 14px;
+        color: #FFFFFF;
+      }
+      .bntlast{
+        background:#2D78B3;
+        cursor:pointer;
+      }
+      .upFile{
+        margin:0 auto;
+        width:440px;
+        height:30px;
+        border: 1px dotted #C4C4C4;
+        border-radius: 4px;
+        input{
+          width:100%;
+          height:100%;
+        }
+      }
+      background:#fff;
+      border-radius: 4px;
+      height:324px;
+      width:520px;
     }
     .export{
       cursor: pointer;
@@ -297,6 +314,7 @@ export default {
     }
     .tablelist{
       overflow: hidden;
+      cursor:pointer;
       border-bottom: 1px solid #E0E0E0;
       .img{
         width:36px;
@@ -304,6 +322,9 @@ export default {
         vertical-align: middle;
         background:red;
       }
+    }
+    .tablelistBc{
+      background: #F5F5F5;
     }
   }
 </style>

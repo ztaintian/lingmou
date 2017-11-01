@@ -76,6 +76,11 @@ export default {
   mounted(){
     this.getAjaxList()
   },
+  watch:{
+    nowNum(){
+      this.getAjaxList()
+    }
+  },
   methods:{
     del(v){
       var that = this

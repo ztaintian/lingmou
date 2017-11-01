@@ -162,7 +162,6 @@ export default {
 <style lang="scss">
   .usermanagement{
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
-    overflow: hidden;
     width:100%;
     background: #FFFFFF;
     border-radius: 4px;
@@ -178,7 +177,7 @@ export default {
     .table{
       margin:30px auto 0;
       width:1120px;
-      padding-bottom: 100px;
+      padding-bottom: 30px;
       box-sizing:border-box;
       .Theaded{
         overflow:hidden;
@@ -188,7 +187,7 @@ export default {
         border-radius: 4px;
         background: #F5F5F5;
       }
-      overflow:hidden;
+      clear:both;
       vertical-align: middle;
       line-height:40px;
       .publicCss{

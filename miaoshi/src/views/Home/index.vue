@@ -23,7 +23,7 @@
   			</div>
   		</div>
   		<div class="top" v-else-if="type==1">
-  			<span :class="[activeF?'bgActive':'','forcereport']" @click="repeot(1)">焦点报告</span>
+  			<span :class="[activeF?'bgActive':'','forcereport']" @click="repeot(1)">售点报告</span>
   			<span :class="[activeC?'bgActive':'','forcereport','tv']" @click="repeot(2)">场景报告</span>
   			<div class="use">
   				<img :src="useimg" alt="">
