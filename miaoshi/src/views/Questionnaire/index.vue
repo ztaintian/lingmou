@@ -167,26 +167,54 @@ export default {
   		v.choiceGetColcor =false
   	},
   	saved:function(){
-  		// this.$message({
-  		// 	message:'错误提示错误提示错误提示错误提示错误提示'
-  		// });
-  		// this.fishFlag = true;
-  		// for(var j=0;j<this.questionList.length;j++){
-  		// 	this.questionList[j].mustAddFlag = false
-	  	// 	for(var i=0;i<this.questionList[j].choiceList.length;i++){
-	  	// 		if(this.questionList[j].title==null||this.questionList[j].title==''||this.questionList[j].choiceList[i].choiceIpt == '' || this.questionList[j].choiceList[i].choiceIpt==null){
-	  	// 			this.questionList[j].mustAddFlag = true
-	  	// 			return
-	  	// 		}
-	  	// 	}
-  		// }
-  		console.log(this.value1)
+  		this.$message({
+  			message:'错误提示错误提示错误提示错误提示错误提示'
+  		});
+  		this.fishFlag = true;
+  		for(var j=0;j<this.questionList.length;j++){
+  			this.questionList[j].mustAddFlag = false
+	  		for(var i=0;i<this.questionList[j].choiceList.length;i++){
+	  			if(this.questionList[j].title==null||this.questionList[j].title==''||this.questionList[j].choiceList[i].choiceIpt == '' || this.questionList[j].choiceList[i].choiceIpt==null){
+	  				this.questionList[j].mustAddFlag = true
+	  				return
+	  			}
+	  		}
+  		}
   		var d = new Date(this.value1)
+  		var YMD = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
+  		if(this.nameQuestion == null || this.nameQuestion == ''){
+  			return
+  		}
+  		if( (new Date().getTime()) > (new Date(YMD+' '+this.selecttime.substr(0, 2)+':00'+':00').getTime())){
+  			this.$message({
+  				message:'截止时间不能小于当前时间'
+  			});
+
+  		}
   		var data = {
   			title:this.nameQuestion,
-  			endtime:new Date(this.value1+''+this.selecttime.substr(0, 2)+':00'+':00').getTime()
+  			endtime:(new Date(YMD+' '+this.selecttime.substr(0, 2)+':00'+':00').getTime())/1000,
+  			question:[]
   		}
-  		console.log(data.endtime)
+  		var objList ={}
+  		var objArr = []
+  		for(let t=0;t<this.questionList.length;t++){
+  			objList = {}
+  			objList.sort = t+1
+  			objList.content = this.questionList[t].title
+  			if(this.questionList[t].radioShow1){
+  				objList.type = 1
+  			}else if(this.questionList[t].radioShow2){
+					objList.type = 2
+  			}else if(this.questionList[t].radioShow3){
+  				objList.type = 3
+  			}
+  			for(let a=0;a<this.questionList[t].choiceList.length;a++){
+  				objList['option'+(a+1)] = this.questionList[t].choiceList[a].choiceIpt
+  			}
+  			objArr.push(objList)
+  		}
+  		data.question = objArr
 			this.Axios.post('/api/y2/frontend/web/index.php?r=question/addnaire',data)
 				.then(function (response) {
 			    console.log(response);
