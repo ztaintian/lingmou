@@ -19,6 +19,20 @@ import Test from '@/views/Test'
 import axios from 'axios'
 Vue.use(Router)
 
+  function axiosIfLongin(next){
+    axios.post('/api/y2/frontend/web/index.php?r=user/index')
+    .then(function (response) {
+      if(response.data.code === 200){
+        next()
+      }else{
+        next('/')
+      }
+    })
+    .catch(function (error) {
+      next('/')
+   });
+  }
+
 export default new Router({
   routes: [
     {
@@ -40,83 +54,105 @@ export default new Router({
           path: 'questionnaire',
           name: 'questionnaire',
           component: Questionnaire,
-          query: { type: 4 },
           beforeEnter:(to, from, next)=>{
-            axios.post('/api/y2/frontend/web/index.php?r=user/index')
-            .then(function (response) {
-              if(response.data.code === 401){
-                // next('/')
-                next()
-              }else{
-                next()
-              }
-            })
-            .catch(function (error) {
-              next('/')
-           });
+           axiosIfLongin(next)
           }
         },
         {
           path: 'focusreport',
           name: 'focusreport',
           component: Focusreport,
-          query: { type: 1 }
+          beforeEnter:(to, from, next)=>{
+            axiosIfLongin(next)
+          }
         },
         {
           path: 'scenereport',
           name: 'scenereport',
-          component: Scenereport
+          component: Scenereport,
+          beforeEnter:(to, from, next)=>{
+           axiosIfLongin(next)
+          }
         },
         {
           path: 'distinguishsku',
           name: 'distinguishsku',
           component: Distinguishsku,
-          query: { type: 5 }
+          beforeEnter:(to, from, next)=>{
+            axiosIfLongin(next)
+          }
         },
         {
           path: 'mustsku',
           name: 'mustsku',
-          component: Mustsku
+          component: Mustsku,
+          beforeEnter:(to, from, next)=>{
+            axiosIfLongin(next)
+          }
         },
         {
           path: 'importsku',
           name: 'importsku',
-          component: Importsku
+          component: Importsku,
+          beforeEnter:(to, from, next)=>{
+           axiosIfLongin(next)
+          }
         },
         {
           path: 'usermanagement',
           name: 'usermanagement',
-          component: Usermanagement
+          component: Usermanagement,
+          beforeEnter:(to, from, next)=>{
+            axiosIfLongin(next)
+          }
         },
         {
           path: 'administratorsettings',
           name: 'administratorsettings',
-          component: Administratorsettings
+          component: Administratorsettings,
+          beforeEnter:(to, from, next)=>{
+            axiosIfLongin(next)
+          }
         },
         {
           path: 'sellpoint',
           name: 'sellpoint',
-          component: Sellpoint
+          component: Sellpoint,
+          beforeEnter:(to, from, next)=>{
+            axiosIfLongin(next)
+          }
         },
         {
           path: 'scenemanagement',
           name: 'scenemanagement',
-          component: Scenemanagement
+          component: Scenemanagement,
+          beforeEnter:(to, from, next)=>{
+           axiosIfLongin(next)
+          }
         },
         {
           path: 'freezerdetails',
           name: 'freezerdetails',
-          component: Freezerdetails
+          component: Freezerdetails,
+          beforeEnter:(to, from, next)=>{
+           axiosIfLongin(next)
+          }
         },
         {
           path: 'pointofsaledetails',
           name: 'pointofsaledetails',
-          component: Pointofsaledetails
+          component: Pointofsaledetails,
+          beforeEnter:(to, from, next)=>{
+           axiosIfLongin(next)
+          }
         },
         {
           path: 'questionnairedetails',
           name: 'questionnairedetails',
-          component: Questionnairedetails
+          component: Questionnairedetails,
+          beforeEnter:(to, from, next)=>{
+           axiosIfLongin(next)
+          }
         }
       ]
     }
