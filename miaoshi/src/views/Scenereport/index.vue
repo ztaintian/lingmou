@@ -65,7 +65,7 @@
           <span class="time twoTime" style="width:56px;">备注名:</span>
           <input class="nameipt"   v-model="reportNumber" type="" name="">
         </div>
-        <span class="search">刷选</span>
+        <span class="search" @click="Brush">刷选</span>
       </div>
     </div>
     <div class="table">
@@ -79,43 +79,31 @@
         <div class="W120 publicCss">线路</div>
       </div>
       <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" @click="freezerdetails(v)" :class="[v.showBc?'tablelistBc':'','tablelist']">
-        <div class="W200 publicCss">2017-12-20  23:49:59</div>
-        <div class="W140 publicCss">99990000222</div>
-        <div class="W200 publicCss">可乐冰柜（备注名）</div>
-        <div class="W140 publicCss">22</div>
-        <div class="W200 publicCss">快客便利店(徐汇区店）</div>
-        <div class="W120 publicCss">888999</div>
-        <div class="W120 publicCss">888999000</div>
+        <div class="W200 publicCss">{{v.createtime|dataForm}}</div>
+        <div class="W140 publicCss">{{v.scene_report_number}}</div>
+        <div class="W200 publicCss">{{v.name}}</div>
+        <div class="W140 publicCss">{{v.p_n}}</div>
+        <div class="W200 publicCss">{{v.storename}}</div>
+        <div class="W120 publicCss">{{v.group_number}}</div>
+        <div class="W120 publicCss">{{v.line_number}}</div>
       </div>
     </div>
-    <Pages :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
+    <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1" :nowPages.sync="nowNum"></Pages>
   </div>
 </template>
 
 <script>
 import iconradio from '@/assets/ic_not selected@1x.png'
 import iconradioActive from '@/assets/ic_selected@1x.png'
-import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
-import ic_next from '@/assets/ic_next_normal@1x.png'
-import pic_next from '@/assets/ic_pre_normal@1x.png'
-import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
 import Pages from '@/components/pages'
+
 export default {
   name: 'Focusreport',
   components:{Pages},
   data () {
     return {
-      totleNums:50,
+      totleNums:1,
       nowNum:1,
-      nextUrl:ic_next,
-      nextUrlA:ic_nextActive,
-      pnextUrl:pic_next,
-      pnextUrlA:pic_nextActive,
-      imgUrlPre:true,
-      imgUrlNext:true,
-      totlePages:'',
-      nowPages:'',
-      jumpPages:'',
       dataTime:'',
       dataTime2:'',
       radioimgUrl:iconradio,
@@ -131,12 +119,40 @@ export default {
       ing:false,
       reportNumber:'',
       statusVal:'',
-      tableList:[{showBc:false},{showBc:false},{showBc:false}]
+      tableList:[]
     }
   },
   mounted(){
+    this.getAjaxList()
+  },
+  watch:{
+    nowNum(){
+      this.getAjaxList()
+    }
   },
   methods:{
+    getAjaxList(){
+      var that  = this
+      this.Axios.get(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
+      .then(function (data) {
+        data.data.data.forEach((val,index)=>{
+          val.showBc = false
+        })
+        that.tableList = data.data.data
+        that.totleNums = data.data.pagelist.count
+        that.nowNum = data.data.pagelist.page
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    Brush(){//刷选
+      console.log(this.dataTime)
+      console.log(new Date(this.dataTime).getTime())
+      var data = {
+        time1:this.dataTime?(new Date(this.dataTime).getTime())/1000:''
+      }
+    },
     getDate(num){
       var nowDate = new Date().getTime()-24*60*60*1000
       var nowDatelast = new Date().getTime()-24*60*60*1000*num
@@ -227,6 +243,7 @@ export default {
           border-radius: 4px;
           height:30px;
           width:60px;
+          cursor:pointer;
           color:#FFFFFF ;
           text-align: center;
           line-height: 30px;

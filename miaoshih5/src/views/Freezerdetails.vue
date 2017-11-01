@@ -97,9 +97,12 @@
       </div>
     </div>
     <div class="imgStyle">
-      <div class="imgBottom" v-for="v in imgListB">
+      <div class="imgBottom" v-for="v in imgListB" @click="getBigimg(v)">
         <img src="../assets/ic_scene_hotsale@3x.png" alt="">
       </div>
+    </div>
+    <div class="Dialogue" v-if="imgFlag" @click="close">
+      <img :src="viewUrl" alt="">
     </div>
   </div>
 </template>
@@ -113,6 +116,7 @@ export default {
   name: 'Freezerdetails',
   data () {
     return {
+      imgFlag:false,
       imgListB:[{},{},{},{},{},{}],
       scale:100,
       viewUrl:viewIcon,
@@ -160,6 +164,14 @@ export default {
     },200)
   },
   methods:{
+    close(){
+      this.imgFlag = false
+    },
+    getBigimg(v){
+      document.body.style.overflow='hidden';
+      document.body.style.height='100%';
+      this.imgFlag = true
+    },
     initCanvas(){
       var that = this;
       var canvas = document.getElementById("bgCanvas");
@@ -260,6 +272,15 @@ export default {
   width:100%;
   overflow: hidden;
   position:relative;
+  .Dialogue{
+    position: fixed;
+    z-index: 1000;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    background:red;
+  }
   .bgBlue{
     background:#fff;
   }

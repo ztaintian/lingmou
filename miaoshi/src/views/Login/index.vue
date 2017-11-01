@@ -5,12 +5,12 @@
 	  	<span>后台管理系统</span>
   	</div>
   	<div>
-	  	<input type="" name="account"  v-model="account" class="iptAct" placeholder="请输入账号">
+	  	<input type="" name="account" @keyup.enter="login" v-model="account" class="iptAct" placeholder="请输入账号">
 	  	<div ref="account"  :class="[accountFlag?'linelast':'line']"></div>
 	  	<div class="error" >{{accountShow}}</div>
   	</div>
   	<div>
-	  	<input type="password" name="pass"   v-model="pass" class="iptSct" placeholder="请输入密码">
+	  	<input type="password" name="pass" @keyup.enter="login"  v-model="pass" class="iptSct" placeholder="请输入密码">
 	  	<div ref="pass" :class="[passFlag?'linelast':'line']"></div>
 	  	<div class="error">{{passShow}}</div>
   	</div>

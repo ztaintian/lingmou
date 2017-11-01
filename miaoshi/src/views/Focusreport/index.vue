@@ -94,34 +94,21 @@
         <div class="W70 publicCss">进行中</div>
       </div>
     </div>
-    <Pages :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
+    <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1" :nowPages.sync="nowNum"></Pages>
   </div>
 </template>
 
 <script>
 import iconradio from '@/assets/ic_not selected@1x.png'
 import iconradioActive from '@/assets/ic_selected@1x.png'
-import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
-import ic_next from '@/assets/ic_next_normal@1x.png'
-import pic_next from '@/assets/ic_pre_normal@1x.png'
-import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
 import Pages from '@/components/pages'
 export default {
   name: 'Focusreport',
   components:{Pages},
   data () {
     return {
-      totleNums:50,
+      totleNums:0,
       nowNum:1,
-      nextUrl:ic_next,
-      nextUrlA:ic_nextActive,
-      pnextUrl:pic_next,
-      pnextUrlA:pic_nextActive,
-      imgUrlPre:true,
-      imgUrlNext:true,
-      totlePages:'',
-      nowPages:'',
-      jumpPages:'',
       dataTime:'',
       dataTime2:'',
       radioimgUrl:iconradio,
@@ -141,13 +128,29 @@ export default {
     }
   },
   mounted(){
+    this.getAjaxList()
   },
   watch:{
-    bb(val){
-      console.log(val)
+    nowNum(){
+      this.getAjaxList()
     }
   },
   methods:{
+    getAjaxList(){
+      var that  = this
+      this.Axios.get(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
+      .then(function (data) {
+        data.data.data.forEach((val,index)=>{
+          val.showBc = false
+        })
+        that.tableList = data.data.data
+        that.totleNums = data.data.pagelist.count
+        that.nowNum = data.data.pagelist.page
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
     pointofsaledetails(v){
       var aa =11
       this.$router.push(`/home/pointofsaledetails?aa=${aa}`)
