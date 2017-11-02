@@ -108,7 +108,7 @@ export default {
   data () {
     return {
       totleNums:0,
-      nowNum:1,
+      nowNum:'1',
       dataTime:'',
       dataTime2:'',
       radioimgUrl:iconradio,

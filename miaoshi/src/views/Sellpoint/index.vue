@@ -67,7 +67,7 @@ export default {
   data () {
     return {
       totleNums:50,
-      nowNum:1,
+      nowNum:'1',
       errorMes:'',
       errorFlag:false,
       haveFails:false,

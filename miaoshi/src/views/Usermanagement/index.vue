@@ -73,7 +73,7 @@ export default {
   data () {
     return {
       totleNums:0,
-      nowNum:1,
+      nowNum:'1',
       hookUrl:hookicon,
       editBoxShow:false,
       BoxShow:false,

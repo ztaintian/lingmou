@@ -27,22 +27,15 @@
       <div class="sameBlock">
         <div class="salereport">
           <span class="time twoTimeTwo">售点:</span>
-          <el-select class="salePoint" v-model="salePoint" placeholder="请选择">
-            <el-option
-              v-for="item in salePointList"
-              :key="item.id"
-              :label="item"
-              :value="item">
-            </el-option>
-          </el-select>
+          <input class="nameipt" v-model="salePoint" />
         </div>
         <div class="salereport">
-          <span class="time twoTime">售点报告编号:</span>
+          <span class="time twoTime">场景报告编号:</span>
           <input class="nameipt"   v-model="reportNumber" type="" name="">
         </div>
         <div class="salereport">
           <span class="time twoTime" style="width:56px;">线路:</span>
-          <input class="nameipt"   v-model="reportNumber" type="" name="">
+          <input class="nameipt"   v-model="lineNumber" type="" name="">
         </div>
       </div>
       <div class="sameBlock">
@@ -59,11 +52,11 @@
         </div>
         <div class="salereport">
           <span class="time twoTime">营业所:</span>
-          <input class="nameipt"   v-model="reportNumber" type="" name="">
+          <input class="nameipt"   v-model="SalesOffice" type="" name="">
         </div>
         <div class="salereport" style="margin-right: 50px">
           <span class="time twoTime" style="width:56px;">备注名:</span>
-          <input class="nameipt"   v-model="reportNumber" type="" name="">
+          <input class="nameipt"   v-model="Memoname" type="" name="">
         </div>
         <span class="search" @click="Brush">刷选</span>
       </div>
@@ -102,10 +95,16 @@ export default {
   components:{Pages},
   data () {
     return {
+      SalesOffice:'',
+      Memoname:'',
+      lineNumber:'',
+      clickBrush:false,
       totleNums:1,
-      nowNum:1,
+      nowNum:'1',
       dataTime:'',
+      time1:'',
       dataTime2:'',
+      time2:'',
       radioimgUrl:iconradio,
       radioaimgUrl:iconradioActive,
       yestoday:false,
@@ -113,27 +112,39 @@ export default {
       lastMounth:false,
       salePoint:'',
       salePointList:['快客','全家'],
-      statusList:['全部','已完成','进行中'],
+      statusList:['冰柜','货架','堆头'],
       all:true,
       compent:false,
       ing:false,
       reportNumber:'',
       statusVal:'',
-      tableList:[]
+      tableList:[],
+      num_type_id:''
     }
   },
   mounted(){
-    this.getAjaxList()
+    this.getAjaxList(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
   },
   watch:{
     nowNum(){
-      this.getAjaxList()
+      if(this.clickBrush){
+        if(this.statusVal == '冰柜'){
+          this.num_type_id = 1
+        }else if(this.statusVal == '货架'){
+          this.num_type_id = 2
+        }else if(this.statusVal == '堆头'){
+          this.num_type_id = 3
+        }
+        this.getAjaxList(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
+      }else{
+        this.getAjaxList(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
+      }
     }
   },
   methods:{
-    getAjaxList(){
+    getAjaxList(url){
       var that  = this
-      this.Axios.get(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
+      this.Axios.get(url)
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
           val.showBc = false
@@ -147,11 +158,19 @@ export default {
       });
     },
     Brush(){//刷选
-      console.log(this.dataTime)
-      console.log(new Date(this.dataTime).getTime())
-      var data = {
-        time1:this.dataTime?(new Date(this.dataTime).getTime())/1000:''
+      this.clickBrush = true
+      this.time1 = this.dataTime?(new Date(this.dataTime).getTime())/1000:''
+      this.time2 = this.dataTime2?(new Date(this.dataTime2).getTime())/1000:''
+      if(this.statusVal == '冰柜'){
+        this.num_type_id = 1
+      }else if(this.statusVal == '货架'){
+        this.num_type_id = 2
+      }else if(this.statusVal == '堆头'){
+        this.num_type_id = 3
       }
+      this.nowNum = '1'
+      this.getAjaxList(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
+
     },
     getDate(num){
       var nowDate = new Date().getTime()-24*60*60*1000
@@ -230,7 +249,6 @@ export default {
         .nameipt{
           width:200px;
           height:26px;
-          margin-left:5px;
           background: #FFFFFF;
           border: 1px solid #E0E0E0;
           border-radius: 5px;
