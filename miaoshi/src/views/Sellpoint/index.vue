@@ -17,18 +17,18 @@
         <div class="W100 publicCss">星期几</div>
       </div>
       <div v-for="(v,index) in tableList"  @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']" @click="pointofsaledetails(v)">
-        <div class="W100 publicCss">123444</div>
-        <div class="W100 publicCss">101</div>
-        <div class="W100 publicCss">92019203</div>
-        <div class="W222 publicCss">全家便利店（徐汇店）</div>
-        <div class="W178 publicCss">上海市徐汇区肇嘉浜路7…</div>
-        <div class="W100 publicCss">林田田</div>
-        <div class="W120 publicCss ">13800138000</div>
-        <div class="W100 publicCss ">一周一访</div>
-        <div class="W100 publicCss ">周二／周五</div>
+        <div class="W100 publicCss">{{v.group_number}}</div>
+        <div class="W100 publicCss">{{v.line_number}}</div>
+        <div class="W100 publicCss">{{v.store_number}}</div>
+        <div class="W222 publicCss">{{v.storename}}</div>
+        <div class="W178 publicCss" style="width: 178px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;">{{v.address}}</div>
+        <div class="W100 publicCss">{{v.username}}</div>
+        <div class="W120 publicCss ">{{v.mobile}}</div>
+        <div class="W100 publicCss ">{{v.check_f}}</div>
+        <div class="W100 publicCss ">{{v.week}}</div>
       </div>
     </div>
-    <Pages :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
+    <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1"  :nowPages.sync="nowNum"></Pages>
     <div class="messagebox" v-if="boxShow" @click="boxShow=false">
     </div>
     <div class="messagecont" v-if="boxShow">
@@ -66,7 +66,7 @@ export default {
   components:{Pages},
   data () {
     return {
-      totleNums:50,
+      totleNums:0,
       nowNum:'1',
       errorMes:'',
       errorFlag:false,
@@ -75,13 +75,34 @@ export default {
       boxShow:false,
       hookUrl:hookicon,
       exportUrl:exporticon,
-      tableList:[{showBc:false},{showBc:false},{showBc:false}],
+      tableList:[],
       fileName:''
     }
   },
   mounted(){
+    this.getAjaxList()
+  },
+  watch:{
+    nowNum(){
+      this.getAjaxList()
+    }
   },
   methods:{
+    getAjaxList(){
+      var that  = this
+      this.Axios.get(`/api/y2/frontend/web/index.php?r=store/index&page=${this.nowNum}&per-page=20`)
+      .then(function (data) {
+        data.data.data.forEach((val,index)=>{
+          val.showBc = false
+        })
+        that.tableList = data.data.data
+        that.totleNums = data.data.pagelist.count
+        that.nowNum = data.data.pagelist.page
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
     pointofsaledetails(v){
       var aa =11
       // this.$router.push(`/home/pointofsaledetails?aa=${aa}`)
@@ -122,6 +143,7 @@ export default {
              }else if(json.code === 200){
               // that.boxShow =false
               that.errorMes = json.msg
+              that.getAjaxList()
              }
          }catch(e){}
          if(json){

@@ -3,44 +3,38 @@
     <div class="content">
       <div class="top">
         <span class="title">场景名称（5505032）</span>
-        <span class="pre">下一个</span>
-        <span class="pre">上一个</span>
+        <span class="pre" @click="choice(0)">下一个</span>
+        <span class="pre" @click="choice(1)">上一个</span>
         <div class="tip">
           123422／105／2017-11-18／1222222售点名称
         </div>
       </div>
       <div class="center">
         <div  class="left">
-          <div  class="allquestion">
-            <div  class="title">
-              1、可口可乐新品在上海市徐汇区家乐福在国庆期间有哪些优惠促销
+          <div v-for="v in choiceList">
+            <div  class="allquestion">
+              <div  class="title">
+                1、可口可乐新品在上海市徐汇区家乐福在国庆期间有哪些优惠促销
+              </div>
+              <div v-for="v in choiceList" class="chioce">
+                选项1：选项名称
+              </div>
             </div>
-            <div v-for="v in choiceList" class="chioce">
-              选项1：选项名称
+            <div  class="allquestion">
+              <div  class="title">
+                2、可口可乐新品在上海市徐汇区家乐福在国庆期间有哪些优惠促销活动？（多选题）
+              </div>
+              <div v-for="v in choiceList" class="chioce">
+                选项1：选项名称
+              </div>
             </div>
-          </div>
-          <div  class="allquestion">
-            <div  class="title">
-              2、可口可乐新品在上海市徐汇区家乐福在国庆期间有哪些优惠促销活动？（多选题）
-            </div>
-            <div v-for="v in choiceList" class="chioce">
-              选项1：选项名称
-            </div>
-          </div>
-          <div  class="allquestion">
-            <div  class="title">
-              3、可口可乐新品在上海市徐汇区家乐福在国庆？（填空题）
-            </div>
-            <div class="chioce">
-              回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回
-            </div>
-          </div>
-          <div  class="allquestion">
-            <div  class="title">
-              5、可口可乐新品在上海市徐汇区家乐福在国庆期间有哪些优惠促销活动？（多选题）
-            </div>
-            <div class="chioce">
-              回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回
+            <div  class="allquestion">
+              <div  class="title">
+                3、可口可乐新品在上海市徐汇区家乐福在国庆？（填空题）
+              </div>
+              <div class="chioce blurColor">
+                回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回
+              </div>
             </div>
           </div>
         </div>
@@ -64,12 +58,33 @@ export default {
   name: 'Questionnairedetails',
   data () {
     return {
-      choiceList:[{},{},{}]
+      choiceList:[{}]
     }
   },
   mounted(){
+    console.log(this.$router.currentRoute.query.q_id)
+    console.log(this.$router.currentRoute.query.store_id)
   },
   methods:{
+    getAjaxList(){
+      var that  = this
+      this.Axios.get(`/api/y2/frontend/web/index.php?r=store/index`)
+      .then(function (data) {
+        that.tableList = data.data.data
+        that.totleNums = data.data.pagelist.count
+        that.nowNum = data.data.pagelist.page
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    choice(num){
+      if(num === 0){
+        console.log('下一个')
+      }else{
+        console.log('上一个')
+      }
+    }
   }
 }
 </script>
@@ -83,6 +98,7 @@ export default {
     border-radius: 4px;
     font-size: 14px;
     .content{
+      overflow: hidden;
       padding:30px 30px 0 30px;
       .top{
         margin-bottom: 40px;
@@ -93,6 +109,7 @@ export default {
           font-weight: bold;
         }
         .pre{
+          cursor: pointer;
           background: #F5F5F5;
           border: 1px solid #E0E0E0;
           border-radius: 4px;
@@ -114,6 +131,7 @@ export default {
       }
       .center{
         overflow: hidden;
+        float: left;
         .left{
           overflow: hidden;
           float: left;
@@ -123,6 +141,9 @@ export default {
             .chioce{
               margin-bottom:8px;
             }
+            .blurColor{
+              color:#2D78B3;
+            }
             .title{
               font-size:14px;
               color:#000000;
@@ -131,32 +152,35 @@ export default {
             }
           }
         }
-        .right{
-          float: right;
-          .titl{
-            font-family:'PingFangSC-Medium';
-            font-size:16px;
-            color:#000000;
-            margin-bottom: 16px;
-            font-weight: bold;
-          }
-          .box{
-            width:400px;
-            height:40px;
-            border: 2px solid #F5F5F5;
-            border-radius: 4px;
-            padding:30px 20px 30px 20px;
-            .ttdetail{
-              span:nth-of-type(1){
-                font-size: 14px;
-                color: #000000;
-                font-weight: bold;
-              }
-              .detail{
-                float: right;
-                font-size: 14px;
-                color: #2D78B3;
-              }
+      }
+      .right{
+        overflow: hidden;
+        width:460px;
+        margin-bottom:24px;
+        float: right;
+        .titl{
+          font-family:'PingFangSC-Medium';
+          font-size:16px;
+          color:#000000;
+          margin-bottom: 16px;
+          font-weight: bold;
+        }
+        .box{
+          width:400px;
+          height:40px;
+          border: 2px solid #F5F5F5;
+          border-radius: 4px;
+          padding:30px 20px 30px 20px;
+          .ttdetail{
+            span:nth-of-type(1){
+              font-size: 14px;
+              color: #000000;
+              font-weight: bold;
+            }
+            .detail{
+              float: right;
+              font-size: 14px;
+              color: #2D78B3;
             }
           }
         }

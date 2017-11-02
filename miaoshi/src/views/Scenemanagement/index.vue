@@ -45,7 +45,7 @@
         <div class="W584 txl publicCss">{{v.title}}</div>
         <div class="W120 publicCss">{{v.finish_n}}</div>
         <div class="W120 publicCss">{{new Date().getTime()>(v.endtime*1000)?'过期':'进行中'}}</div>
-        <div class="W280 publicCss" style="text-align:right;"><span style="cursor: pointer;color:#2D78B3;margin-right:30px;" @click="questionnairedetails(v)">详情</span><span style="cursor: pointer;color:#2D78B3;margin-right:16px;" @click="del(v)">删除</span></div>
+        <div class="W280 publicCss" style="text-align:right;"><!-- <span style="cursor: pointer;color:#2D78B3;margin-right:30px;" @click="questionnairedetails(v)">详情</span> --><span style="cursor: pointer;color:#2D78B3;margin-right:16px;" @click="del(v)">删除</span></div>
       </div>
     </div>
     <Pages  v-if="totleNums/20>1"  :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
@@ -105,9 +105,6 @@ export default {
       .catch(function (error) {
         console.log(error);
       });
-    },
-    questionnairedetails(v){
-      this.$router.push(`/home/questionnairedetails`)
     },
     newQuestion(){
       this.$router.push('/home/questionnaire')

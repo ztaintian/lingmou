@@ -27,22 +27,15 @@
       <div class="sameBlock">
         <div class="salereport">
           <span class="time twoTimeTwo">售点:</span>
-          <el-select class="salePoint" v-model="salePoint" placeholder="请选择">
-            <el-option
-              v-for="item in salePointList"
-              :key="item.id"
-              :label="item"
-              :value="item">
-            </el-option>
-          </el-select>
+          <input class="nameipt" v-model="salePoint" >
         </div>
         <div class="salereport">
           <span class="time twoTime">售点报告编号:</span>
-          <input class="nameipt"   v-model="reportNumber" type="" name="">
+          <input class="nameipt ml5"   v-model="reportNumber" type="" name="">
         </div>
         <div class="salereport">
           <span class="time twoTime" style="width:56px;">线路:</span>
-          <input class="nameipt"   v-model="reportNumber" type="" name="">
+          <input class="nameipt ml5"   v-model="reportNumber" type="" name="">
         </div>
       </div>
       <div class="sameBlock">
@@ -59,7 +52,7 @@
         </div>
         <div class="salereport">
           <span class="time twoTime">营业所:</span>
-          <input class="nameipt"   v-model="reportNumber" type="" name="">
+          <input class="nameipt ml5"   v-model="reportNumber" type="" name="">
         </div>
         <span class="search">刷选</span>
       </div>
@@ -229,11 +222,13 @@ export default {
         .nameipt{
           width:200px;
           height:26px;
-          margin-left:5px;
           background: #FFFFFF;
           border: 1px solid #E0E0E0;
           border-radius: 5px;
           color: #333333;
+        }
+        .ml5{
+          margin-left:5px;
         }
         .search{
           display:inline-block;

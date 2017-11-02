@@ -60,7 +60,7 @@
   		</div>
   		<div class="centerLine"></div>
   		<div class="routerchild">
-	  		<router-view :key="key" />
+	  		<router-view  active-class="active" :key="key" />
   		</div>
   	</div>
   </div>
@@ -137,15 +137,17 @@ export default {
 	  		this.activeF = false
 	  		this.activeC = true
 	  		break;
+	  		case '/home/questionnairedetails':
+	  		this.type = 1
+	  		this.iconShow()
+	  		this.activeF = false
+	  		this.activeC = true
+	  		break;
 	  		case '/home/questionnaire':
 	  		this.type = 4
 	  		this.iconShow()
 	  		break;
 	  		case '/home/scenemanagement':
-	  		this.type = 4
-	  		this.iconShow()
-	  		break;
-	  		case '/home/questionnairedetails':
 	  		this.type = 4
 	  		this.iconShow()
 	  		break;

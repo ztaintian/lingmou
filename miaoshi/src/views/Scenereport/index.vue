@@ -30,12 +30,12 @@
           <input class="nameipt" v-model="salePoint" />
         </div>
         <div class="salereport">
-          <span class="time twoTime">场景报告编号:</span>
-          <input class="nameipt"   v-model="reportNumber" type="" name="">
+          <span class="time twoTime">报告编号:</span>
+          <input class="nameipt ml5"   v-model="reportNumber" type="" name="">
         </div>
         <div class="salereport">
           <span class="time twoTime" style="width:56px;">线路:</span>
-          <input class="nameipt"   v-model="lineNumber" type="" name="">
+          <input class="nameipt ml5"   v-model="lineNumber" type="" name="">
         </div>
       </div>
       <div class="sameBlock">
@@ -52,16 +52,16 @@
         </div>
         <div class="salereport">
           <span class="time twoTime">营业所:</span>
-          <input class="nameipt"   v-model="SalesOffice" type="" name="">
+          <input class="nameipt ml5"   v-model="SalesOffice" type="" name="">
         </div>
         <div class="salereport" style="margin-right: 50px">
           <span class="time twoTime" style="width:56px;">备注名:</span>
-          <input class="nameipt"   v-model="Memoname" type="" name="">
+          <input class="nameipt ml5"   v-model="Memoname" type="" name="">
         </div>
         <span class="search" @click="Brush">刷选</span>
       </div>
     </div>
-    <div class="table">
+    <div class="table" v-if="questionFalg">
       <div class="Theaded">
         <div class="W200 publicCss">时间</div>
         <div class="W140 publicCss">场景报告编号</div>
@@ -81,6 +81,22 @@
         <div class="W120 publicCss">{{v.line_number}}</div>
       </div>
     </div>
+    <div class="table" v-if="!questionFalg">
+      <div class="Theaded">
+        <div class="W300 publicCss">时间</div>
+        <div class="W240 publicCss">问卷报告编号</div>
+        <div class="W300 publicCss">售点</div>
+        <div class="W160 publicCss">营业所</div>
+        <div class="W120 publicCss">线路</div>
+      </div>
+      <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" @click="freezerdetails(v)" :class="[v.showBc?'tablelistBc':'','tablelist']">
+        <div class="W300 publicCss">{{v.createtime|dataForm}}</div>
+        <div class="W240 publicCss">{{v.scene_report_number}}</div>
+        <div class="W300 publicCss">{{v.storename}}</div>
+        <div class="W160 publicCss">{{v.group_number}}</div>
+        <div class="W120 publicCss">{{v.line_number}}</div>
+      </div>
+    </div>
     <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1" :nowPages.sync="nowNum"></Pages>
   </div>
 </template>
@@ -95,6 +111,7 @@ export default {
   components:{Pages},
   data () {
     return {
+      questionFalg:true,
       SalesOffice:'',
       Memoname:'',
       lineNumber:'',
@@ -112,7 +129,7 @@ export default {
       lastMounth:false,
       salePoint:'',
       salePointList:['快客','全家'],
-      statusList:['冰柜','货架','堆头'],
+      statusList:['冰柜','货架','堆头','问卷'],
       all:true,
       compent:false,
       ing:false,
@@ -134,6 +151,8 @@ export default {
           this.num_type_id = 2
         }else if(this.statusVal == '堆头'){
           this.num_type_id = 3
+        }else if(this.statusVal == '问卷'){
+           this.num_type_id = 4
         }
         this.getAjaxList(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
       }else{
@@ -163,10 +182,16 @@ export default {
       this.time2 = this.dataTime2?(new Date(this.dataTime2).getTime())/1000:''
       if(this.statusVal == '冰柜'){
         this.num_type_id = 1
+        this.questionFalg = true
       }else if(this.statusVal == '货架'){
         this.num_type_id = 2
+        this.questionFalg = true
       }else if(this.statusVal == '堆头'){
         this.num_type_id = 3
+        this.questionFalg = true
+      }else if(this.statusVal == '问卷'){
+        this.num_type_id = 4
+        this.questionFalg = false
       }
       this.nowNum = '1'
       this.getAjaxList(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
@@ -178,8 +203,12 @@ export default {
       this.dataTime = new Date(nowDatelast).getFullYear()+'-'+new Date(nowDatelast).getMonth()+'-'+new Date(nowDatelast).getDate()+' 00:00:00'
       this.dataTime2 = new Date(nowDate).getFullYear()+'-'+new Date(nowDate).getMonth()+'-'+new Date(nowDate).getDate()+' 23:59:59'
     },
-    freezerdetails(){
-      this.$router.push('/home/freezerdetails')
+    freezerdetails(v){
+      if(this.questionFalg){
+        this.$router.push('/home/freezerdetails')
+      }else{
+        this.$router.push({path:`/home/questionnairedetails`,query:{q_id:v.q_id,store_id:v.store_id}})
+      }
     },
     enter(v,index){
       for(var i=0;i<this.tableList.length;i++){
@@ -253,6 +282,9 @@ export default {
           border: 1px solid #E0E0E0;
           border-radius: 5px;
           color: #333333;
+        }
+        .ml5{
+          margin-left:5px;
         }
         .search{
           display:inline-block;
