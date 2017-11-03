@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-default/index.css'
 import axios from 'axios'
 Vue.config.productionTip = false
 Vue.prototype.Axios = axios
-
+Vue.prototype.api = '/api'
 // axios.post('/api/y2/frontend/web/index.php?r=store/index')
 // 	.then(function (response) {
 //     console.log(response);
@@ -20,7 +20,6 @@ Vue.use(ElementUI)
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
-
 
 new Vue({
   el: '#app',

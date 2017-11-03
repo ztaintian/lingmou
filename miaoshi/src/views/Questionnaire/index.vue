@@ -219,7 +219,7 @@ export default {
   		}
   		data.question = objArr
   		var that = this
-			this.Axios.post('/api/y2/frontend/web/index.php?r=question/addnaire',data)
+			this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=question/addnaire`,data)
 			.then(function (response) {
 				if(response.data.code === 200){
 		  		that.$message({

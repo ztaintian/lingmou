@@ -140,7 +140,7 @@ export default {
     }
   },
   mounted(){
-    this.getAjaxList(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
+    this.getAjaxList(`${this.api}/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
   },
   watch:{
     nowNum(){
@@ -154,9 +154,9 @@ export default {
         }else if(this.statusVal == '问卷'){
            this.num_type_id = 4
         }
-        this.getAjaxList(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
+        this.getAjaxList(`${this.api}/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
       }else{
-        this.getAjaxList(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
+        this.getAjaxList(`${this.api}/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
       }
     }
   },
@@ -194,7 +194,7 @@ export default {
         this.questionFalg = false
       }
       this.nowNum = '1'
-      this.getAjaxList(`/api/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
+      this.getAjaxList(`${this.api}/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
 
     },
     getDate(num){

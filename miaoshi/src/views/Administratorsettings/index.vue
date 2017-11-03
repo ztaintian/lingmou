@@ -96,7 +96,7 @@ export default {
   methods:{
     getAjaxList(){
       var that  = this
-      this.Axios.get(`/api/y2/frontend/web/index.php?r=user/adminlist&page=${this.nowNum}&per-page=20`)
+      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=user/adminlist&page=${this.nowNum}&per-page=20`)
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
           val.editBoxShow = false
@@ -122,9 +122,9 @@ export default {
     firbid(v){//'启用':'禁用'
       console.log(v)
       if(v.status == 0){
-        this.firbidAjax(`/api/y2/frontend/web/index.php?r=user/adminopen`,v.id)
+        this.firbidAjax(`${this.api}/y2/frontend/web/index.php?r=user/adminopen`,v.id)
       }else{
-        this.firbidAjax(`/api/y2/frontend/web/index.php?r=user/admindel`,v.id)
+        this.firbidAjax(`${this.api}/y2/frontend/web/index.php?r=user/admindel`,v.id)
       }
     },
     edit(v){//编辑
@@ -149,7 +149,7 @@ export default {
     addsuccess(){//添加管理员账号
       if(this.bntIf){
         var that  = this
-        this.Axios.post(`/api/y2/frontend/web/index.php?r=user/adminadd`,{username:this.account,password:this.pass})
+        this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=user/adminadd`,{username:this.account,password:this.pass})
         .then(function (data) {
           that.boxShow = false
           that.getAjaxList()
@@ -169,7 +169,7 @@ export default {
     save(v){//编辑管理员保存
       if(this.editBntIf){
         var that  = this
-        this.Axios.post(`/api/y2/frontend/web/index.php?r=user/adminupdate`,{id:v.id,password:this.editPass})
+        this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=user/adminupdate`,{id:v.id,password:this.editPass})
         .then(function (data) {
           v.editBoxShow = false
           that.getAjaxList()

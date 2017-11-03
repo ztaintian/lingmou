@@ -11,29 +11,71 @@
       </div>
       <div class="center">
         <div  class="left">
-          <div v-for="v in choiceList">
-            <div  class="allquestion">
+          <div v-for="(v,indexC) in choiceList">
+            <div  class="allquestion" v-if="v.questions.type == 1">
               <div  class="title">
-                1、可口可乐新品在上海市徐汇区家乐福在国庆期间有哪些优惠促销
+                {{v.questions.sort}}、{{v.questions.content}}（单选题）
               </div>
-              <div v-for="v in choiceList" class="chioce">
-                选项1：选项名称
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option1">
+                选项1：{{v.questions.option1}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option2">
+                选项2：{{v.questions.option2}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option3">
+                选项3：{{v.questions.option3}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option4">
+                选项4：{{v.questions.option4}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option5">
+                选项5：{{v.questions.option5}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option6">
+                选项6：{{v.questions.option6}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option7">
+                选项7：{{v.questions.option7}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option8">
+                选项8：{{v.questions.option8}}
               </div>
             </div>
-            <div  class="allquestion">
+            <div  class="allquestion" v-if="v.questions.type == 2">
               <div  class="title">
-                2、可口可乐新品在上海市徐汇区家乐福在国庆期间有哪些优惠促销活动？（多选题）
+                 {{v.questions.sort}}、{{v.questions.content}}（多选题）
               </div>
-              <div v-for="v in choiceList" class="chioce">
-                选项1：选项名称
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option1">
+                选项1：{{v.questions.option1}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option2">
+                选项2：{{v.questions.option2}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option3">
+                选项3：{{v.questions.option3}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option4">
+                选项4：{{v.questions.option4}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option5">
+                选项5：{{v.questions.option5}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option6">
+                选项6：{{v.questions.option6}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option7">
+                选项7：{{v.questions.option7}}
+              </div>
+              <div  :class="[v.d1 ==1?'blurColor':'','chioce']" v-if="v.questions.option8">
+                选项8：{{v.questions.option8}}
               </div>
             </div>
-            <div  class="allquestion">
+            <div  class="allquestion" v-if="v.questions.type == 3">
               <div  class="title">
-                3、可口可乐新品在上海市徐汇区家乐福在国庆？（填空题）
+                {{v.questions.sort}}、{{v.questions.content}}（填空题）
               </div>
               <div class="chioce blurColor">
-                回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回答回
+                {{v.answer}}
               </div>
             </div>
           </div>
@@ -58,21 +100,22 @@ export default {
   name: 'Questionnairedetails',
   data () {
     return {
-      choiceList:[{}]
+      choiceList:[]
     }
   },
   mounted(){
     console.log(this.$router.currentRoute.query.q_id)
     console.log(this.$router.currentRoute.query.store_id)
+    this.getAjaxList()
   },
   methods:{
     getAjaxList(){
       var that  = this
-      this.Axios.get(`/api/y2/frontend/web/index.php?r=store/index`)
+      // q_id
+      this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=question/content`,{q_id:'12',store_id:'278'})
       .then(function (data) {
-        that.tableList = data.data.data
-        that.totleNums = data.data.pagelist.count
-        that.nowNum = data.data.pagelist.page
+        console.log(data.data)
+        that.choiceList = data.data.data
       })
       .catch(function (error) {
         console.log(error);

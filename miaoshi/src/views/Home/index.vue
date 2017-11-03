@@ -108,7 +108,7 @@ export default {
   methods:{
   	Signout(){
   		var that = this
-  		this.Axios.post('/api/y2/frontend/web/index.php?r=user/logout').then(function (data) {
+  		this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=user/logout`).then(function (data) {
   			if(data.data.code === 200){
 		  		Cookies.remove('user_name')
 		  		that.$router.push('/')

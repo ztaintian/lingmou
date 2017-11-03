@@ -84,7 +84,7 @@ export default {
   methods:{
     del(v){
       var that = this
-      this.Axios.post(`/api/y2/frontend/web/index.php?r=question/delnaire`,{id:v.id})
+      this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=question/delnaire`,{id:v.id})
       .then(function (data) {
         console.log(data)
          that.getAjaxList()
@@ -96,7 +96,7 @@ export default {
     },
     getAjaxList(){
       var that = this
-      this.Axios.get(`/api/y2/frontend/web/index.php?r=question/naire&page=${this.nowNum}&per-page=20`)
+      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=question/naire&page=${this.nowNum}&per-page=20`)
       .then(function (data) {
         that.tableList = data.data.data;
         that.totleNums = data.data.pagelist.count
