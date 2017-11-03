@@ -2,11 +2,11 @@
   <div class="questionnairedetails">
     <div class="content">
       <div class="top">
-        <span class="title">场景名称（5505032）</span>
+        <span class="title">{{titleList.title}}</span>
         <span class="pre" @click="choice(0)">下一个</span>
         <span class="pre" @click="choice(1)">上一个</span>
         <div class="tip">
-          123422／105／2017-11-18／1222222售点名称
+          {{storeList.group_number}}／{{storeList.line_number}}／{{titleList.endtime|dataFormYMD}}／{{storeList.storename}}
         </div>
       </div>
       <div class="center">
@@ -100,7 +100,9 @@ export default {
   name: 'Questionnairedetails',
   data () {
     return {
-      choiceList:[]
+      choiceList:[],
+      storeList:{},
+      titleList:{}
     }
   },
   mounted(){
@@ -111,11 +113,12 @@ export default {
   methods:{
     getAjaxList(){
       var that  = this
-      // q_id
       this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=question/content`,{q_id:'12',store_id:'278'})
       .then(function (data) {
         console.log(data.data)
         that.choiceList = data.data.data
+        that.storeList = data.data.store
+        that.titleList = data.data.naire
       })
       .catch(function (error) {
         console.log(error);

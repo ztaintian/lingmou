@@ -90,7 +90,7 @@ export default {
   methods:{
     getAjaxList(){
       var that  = this
-      this.Axios.get(`/api/y2/frontend/web/index.php?r=store/index&page=${this.nowNum}&per-page=20`)
+      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=store/index&page=${this.nowNum}&per-page=20`)
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
           val.showBc = false

@@ -1,95 +1,67 @@
 <template>
-  <div class="distinguishsku">
+  <div class="importsku">
     <div class="table">
       <div class="Theaded">
-        <div class="W200 publicCss">编号</div>
+        <div class="W300 publicCss">编号</div>
         <div class="W120 publicCss">图片</div>
         <div class="W360 publicCss">sku名</div>
         <div class="W200 publicCss">父品牌</div>
-        <div class="W120 publicCss">状态</div>
-        <div class="W120 publicCss"></div>
+        <div class="W140 publicCss">状态</div>
       </div>
       <div v-for="(v,index) in tableList" class="tablelist">
-        <div class="W200 publicCss">9990000</div>
-        <div class="W120 publicCss"><img  class="img" src="" alt=""></div>
-        <div class="W360 publicCss">可口可乐330ml罐装</div>
+        <div class="W300 publicCss">{{v.id}}</div>
+        <div class="W120 publicCss"><img  class="img" :src="v.picture" alt=""></div>
+        <div class="W360 publicCss">{{v.sku_name}}</div>
         <div class="W200 publicCss">可口可乐</div>
-        <div class="W120 publicCss">生效中</div>
-        <div class="W120 publicCss" style="cursor: pointer;color:#2D78B3;">编辑</div>
+        <div class="W140 publicCss"><span v-if="v.state==1" :class="[v.state==1?'blueClocor':'']">生效中</span><span v-if="v.state!=1" :class="[v.state==1?'redClocor':'']">已失效</span></div>
       </div>
     </div>
-    <div class="pagination">
-      <span class="totle">共{{totlePages}}条，每页20条</span>
-      <img class="img" @click="preClick" :src="imgUrlPre?pnextUrl:pnextUrlA" alt=""><span class="num">{{nowPages}}/{{Math.ceil(totlePages/20)}}</span>
-      <img class="img" @click="nextClick"  :src="imgUrlNext?nextUrl:nextUrlA" alt="">
-      <input type="" name="" v-model="jumpPages">
-      <span class="jump" @click="jump">跳转</span>
-    </div>
+    <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1"  :nowPages.sync="nowNum"></Pages>
   </div>
 </template>
 
 <script>
 import hookicon from '@/assets/ic_yes@1x.png'
-import ic_nextActive from '@/assets/ic_next_pressed@1x.png'
-import ic_next from '@/assets/ic_next_normal@1x.png'
-import pic_next from '@/assets/ic_pre_normal@1x.png'
-import pic_nextActive from '@/assets/ic_pre_pressed@1x.png'
+import Pages from '@/components/pages'
 
 export default {
-  name: 'Distinguishsku',
+  name: 'Importsku',
+  components:{Pages},
   data () {
     return {
-      imgUrlPre:true,
-      imgUrlNext:true,
-      totlePages:'',
-      nowPages:'',
-      jumpPages:'',
-      nextUrl:ic_next,
-      nextUrlA:ic_nextActive,
-      pnextUrl:pic_next,
-      pnextUrlA:pic_nextActive,
+      totleNums:0,
+      nowNum:'1',
       hookUrl:hookicon,
-      tableList:[{showBc:false},{showBc:false},{showBc:false}]
+      tableList:[]
     }
   },
   mounted(){
-    this.totlePages = 50
-    this.nowPages = 1
+    this.getAjaxList()
+  },
+  watch:{
+    nowNum(){
+      this.getAjaxList()
+    }
   },
   methods:{
-    preClick(){
-      this.imgUrlNext = true
-      if(this.nowPages <=1){
-        return
-      }
-      this.nowPages--
-      this.imgUrlPre = false
-    },
-    nextClick(){
-      this.imgUrlPre = true
-      if(this.nowPages >= Math.ceil(this.totlePages/20)){
-        return
-      }
-      this.nowPages++
-      this.imgUrlNext = false
-    },
-    jump(){
-      if(isNaN(this.jumpPages)){
-        return
-      }
-      if(this.jumpPages<=0||this.jumpPages>Math.ceil(this.totlePages/20)){
-        return;
-      }
-      this.imgUrlNext = true
-      this.imgUrlPre = true
-      this.nowPages = this.jumpPages
+    getAjaxList(){
+      var that  = this
+      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=sku/index&page=${this.nowNum}&per-page=20&type=2`)
+      .then(function (data) {
+        that.tableList = data.data.data
+        that.totleNums = data.data.pagelist.count
+        that.nowNum = data.data.pagelist.page
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   }
 }
 </script>
 
 <style lang="scss">
-  .distinguishsku{
+  .importsku{
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
     overflow: hidden;
     width:100%;
@@ -127,7 +99,6 @@ export default {
         width:36px;
         height:36px;
         vertical-align: middle;
-        background:red;
       }
     }
   }
