@@ -33,7 +33,7 @@
     </div>
     <div class="messagecont" v-if="boxShow">
       <iframe id="hiddenIframe" style="border-width:0;width:0;height:0;" name="posthere"></iframe>
-      <form target="posthere" action="/api/y2/frontend/web/index.php?r=store/upload" method="post" enctype="multipart/form-data">
+      <form target="posthere" :action="formUrl" method="post" enctype="multipart/form-data">
         <div class="addGY">
           上传文件
         </div>
@@ -45,7 +45,7 @@
         <div class="tip">
           最大支持 3 MB XLS的文件。<span  class="errorShow">{{errorMes}}</span>
         </div>
-        <div class="p">导入的文件数据需要同模板文件保持一致。<span>下载模版</span></div>
+        <div class="p">导入的文件数据需要同模板文件保持一致。<span @click="loadFile">下载模版</span></div>
         <div class="p">导入后将会覆盖原先的售点数据。售点数据全部来源于新文件。</div>
         <div class="p">导入售点后需要一段时间同步售点信息，之后才会出现，请耐心等待。</div>
         <button type="submit" @click="submit" :class="[bntIf?'bntlast':'bnt','addPublic']">
@@ -66,6 +66,7 @@ export default {
   components:{Pages},
   data () {
     return {
+      formUrl:'',
       totleNums:0,
       nowNum:'1',
       errorMes:'',
@@ -80,6 +81,7 @@ export default {
     }
   },
   mounted(){
+    this.formUrl = `${this.api}/store/upload`
     this.getAjaxList()
   },
   watch:{
@@ -90,7 +92,7 @@ export default {
   methods:{
     getAjaxList(){
       var that  = this
-      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=store/index&page=${this.nowNum}&per-page=20`)
+      this.Axios.get(`${this.api}/store/index?page=${this.nowNum}&per-page=20`)
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
           val.showBc = false
@@ -103,9 +105,11 @@ export default {
         console.log(error);
       });
     },
+    loadFile(){
+      window.location.href = `${this.apiLoad}/uploads/demo.xls`
+    },
     pointofsaledetails(v){
-      var aa =11
-      // this.$router.push(`/home/pointofsaledetails?aa=${aa}`)
+      this.$router.push({path:'/home/pointofsaledetails',query:{}})
     },
     enter(v,index){
       for(var i=0;i<this.tableList.length;i++){
@@ -141,8 +145,7 @@ export default {
              }else if(json.code === 402){
               that.errorMes = json.msg
              }else if(json.code === 200){
-              // that.boxShow =false
-              that.errorMes = json.msg
+              that.boxShow =false
               that.getAjaxList()
              }
          }catch(e){}
@@ -237,10 +240,10 @@ export default {
         margin:10px 0 20px 40px;
         .errorShow{
           font-family:'PingFang SC-Regular';
-          font-size: 13px;
+          font-size: 14px;
           color: #D61E2A;
           float: right;
-          margin-right:40px;
+          margin-right:48px;
         }
       }
       .addGY{

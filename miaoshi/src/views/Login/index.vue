@@ -49,7 +49,7 @@ export default {
   			var that = this
   			that.passShow = ''
   			that.accountShow = ''
-	  		this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=user/login`,{
+	  		this.Axios.post(`${this.api}/user/login`,{
 			    username: this.account,
 			    password: this.pass
 			  })

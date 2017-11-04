@@ -24,7 +24,7 @@
     <div class="center">
       <img :src="hotsaleUrl" alt="">
       <div class="right">
-        <span class="freezer">堆头场景</span><div>业代可添加该场景，完成堆头稽查任务，为保证识别正确率，需45度对角分两次拍摄统一堆头</div>
+        <span class="freezer">堆头场景</span><div>业代可添加该场景，完成堆头稽查任务，为保证识别正确率，需45度对角分两次拍摄同一堆头</div>
       </div>
       <div class="rightLast">
         已启用
@@ -84,7 +84,7 @@ export default {
   methods:{
     del(v){
       var that = this
-      this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=question/delnaire`,{id:v.id})
+      this.Axios.post(`${this.api}/question/delnaire`,{id:v.id})
       .then(function (data) {
         console.log(data)
          that.getAjaxList()
@@ -96,7 +96,7 @@ export default {
     },
     getAjaxList(){
       var that = this
-      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=question/naire&page=${this.nowNum}&per-page=20`)
+      this.Axios.get(`${this.api}/question/naire?page=${this.nowNum}&per-page=20`)
       .then(function (data) {
         that.tableList = data.data.data;
         that.totleNums = data.data.pagelist.count

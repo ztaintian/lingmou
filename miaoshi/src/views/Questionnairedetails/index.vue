@@ -102,18 +102,21 @@ export default {
     return {
       choiceList:[],
       storeList:{},
-      titleList:{}
+      titleList:{},
+      q_id:'',
+      store_id:''
+
     }
   },
   mounted(){
-    console.log(this.$router.currentRoute.query.q_id)
-    console.log(this.$router.currentRoute.query.store_id)
+    this.q_id = this.$router.currentRoute.query.q_id
+    this.store_id = this.$router.currentRoute.query.store_id
     this.getAjaxList()
   },
   methods:{
     getAjaxList(){
       var that  = this
-      this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=question/content`,{q_id:'12',store_id:'278'})
+      this.Axios.post(`${this.api}/question/content`,{q_id:this.q_id ,store_id:this.store_id})
       .then(function (data) {
         console.log(data.data)
         that.choiceList = data.data.data

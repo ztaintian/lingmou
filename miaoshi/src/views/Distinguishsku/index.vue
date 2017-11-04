@@ -18,7 +18,7 @@
         <div class="W120 publicCss"><img  v-if="v.is_z == 1" class="imgHook" :src="hookUrl" alt=""></div>
       </div>
     </div>
-    <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1"  :nowPages.sync="nowNum"></Pages>
+    <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1" :bntShowPage.sync="bntShow"  :nowPages.sync="nowNum"></Pages>
   </div>
 </template>
 
@@ -31,8 +31,9 @@ export default {
   components:{Pages},
   data () {
     return {
+      bntShow:true,
       totleNums:0,
-      nowNum:'1',
+      nowNum:1,
       hookUrl:hookicon,
       tableList:[]
     }
@@ -48,11 +49,18 @@ export default {
   methods:{
     getAjaxList(){
       var that  = this
-      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=sku/index&page=${this.nowNum}&per-page=20`)
+      this.Axios.get(`${this.api}/sku/index?page=${this.nowNum}&per-page=20`)
       .then(function (data) {
-        that.tableList = data.data.data
-        that.totleNums = data.data.pagelist.count
-        that.nowNum = data.data.pagelist.page
+        if(data.data.code == 200){
+          setTimeout(function(){
+            that.bntShow = true
+          },2000)
+          that.tableList = data.data.data
+          that.totleNums = data.data.pagelist.count
+          that.nowNum = Number(data.data.pagelist.page)
+        }else{
+          that.bntShow = false
+        }
       })
       .catch(function (error) {
         console.log(error);

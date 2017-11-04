@@ -25,6 +25,22 @@
           <span @click="edit(v)">编辑</span>
           <span @click="firbid(v)">{{v.status==0?'启用':'禁用'}}</span>
         </div>
+        <div style="clear: both;"></div>
+        <!-- <div v-if="v.openShow" class="messageBox">
+          <img class="img" :src="sanjiaoUrl" alt="">
+          <div class="count">
+            账号：{{v.username}}
+          </div>
+          <div class="decrite">
+            确定{{v.status==0?'禁用':'启用'}}该帐号？
+          </div>
+          <div @click="confimOpen(v)" class="btnAA btnAAS">
+             确定
+          </div>
+          <div @click="canlve(v)" class="btnAA btnAAC">
+             取消
+          </div>
+        </div> -->
         <div class="messagebox" v-show="v.editBoxShow" @click="v.editBoxShow=false">
         </div>
         <div class="messagecont"  v-show="v.editBoxShow">
@@ -35,7 +51,7 @@
             <input  v-model="v.username" disabled="disabled" :class="[editAccountFlag?'linelast':'']" type="" name="" placeholder="用户名">
           </div>
           <div class="use">
-            <input type="password"  :class="[editPassFlag?'linelast':'']"   v-model="editPass" name="" placeholder="密码">
+            <input type="password"   :class="[editPassFlag?'linelast':'']"   v-model="editPass" name="" placeholder="密码">
           </div>
           <div @click="save(v)" :class="[editBntIf?'bntlast':'bnt','addPublic']">
             保存
@@ -66,12 +82,14 @@
 <script>
 import hookicon from '@/assets/ic_yes@1x.png'
 import Pages from '@/components/pages'
+import sanjiao from '@/assets/sj@1x.png'
 
 export default {
   name: 'Administratorsettings',
   components:{Pages},
   data () {
     return {
+      sanjiaoUrl:sanjiao,
       totleNums:1,
       nowNum:'1',
       hookUrl:hookicon,
@@ -96,10 +114,11 @@ export default {
   methods:{
     getAjaxList(){
       var that  = this
-      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=user/adminlist&page=${this.nowNum}&per-page=20`)
+      this.Axios.get(`${this.api}/user/adminlist?page=${this.nowNum}&per-page=20`)
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
           val.editBoxShow = false
+          val.openShow = false
         })
         that.tableList = data.data.data
         that.totleNums = data.data.pagelist.count
@@ -120,11 +139,12 @@ export default {
       });
     },
     firbid(v){//'启用':'禁用'
-      console.log(v)
       if(v.status == 0){
-        this.firbidAjax(`${this.api}/y2/frontend/web/index.php?r=user/adminopen`,v.id)
+        v.openShow = true
+        this.firbidAjax(`${this.api}/user/adminopen`,v.id)
       }else{
-        this.firbidAjax(`${this.api}/y2/frontend/web/index.php?r=user/admindel`,v.id)
+        v.openShow = true
+        this.firbidAjax(`${this.api}/user/admindel`,v.id)
       }
     },
     edit(v){//编辑
@@ -149,7 +169,7 @@ export default {
     addsuccess(){//添加管理员账号
       if(this.bntIf){
         var that  = this
-        this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=user/adminadd`,{username:this.account,password:this.pass})
+        this.Axios.post(`${this.api}/user/adminadd`,{username:this.account,password:this.pass})
         .then(function (data) {
           that.boxShow = false
           that.getAjaxList()
@@ -169,7 +189,7 @@ export default {
     save(v){//编辑管理员保存
       if(this.editBntIf){
         var that  = this
-        this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=user/adminupdate`,{id:v.id,password:this.editPass})
+        this.Axios.post(`${this.api}/user/adminupdate`,{id:v.id,password:this.editPass})
         .then(function (data) {
           v.editBoxShow = false
           that.getAjaxList()
@@ -345,13 +365,26 @@ export default {
       }
     }
     .tablelist{
-      overflow: hidden;
       border-bottom: 1px solid #E0E0E0;
+      position:relative;
+      .messageBox{
+        position:absolute;
+        z-index:777;
+        width:280px;
+        height:145px;
+        background:#000;
+        background: #FFFFFF;
+        border: 1px solid #E0E0E0;
+        box-shadow: 0 4px 12px 0 rgba(0,0,0,0.12);
+        border-radius: 4px;
+        top:40px;
+        right:20px;
+        text-align: center;
+      }
       .img{
         width:36px;
         height:36px;
         vertical-align: middle;
-        background:red;
       }
       .operation{
         text-align: right;

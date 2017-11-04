@@ -2,14 +2,14 @@
   <div class="pointofsaledetails">
     <div class="content">
       <div class="top">
-        <span class="title">快客便利店徐汇店（5505032）</span>
-        <span class="pre">下一个</span>
-        <span class="pre">上一个</span>
+        <span class="title">{{reportFristList1.storename}}（{{reportFristList1.store_number}}）</span>
+        <span class="pre" @click="nextList">下一个</span>
+        <span class="pre" @click="preList">上一个</span>
         <div class="tip">
-          123422／105／2017-11-18
+          {{reportFristList1.group_number}}／{{reportFristList1.line_number}}／{{reportFristList.created_at|dataFormYMD}}
         </div>
       </div>
-      <div class="center">
+<!--       <div class="center">
         <div class="left">
           <div class="titl">场景数据</div>
           <div class="cycly">
@@ -58,28 +58,22 @@
             <img class="Unqualified" :src="iconUnqualifiedUrl" alt="">
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="sku">
         <div class="left">
           <div class="title">
             缺失必备 SKU
           </div>
-          <div class="p">
-            <span>缺失</span><span>可口可乐罐装300ml</span>
-          </div>
-          <div class="p">
-            <span>缺失</span><span>美汁源果粒橙热带水果味600ml</span>
-          </div>
-          <div class="p">
-            <span>缺失</span><span>美汁源果粒橙热带水果味600ml</span>
+          <div class="p" v-if="v.type==1" v-for="v in reportFristList.storeReportMiss">
+            <span>缺失</span><span>{{v.sku_name}}</span>
           </div>
         </div>
         <div class="left right">
           <div class="title">
             缺失重点 SKU
           </div>
-          <div class="p">
-            <span>缺失</span><span>可口可乐罐装300ml</span>
+          <div class="p" v-if="v.type==2" v-for="v in reportFristList.storeReportMiss">
+            <span>缺失</span><span>{{v.sku_name}}</span>
           </div>
           <div class="p">
             <span>缺失</span><span>美汁源果粒橙热带水果味600ml</span>
@@ -92,11 +86,11 @@
         </div>
         <div class="nav">
           <div v-for="v in navList" style="width:160px;height:40px;display:inline-block;">
-            <span @mouseover = "over(v)" @mouseleave = "leave(v)" @click="navClick(v)" :class="[v.navFlag?'navover':'',v.clickFlag?'navclick':'']">选中</span>
+            <span @mouseover = "over(v)" @mouseleave = "leave(v)" @click="navClick(v)" :class="[v.navFlag?'navover':'',v.clickFlag?'navclick':'']">{{v.name}}</span>
           </div>
         </div>
         <div class="title">
-          <span>识别产品（共27，top8，重点1）</span>
+          <span>识别产品（共{{reportList.sku_total_num}}，top{{reportList.sku_necessary_num_act}}，重点{{reportList.sku_important_num_act}}）</span>
           <div class="img">
             <img :src="iconFlag?iconUrlA:iconUrl" @click="changeImg" alt="">
           </div>
@@ -105,18 +99,14 @@
         </div>
         <div class="tree">
           <div class="left">
-            <div class="treeLi" v-for="(v,index) in dataList">
-              <div class="li" @click="liClick(v)">
-                <img :src="iconFoldURl"  :class="v.childShow?'imgTranform':''" alt=""><span>{{v.title}}</span>
+            <div class="treeLi" v-for="(v,index) in skuseriesList">
+              <div class="li" @click.stop.prevent="liClick(v,$event)">
+                <img :src="iconFoldURl"  :class="v.childShow?'imgTranform':''" alt=""><span>{{v.sku_name}} ({{v.length}})</span>
               </div>
-              <div v-if="v.childShow"  v-for="(vC,indexC) in v.childrenList">
-                <div @click="childClick(vC)" :class="[vC.colorChange?'bgBlue':'','li mgLeft10']"  >
-                  <img :src="iconFoldURl"  :class="vC.childrenShow?'imgTranform':''" alt="">
-                  <span>{{vC.children1}}</span>
-                </div>
-                <div :class="[vC.colorChange?'bgBlue':'','li mgLeft20']" @click="getGoods(vCC)" v-for="(vCC,indexCC) in vC.childrenHave"  v-if="vC.childrenShow">
-                  <span>{{vCC.title}}</span>
-                </div>
+              <div v-if="v.childShow" v-for="(vC,indexC) in v.ArrObjList"  @click.stop.prevent="childClick(vC,$event)">
+                <span style="display:block" :class="[vC.colorChange?'bgBlue':'','li mgLeft10  queryList']" >
+                  {{vC.name}}({{vC.num}})
+                </span>
               </div>
             </div>
           </div>
@@ -133,18 +123,10 @@
       <div class="bottom">
         <div class="title">原图（6）</div>
         <div class="img" v-for="v in imgList">
-          <img @click="img(v)"  style="cursor:pointer;" :src="vueUrl" alt="">
+          <img @click="img(v)"  style="cursor:pointer;" :src="v" alt="">
         </div>
       </div>
     </div>
-<!--     <div class="messagebox" v-if="editBoxShow">
-      <div class="messagecont">
-         <img  style="height:500px;width:200px;" :src="vueUrl" alt="">
-        <div style="cursor:pointer;margin-left:94px;font-size:20px;color:#000;" @click="cancle">
-          X
-        </div>
-      </div>
-    </div> -->
     <img-model  v-if="editBoxShow" :imgUrl="vueUrl" :editBoxShow.sync="editBoxShow"></img-model>
   </div>
 </template>
@@ -168,10 +150,10 @@ export default {
       showAllMark: true,
       scale: 100,
       bboxes: [],
-      navList:[{navFlag:false,clickFlag:true},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false},{navFlag:false,clickFlag:false}],
+      navList:[],
       navFlag:false,
       editBoxShow:false,
-      imgList:[{},{},{},{},{}],
+      imgList:[],
       iconUrlA:hookiconA,
       iconUrl:hookicon,
       iconUnqualifiedUrl:iconUnqualified,
@@ -180,28 +162,153 @@ export default {
       iconEnlargeUrl:iconEnlarge,
       iconNarrowUrl:iconNarrow,
       vueUrl:iconVue,
-      viewUrl:viewIcon,
-      dataList:[{
-        title:'美汁源',
-        childShow:false,
-        childrenList:[{
-          colorChange:false,
-          children1:'果粒奶优300ml',
-          childrenShow:false,
-          childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        },{
-          colorChange:false,
-          children1:'果粒奶优300ml',
-          childrenShow:false,
-          childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        }]
-      }]
+      viewUrl:'',
+      dataList:[],
+      sceneList:{},
+      storeList:{},
+      skuList:[],
+      skuseriesList:[],
+      reportList:{},
+      sku_lack_num:'',
+      tempList:[],
+      numList:[],
+      store_reportList:{},
+      id:'',
+      reportFristList:{},
+      reportFristList1:{},
+      clickId:''
     }
   },
   mounted(){
-    this.initCanvas()
+    this.getAjaxListFirst()
   },
   methods:{
+    getAjaxListFirst(){
+      var that  = this
+      this.id = this.$router.currentRoute.query.id
+      this.Axios.post(`${this.api}/store-report/report`,{"id":1})
+      .then(function (data) {
+        that.reportFristList = data.data.data.report
+        that.reportFristList1 = data.data.data.report.store
+        data.data.data.scene_id.forEach((val,index)=>{
+          val.navFlag = false
+          val.clickFlag = false
+        })
+        that.navList = data.data.data.scene_id
+        that.clickId = data.data.data.scene_id[0].id
+        that.getAjaxList()
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    nextList(){
+      this.clickId--
+      if(this.clickId<=0){
+        return
+      }
+      this.imgList =[]
+      this.vueUrl =''
+      this.viewUrl =''
+      this.getAjaxList()
+    },
+    preList(){
+      this.clickId++
+      this.imgList =[]
+      this.vueUrl =''
+      this.viewUrl =''
+      this.getAjaxList()
+    },
+    getAjaxList(){
+      var that  = this
+      this.Axios.post(`${this.api}/scene-report/report`,{id:that.clickId})
+      .then(function (data) {
+        console.log(data)
+        that.sceneList = data.data.data.scene
+        that.storeList = data.data.data.store
+        that.skuList = data.data.data.sku
+        that.reportList = data.data.data.report
+        that.store_reportList = data.data.data.store_report
+        data.data.data.picture.forEach((val,index)=>{
+          if(val.type == 1){
+            that.viewUrl = val.url
+          }else{
+            that.imgList.push(val.url)
+          }
+        })
+        that.initCanvas()
+        for(var i=0;i<data.data.data.skuseries.length;i++){
+          data.data.data.skuseries[i].arr1 = []
+          data.data.data.skuseries[i].arr = []
+          data.data.data.skuseries[i].length = ''
+          data.data.data.skuseries[i].childShow = false
+          var obj = {name:'',num:0}
+          that.skuList.forEach((val,index)=>{
+            if(val.series_id == data.data.data.skuseries[i].series_id){
+              obj.num++
+              if(!obj.name){
+                obj.name = val.sku_name
+                obj={name:'',num:0}
+              }
+              data.data.data.skuseries[i].arr1.push(obj)
+              data.data.data.skuseries[i].arr.push(val.sku_name)
+            }
+            data.data.data.skuseries[i].length = data.data.data.skuseries[i].arr.length
+          })
+        }
+          for(var v=0;v<data.data.data.skuseries.length;v++){
+            that.tempList.push(...data.data.data.skuseries[v].arr)
+          }
+        that.skuseriesList = data.data.data.skuseries
+        Array.prototype.unique = function() {
+          var n = [];
+          var obj = {};
+          for(var i = 0; i<this.length; i++) {
+            var item = this[i];
+            var key = typeof(item) + item;
+              if(!obj[key]){
+                n.push(this[i])
+                obj[key] = true
+              }
+          }
+          return n;
+        }
+
+        for(var k=0;k<that.skuseriesList.length;k++){
+          that.skuseriesList[k].arr = that.skuseriesList[k].arr.unique()
+        }
+
+        for(var o=0;o<that.skuseriesList.length;o++){
+          for(var r=0;r<that.skuseriesList[o].arr.length;r++){
+            var num = 0
+            for(var b=0;b<that.tempList.length;b++){
+              if(that.skuseriesList[o].arr[r] == that.tempList[b]){
+                num++
+              }
+            }
+            that.numList.push(num)
+          }
+        }
+        // console.log(that.skuseriesList)
+        for(var w=0;w<that.skuseriesList.length;w++){
+          that.skuseriesList[w].arr2 = that.numList.splice(0,that.skuseriesList[w].arr.length)
+        }
+        for(var m=0;m<that.skuseriesList.length;m++){
+          that.skuseriesList[m].ArrObjList = []
+          for(var z=0;z<that.skuseriesList[m].arr.length;z++){
+            var ArrObj = {name:'',num:''}
+            ArrObj.name = that.skuseriesList[m].arr[z]
+            ArrObj.num = that.skuseriesList[m].arr2[z]
+            that.$set(ArrObj, 'colorChange', false);
+            that.skuseriesList[m].ArrObjList.push(ArrObj)
+          }
+        }
+            console.log(that.skuseriesList)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
     scaleImg: function (state) {
       if (state) {
           if (this.scale >= 200) {
@@ -246,10 +353,6 @@ export default {
       }, 100);
     },
     showAll: function () {
-        this.bboxes = [{x1:200,y1:200,x2:300,y2:300,truncated:false,color:'red'}]
-        if (!(this.bboxes.length)) {
-            return;
-        }
         var that = this;
         var canvas = document.getElementById("imgCanvas");
         var context = canvas.getContext("2d");
@@ -279,6 +382,11 @@ export default {
         this.navList[i].clickFlag = false
       }
       v.clickFlag = true
+      this.clickId = v.id
+      this.imgList = []
+      this.vueUrl = ''
+      this.viewUrl = ''
+      this.getAjaxList()
     },
     over(v){
       v.navFlag=true
@@ -300,20 +408,57 @@ export default {
         }
       }
     },
-    childClick(v){
-      this.colorChangeList()
+    childClick(v,event){
+      if(!event){
+        return
+      }
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
+      event.target.style.backgroundColor ='#D0E4F2'
       v.colorChange = true
-      v.childrenShow = true
+      this.bboxes =[]
+      for(var i=0;i<this.skuList.length;i++){
+        var obj = {truncated:false,color:'red'}
+        if(this.skuList[i].sku_name == v.name){
+          obj.x1 = this.skuList[i].x1
+          obj.x2 =this.skuList[i].x2
+          obj.y1 = this.skuList[i].y1
+          obj.y2 = this.skuList[i].y2
+          this.bboxes.push(obj)
+        }
+      }
+      this.showAll(this.bboxes)
       this.iconFlag = false
     },
-    liClick(v){
+    liClick(v,event){
+      event.stopPropagation();
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
       v.childShow = !v.childShow
-       this.iconFlag = false
+      this.iconFlag = false
     },
     changeImg(){
-      this.colorChangeList()
-      this.iconFlag = !this.iconFlag
-    }
+      if(!this.iconFlag){
+        // this.colorChangeList()
+        for(var i=0;i<this.skuList.length;i++){
+          var obj = {truncated:false,color:'red'}
+          obj.x1 = this.skuList[i].x1
+          obj.x2 =this.skuList[i].x2
+          obj.y1 = this.skuList[i].y1
+          obj.y2 = this.skuList[i].y2
+          this.bboxes.push(obj)
+        }
+         this.showAll(this.bboxes)
+      }else{
+        this.bboxes = []
+        this.showAll(this.bboxes)
+      }
+        this.iconFlag = !this.iconFlag
+    },
   }
 }
 </script>
@@ -344,6 +489,7 @@ export default {
           border: 1px solid #E0E0E0;
           border-radius: 4px;
           display: inline-block;
+          cursor:pointer;
           width:60px;
           height:24px;
           font-size: 14px;

@@ -72,7 +72,7 @@
         <div class="W120 publicCss">线路</div>
       </div>
       <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" @click="freezerdetails(v)" :class="[v.showBc?'tablelistBc':'','tablelist']">
-        <div class="W200 publicCss">{{v.createtime|dataForm}}</div>
+        <div class="W200 publicCss">{{v.created_at|dataForm}}</div>
         <div class="W140 publicCss">{{v.scene_report_number}}</div>
         <div class="W200 publicCss">{{v.name}}</div>
         <div class="W140 publicCss">{{v.p_n}}</div>
@@ -140,7 +140,7 @@ export default {
     }
   },
   mounted(){
-    this.getAjaxList(`${this.api}/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
+    this.getAjaxList(`${this.api}/scene-report/index?page=${this.nowNum}&per-page=20`)
   },
   watch:{
     nowNum(){
@@ -154,9 +154,9 @@ export default {
         }else if(this.statusVal == '问卷'){
            this.num_type_id = 4
         }
-        this.getAjaxList(`${this.api}/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
+        this.getAjaxList(`${this.api}/scene-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
       }else{
-        this.getAjaxList(`${this.api}/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
+        this.getAjaxList(`${this.api}/scene-report/index?page=${this.nowNum}&per-page=20`)
       }
     }
   },
@@ -194,7 +194,7 @@ export default {
         this.questionFalg = false
       }
       this.nowNum = '1'
-      this.getAjaxList(`${this.api}/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
+      this.getAjaxList(`${this.api}/scene-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
 
     },
     getDate(num){
@@ -205,7 +205,7 @@ export default {
     },
     freezerdetails(v){
       if(this.questionFalg){
-        this.$router.push('/home/freezerdetails')
+        this.$router.push({path:'/home/freezerdetails',query:{id:v.id}})
       }else{
         this.$router.push({path:`/home/questionnairedetails`,query:{q_id:v.q_id,store_id:v.store_id}})
       }

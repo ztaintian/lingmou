@@ -167,10 +167,6 @@ export default {
   		v.choiceGetColcor =false
   	},
   	saved:function(){//完成
-  		// this.$message({
-  		// 	message:'错误提示错误提示错误提示错误提示错误提示'
-  		// });
-
   		this.fishFlag = true; 
   		//input值判断
   		for(var j=0;j<this.questionList.length;j++){
@@ -219,13 +215,13 @@ export default {
   		}
   		data.question = objArr
   		var that = this
-			this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=question/addnaire`,data)
+			this.Axios.post(`${this.api}/question/addnaire`,data)
 			.then(function (response) {
 				if(response.data.code === 200){
 		  		that.$message({
 		  			message:response.data.msg
 		  		});
-		  		that.$router.push('home/scenemanagement')
+		  		that.$router.push('/home/scenemanagement')
 				}else{
 		  		that.$message({
 		  			message:response.data.msg

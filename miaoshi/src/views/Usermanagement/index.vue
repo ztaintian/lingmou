@@ -93,7 +93,7 @@ export default {
   methods:{
     getAjaxList(){
       var that  = this
-      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=user/userlist&page=${this.nowNum}&per-page=20`)
+      this.Axios.get(`${this.api}/user/userlist?page=${this.nowNum}&per-page=20`)
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
           val.showBc = false
@@ -131,7 +131,7 @@ export default {
     },
     confimSecrit(v){
       var that  = this
-      this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=user/userinit`,{id:v.id})
+      this.Axios.post(`${this.api}/user/userinit`,{id:v.id})
       .then(function (data) {
         that.getAjaxList()
         v.tipShow = false
@@ -142,7 +142,7 @@ export default {
     },
     confimOpen(v){
       var that  = this
-      this.Axios.post(`${this.api}/y2/frontend/web/index.php?r=user/userstop`,{id:v.id})
+      this.Axios.post(`${this.api}/user/userstop`,{id:v.id})
       .then(function (data) {
         v.openShow = false
         that.getAjaxList()

@@ -27,7 +27,7 @@
       <div class="sameBlock">
         <div class="salereport">
           <span class="time twoTimeTwo">售点:</span>
-          <input class="nameipt" v-model="salePoint" >
+          <input class="nameipt" v-model="storeName" >
         </div>
         <div class="salereport">
           <span class="time twoTime">售点报告编号:</span>
@@ -35,7 +35,7 @@
         </div>
         <div class="salereport">
           <span class="time twoTime" style="width:56px;">线路:</span>
-          <input class="nameipt ml5"   v-model="reportNumber" type="" name="">
+          <input class="nameipt ml5"   v-model="lineNumber" type="" name="">
         </div>
       </div>
       <div class="sameBlock">
@@ -52,9 +52,9 @@
         </div>
         <div class="salereport">
           <span class="time twoTime">营业所:</span>
-          <input class="nameipt ml5"   v-model="reportNumber" type="" name="">
+          <input class="nameipt ml5"   v-model="groupNumber" type="" name="">
         </div>
-        <span class="search">刷选</span>
+        <span class="search" @click="Brush">刷选</span>
       </div>
     </div>
     <div class="table">
@@ -73,18 +73,18 @@
         <div class="W70 publicCss">状态</div>
       </div>
       <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']" @click="pointofsaledetails(v)" >
-        <div class="W170 publicCss">2017-12-20  23:49:59</div>
-        <div class="W100 publicCss">99990000222</div>
-        <div class="W150 publicCss">快客便利店(徐汇区店…</div>
-        <div class="W70 publicCss">888999</div>
-        <div class="W70 publicCss">000</div>
-        <div class="W80 publicCss">19</div>
-        <div class="W80 publicCss">12/20</div>
-        <div class="W80 publicCss">11/23</div>
-        <div class="W90 publicCss">90%</div>
-        <div class="W90 publicCss">11%</div>
-        <div class="W70 publicCss">99</div>
-        <div class="W70 publicCss">进行中</div>
+        <div class="W170 publicCss">{{v.created_at|dataForm}}</div>
+        <div class="W100 publicCss">{{v.store_number}}</div>
+        <div class="W150 publicCss" style="">{{v.storename}}</div>
+        <div class="W70 publicCss">{{v.group_number}}</div>
+        <div class="W70 publicCss">{{v.line_number}}</div>
+        <div class="W80 publicCss">{{v.sku_total_num}}</div>
+        <div class="W80 publicCss">{{v.sku_necessary_num_act}}/{{v.sku_necessary_num}}</div>
+        <div class="W80 publicCss">{{v.sku_important_num_act}}/{{v.sku_important_num}}</div>
+        <div class="W90 publicCss">{{v.purity}}%</div>
+        <div class="W90 publicCss">{{v.saturation}}%</div>
+        <div class="W70 publicCss">{{v.scene_num}}</div>
+        <div class="W70 publicCss">{{v.status==0?'进行中':'完成'}}</div>
       </div>
     </div>
     <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1" :nowPages.sync="nowNum"></Pages>
@@ -100,6 +100,7 @@ export default {
   components:{Pages},
   data () {
     return {
+      clickBrush:false,
       totleNums:0,
       nowNum:'1',
       dataTime:'',
@@ -117,21 +118,59 @@ export default {
       ing:false,
       reportNumber:'',
       statusVal:'',
-      tableList:[{showBc:false},{showBc:false},{showBc:false}]
+      tableList:[],
+      time1:'',
+      time2:'',
+      reportNumber:'',
+      lineNumber:'',
+      groupNumber:'',
+      storeName:''
     }
   },
   mounted(){
-    this.getAjaxList()
+    this.getAjaxList(`${this.api}/store-report/index?page=${this.nowNum}&per-page=20`)
   },
   watch:{
     nowNum(){
-      this.getAjaxList()
+      if(this.clickBrush){
+        if(this.statusVal == '已完成'){
+          this.num_type_id = 1
+        }else if(this.statusVal == '未完成'){
+          this.num_type_id = 2
+        }else if(this.statusVal == '全部'){
+          this.num_type_id = ''
+        }
+        this.getAjaxList(`${this.api}/store-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_report_number=${this.reportNumber}&status=${this.num_type_id}&group_number=${this.groupNumber}&line_number=${this.lineNumber}&store_name=${this.storeName}`)
+      }else{
+        this.getAjaxList(`${this.api}/scene-report/index?page=${this.nowNum}&per-page=20`)
+      }
     }
   },
   methods:{
-    getAjaxList(){
+    getDate(num){
+      var nowDate = new Date().getTime()-24*60*60*1000
+      var nowDatelast = new Date().getTime()-24*60*60*1000*num
+      this.dataTime = new Date(nowDatelast).getFullYear()+'-'+new Date(nowDatelast).getMonth()+'-'+new Date(nowDatelast).getDate()+' 00:00:00'
+      this.dataTime2 = new Date(nowDate).getFullYear()+'-'+new Date(nowDate).getMonth()+'-'+new Date(nowDate).getDate()+' 23:59:59'
+    },
+    Brush(){//刷选
+      this.clickBrush = true
+      this.time1 = this.dataTime?(new Date(this.dataTime).getTime())/1000:''
+      this.time2 = this.dataTime2?(new Date(this.dataTime2).getTime())/1000:''
+      if(this.statusVal == '已完成'){
+        this.num_type_id = 1
+      }else if(this.statusVal == '未完成'){
+        this.num_type_id = 2
+      }else if(this.statusVal == '全部'){
+        this.num_type_id = ''
+      }
+      this.nowNum = '1'
+      this.getAjaxList(`${this.api}/store-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_report_number=${this.reportNumber}&status=${this.num_type_id}&group_number=${this.groupNumber}&line_number=${this.lineNumber}&store_name=${this.storeName}`)
+
+    },
+    getAjaxList(url){
       var that  = this
-      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=scene-report/index&page=${this.nowNum}&per-page=20`)
+      this.Axios.get(url)
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
           val.showBc = false
@@ -145,8 +184,7 @@ export default {
       });
     },
     pointofsaledetails(v){
-      var aa =11
-      this.$router.push(`/home/pointofsaledetails?aa=${aa}`)
+      this.$router.push(`/home/pointofsaledetails?id=${v.id}`)
     },
     enter(v,index){
       for(var i=0;i<this.tableList.length;i++){
@@ -233,6 +271,7 @@ export default {
         .search{
           display:inline-block;
           float: right;
+          cursor:pointer;
           background: #2D78B3;
           border-radius: 4px;
           height:30px;

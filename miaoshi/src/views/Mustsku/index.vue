@@ -46,7 +46,7 @@ export default {
   methods:{
     getAjaxList(){
       var that  = this
-      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=sku/index&page=${this.nowNum}&per-page=20&type=1`)
+      this.Axios.get(`${this.api}/sku/index?page=${this.nowNum}&per-page=20&type=1`)
       .then(function (data) {
         that.tableList = data.data.data
         that.totleNums = data.data.pagelist.count

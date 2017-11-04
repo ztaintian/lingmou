@@ -46,7 +46,7 @@ export default {
   methods:{
     getAjaxList(){
       var that  = this
-      this.Axios.get(`${this.api}/y2/frontend/web/index.php?r=sku/index&page=${this.nowNum}&per-page=20&type=2`)
+      this.Axios.get(`${this.api}/sku/index?page=${this.nowNum}&per-page=20&type=2`)
       .then(function (data) {
         that.tableList = data.data.data
         that.totleNums = data.data.pagelist.count
@@ -90,6 +90,12 @@ export default {
         text-align: center;
         vertical-align: middle;
         color: #000000;
+      }
+      .blueClocor{
+        color:#3DB866;
+      }
+      .redClocor{
+        color:#D61E2A;
       }
     }
     .tablelist{

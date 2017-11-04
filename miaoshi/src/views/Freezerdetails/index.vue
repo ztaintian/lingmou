@@ -2,11 +2,11 @@
   <div class="freezerdetails">
     <div class="content">
       <div class="top">
-        <span class="title">场景名称（5505032）</span>
-        <span class="pre">下一个</span>
-        <span class="pre">上一个</span>
+        <span class="title">{{sceneList.name}}（{{reportList.scene_report_number}}）</span>
+        <span class="pre" @click="nextList">下一个</span>
+        <span class="pre"  @click="preList">上一个</span>
         <div class="tip">
-          123422／105／2017-11-18／1222222售点名称
+          {{storeList.group_number}}／{{storeList.line_number}}／2017-11-18／{{storeList.storename}}
         </div>
       </div>
       <div class="center">
@@ -18,7 +18,7 @@
               <circle class="demo2" cx="52" cy="52" id="J_demo1"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
             </svg>
             <div class="percentage">
-              21.7%
+              {{reportList.purity*100}}%
             </div>
             <div class="describe">
               纯净度
@@ -30,7 +30,7 @@
               <circle class="demo2" cx="52" cy="52" id="J_demo2"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
             </svg>
             <div class="percentage">
-              21.7%
+              {{reportList.saturation*100}}%
             </div>
             <div class="describe">
               饱和度
@@ -42,7 +42,7 @@
               <circle class="demo2" cx="52" cy="52" id="J_demo3"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
             </svg>
             <div class="percentage">
-              21.7%
+              {{reportList.sku_lack_num/reportList.sku_total_num*100}}%
             </div>
             <div class="describe">
               空缺率
@@ -50,11 +50,11 @@
           </div>
           <div class="cycly">
             <svg >
-              <circle cx="52" cy="52" r="50" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="52" cy="52" r="50" fill="none" stroke="#EBEEF0" stroke-width="3" stroke-linecap="round"/>
               <circle class="demo2" cx="52" cy="52" id="J_demo4"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
             </svg>
             <div class="percentage">
-              99.0%
+              {{reportList.sku_lack_num}}
             </div>
             <div class="describe">
               空缺数
@@ -65,15 +65,15 @@
           <div class="titl">所属售点</div>
           <div class="box">
             <div class="ttdetail">
-              <span>快客徐汇店 000222888</span><span class="detail">详情></span>
+              <span>{{storeList.storename}}</span><span class="detail" @click="pointofsaledetails(store_reportList.id)" >详情></span>
             </div>
-            <p><span>售点sku数：23；</span><span>必备sku数：15/16；</span><span>重点sku数：9/12</span></p>
+            <p><span>售点sku数：{{store_reportList.sku_total_num}}；</span><span>必备sku数：{{store_reportList.sku_necessary_num}}；</span><span>重点sku数：{{store_reportList.sku_important_num}}</span></p>
           </div>
         </div>
       </div>
       <div class="picture">
         <div class="title">
-          <span>识别产品（共27，top8，重点1）</span>
+          <span>识别产品（共{{reportList.sku_total_num}}，top{{reportList.sku_necessary_num_act}}，重点{{reportList.sku_important_num_act}}）</span>
           <div class="img">
             <img :src="iconFlag?iconUrlA:iconUrl" @click="changeImg" alt="">
           </div>
@@ -81,18 +81,14 @@
         </div>
         <div class="tree">
           <div class="left">
-            <div class="treeLi" v-for="(v,index) in dataList">
-              <div class="li" @click="liClick(v)">
-                <img :src="iconFoldURl"  :class="v.childShow?'imgTranform':''" alt=""><span>{{v.title}}</span>
+            <div class="treeLi" v-for="(v,index) in skuseriesList">
+              <div class="li" @click.stop.prevent="liClick(v,$event)">
+                <img :src="iconFoldURl"  :class="v.childShow?'imgTranform':''" alt=""><span>{{v.sku_name}} ({{v.length}})</span>
               </div>
-              <div v-if="v.childShow"  v-for="(vC,indexC) in v.childrenList">
-                <div @click="childClick(vC)" :class="[vC.colorChange?'bgBlue':'','li mgLeft10']" >
-                  <img :src="iconFoldURl"  :class="vC.childrenShow?'imgTranform':''" alt="">
-                  <span>{{vC.children1}}</span>
-                </div>
-                <div :class="[vC.colorChange?'bgBlue':'','li mgLeft20']" @click="getGoods(vCC)" v-for="(vCC,indexCC) in vC.childrenHave"  v-if="vC.childrenShow">
-                  <span>{{vCC.title}}</span>
-                </div>
+              <div v-if="v.childShow" v-for="(vC,indexC) in v.ArrObjList"  @click.stop.prevent="childClick(vC,$event)">
+                <span style="display:block" :class="[vC.colorChange?'bgBlue':'','li mgLeft10  queryList']" >
+                  {{vC.name}}({{vC.num}})
+                </span>
               </div>
             </div>
           </div>
@@ -109,7 +105,7 @@
       <div class="bottom">
         <div class="title">原图（6）</div>
         <div class="img" @click="img(v)" v-for="v in imgList">
-          <img :src="vueUrl" alt="">
+          <img :src="v" alt="">
         </div>
       </div>
     </div>
@@ -141,8 +137,8 @@ export default {
       showAllMark: true,
       scale: 100,
       bboxes: [],
-      viewUrl:viewIcon,
-      imgList:[{},{},{},{},{}],
+      viewUrl:'',
+      imgList:[],
       iconUrlA:hookiconA,
       iconUrl:hookicon,
       iconFlag:false,
@@ -150,33 +146,163 @@ export default {
       iconEnlargeUrl:iconEnlarge,
       iconNarrowUrl:iconNarrow,
       vueUrl:iconVue,
-      dataList:[{
-        title:'美汁源',
-        childShow:false,
-        childrenList:[{
-          colorChange:false,
-          children1:'果粒奶优300ml',
-          childrenShow:false,
-          childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        },{
-          colorChange:false,
-          children1:'果粒奶优300ml',
-          childrenShow:false,
-          childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        }]
-      }]
+      dataList:[],
+      sceneList:{},
+      storeList:{},
+      skuList:[],
+      skuseriesList:[],
+      reportList:{},
+      sku_lack_num:'',
+      tempList:[],
+      numList:[],
+      store_reportList:{},
+      id:''
     }
   },
   mounted(){
-    this.circleSet(21.7, document.querySelector("#J_demo1"))
-    this.circleSet(21.7, document.querySelector("#J_demo2"))
-    this.circleSet(21.7, document.querySelector("#J_demo3"))
-    this.circleSet(99, document.querySelector("#J_demo4"))
-    this.initCanvas()
+    this.getAjaxList()
   },
   methods:{
+    pointofsaledetails(v){
+      this.$router.push(`/home/pointofsaledetails?id=${v}`)
+    },
+    nextList(){
+      console.log(this.id)
+      this.id--
+      if(this.id<=0){
+        return
+      }
+      this.imgList =[]
+      this.getAjaxList()
+    },
+    preList(){
+      this.id++
+      this.imgList =[]
+      this.getAjaxList()
+    },
+    getAjaxList(){
+      var that  = this
+      this.id = this.$router.currentRoute.query.id
+      this.Axios.post(`${this.api}/scene-report/report`,{id:this.id})
+      .then(function (data) {
+        that.sceneList = data.data.data.scene
+        that.storeList = data.data.data.store
+        that.skuList = data.data.data.sku
+        that.reportList = data.data.data.report
+        that.store_reportList = data.data.data.store_report
+        data.data.data.picture.forEach((val,index)=>{
+          if(val.type == 1){
+            that.viewUrl = val.url
+          }else{
+            that.imgList.push(val.url)
+          }
+        })
+        that.initCanvas()
+        that.circleSet(100-data.data.data.report.purity*100, document.querySelector("#J_demo1"))
+        that.circleSet(100-data.data.data.report.purity*100, document.querySelector("#J_demo2"))
+        that.circleSet(100-(that.reportList.sku_lack_num/that.reportList.sku_total_num)*100, document.querySelector("#J_demo3"))
+
+        // for(var i=0;i<data.data.data.skuseries.length;i++){
+        //   data.data.data.skuseries[i].arr = []
+        //   data.data.data.skuseries[i].length = ''
+        //   data.data.data.skuseries[i].childShow = false
+        //   that.skuList.forEach((val,index)=>{
+        //     if(val.series_id == data.data.data.skuseries[i].series_id){
+        //       data.data.data.skuseries[i].arr.push(val.sku_name)
+        //     }
+        //     data.data.data.skuseries[i].length = data.data.data.skuseries[i].arr.length
+        //   })
+        // }
+        for(var i=0;i<data.data.data.skuseries.length;i++){
+          data.data.data.skuseries[i].arr1 = []
+          data.data.data.skuseries[i].arr = []
+          data.data.data.skuseries[i].length = ''
+          data.data.data.skuseries[i].childShow = false
+          var obj = {name:'',num:0}
+          that.skuList.forEach((val,index)=>{
+            if(val.series_id == data.data.data.skuseries[i].series_id){
+              obj.num++
+              if(!obj.name){
+                obj.name = val.sku_name
+                obj={name:'',num:0}
+              }
+              data.data.data.skuseries[i].arr1.push(obj)
+              data.data.data.skuseries[i].arr.push(val.sku_name)
+            }
+            data.data.data.skuseries[i].length = data.data.data.skuseries[i].arr.length
+          })
+        }
+          for(var v=0;v<data.data.data.skuseries.length;v++){
+            // console.log(data.data.data.skuseries[v].arr)
+            that.tempList.push(...data.data.data.skuseries[v].arr)
+          }
+          // that.tempList = data.data.data.skuseries
+          // console.log(that.tempList)
+          // console.log(data.data.data.skuseries[1].arr1)
+        // console.log(data.data.data.skuseries[0].arr)
+        // for(var t=0;t<data.data.data.skuseries.length;t++){
+        //   for(var g=0;g<data.data.data.skuseries[t].arr.length;g++){
+        //     that.skuList.forEach((val,index)=>{
+        //       if(data.data.data.skuseries[t].arr[g] == val.sku_name ){
+        //         console.log(val)
+        //       }
+        //     })
+        //   }
+        // }
+        that.skuseriesList = data.data.data.skuseries
+        Array.prototype.unique = function() {
+          var n = [];
+          var obj = {};
+          for(var i = 0; i<this.length; i++) {
+            var item = this[i];
+            var key = typeof(item) + item;
+              if(!obj[key]){
+                n.push(this[i])
+                obj[key] = true
+              }
+          }
+          return n;
+        }
+
+        for(var k=0;k<that.skuseriesList.length;k++){
+          that.skuseriesList[k].arr = that.skuseriesList[k].arr.unique()
+        }
+        // console.log(that.tempList[0].arr)
+        // console.log(that.skuseriesList)
+        for(var o=0;o<that.skuseriesList.length;o++){
+          for(var r=0;r<that.skuseriesList[o].arr.length;r++){
+            var num = 0
+            for(var b=0;b<that.tempList.length;b++){
+              if(that.skuseriesList[o].arr[r] == that.tempList[b]){
+                num++
+              }
+            }
+            that.numList.push(num)
+          }
+        }
+        // console.log(that.skuseriesList)
+        for(var w=0;w<that.skuseriesList.length;w++){
+          that.skuseriesList[w].arr2 = that.numList.splice(0,that.skuseriesList[w].arr.length)
+        }
+        for(var m=0;m<that.skuseriesList.length;m++){
+          that.skuseriesList[m].ArrObjList = []
+          for(var z=0;z<that.skuseriesList[m].arr.length;z++){
+            var ArrObj = {name:'',num:''}
+            ArrObj.name = that.skuseriesList[m].arr[z]
+            ArrObj.num = that.skuseriesList[m].arr2[z]
+            that.$set(ArrObj, 'colorChange', false);
+            that.skuseriesList[m].ArrObjList.push(ArrObj)
+          }
+        }
+            console.log(that.skuseriesList)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
     img(v){
       this.editBoxShow = true
+      this.vueUrl = v
     },
     cancle(){
       this.editBoxShow = false
@@ -227,10 +353,6 @@ export default {
       }, 100);
     },
     showAll: function () {
-        this.bboxes = [{x1:200,y1:200,x2:300,y2:300,truncated:false,color:'red'}]
-        if (!(this.bboxes.length)) {
-            return;
-        }
         var that = this;
         var canvas = document.getElementById("imgCanvas");
         var context = canvas.getContext("2d");
@@ -266,21 +388,57 @@ export default {
         }
       }
     },
-    childClick(v){
-      this.colorChangeList()
+    childClick(v,event){
+      if(!event){
+        return
+      }
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
+      event.target.style.backgroundColor ='#D0E4F2'
       v.colorChange = true
-      v.childrenShow = true
+      this.bboxes =[]
+      for(var i=0;i<this.skuList.length;i++){
+        var obj = {truncated:false,color:'red'}
+        if(this.skuList[i].sku_name == v.name){
+          obj.x1 = this.skuList[i].x1
+          obj.x2 =this.skuList[i].x2
+          obj.y1 = this.skuList[i].y1
+          obj.y2 = this.skuList[i].y2
+          this.bboxes.push(obj)
+        }
+      }
+      this.showAll(this.bboxes)
       this.iconFlag = false
     },
-    liClick(v){
+    liClick(v,event){
+      event.stopPropagation();
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
       v.childShow = !v.childShow
       this.iconFlag = false
     },
     changeImg(){
       if(!this.iconFlag){
-        this.colorChangeList()
+        // this.colorChangeList()
+        for(var i=0;i<this.skuList.length;i++){
+          var obj = {truncated:false,color:'red'}
+          obj.x1 = this.skuList[i].x1
+          obj.x2 =this.skuList[i].x2
+          obj.y1 = this.skuList[i].y1
+          obj.y2 = this.skuList[i].y2
+          this.bboxes.push(obj)
+        }
+         this.showAll(this.bboxes)
+      }else{
+        console.log(5)
+        this.bboxes = []
+        this.showAll(this.bboxes)
       }
-      this.iconFlag = !this.iconFlag
+        this.iconFlag = !this.iconFlag
     },
     circleSet(num,dom){
       var circleLength = Math.floor(2 * Math.PI * dom.getAttribute("r"));
@@ -334,6 +492,7 @@ export default {
         }
         .pre{
           background: #F5F5F5;
+          cursor:pointer;
           border: 1px solid #E0E0E0;
           border-radius: 4px;
           display: inline-block;
@@ -366,7 +525,8 @@ export default {
             .percentage{
               position:absolute;
               top:24px;
-              left:20px;
+              width:100px;
+              text-align: center;
               font-family:'Avenir-Black';
               font-size: 24px;
               color: #333333;
@@ -413,6 +573,7 @@ export default {
                 font-weight: bold;
               }
               .detail{
+                cursor:pointer;
                 float: right;
                 font-size: 14px;
                 color: #2D78B3;

@@ -20,7 +20,7 @@ import axios from 'axios'
 Vue.use(Router)
 
   function axiosIfLongin(next){
-    axios.post('/api/y2/frontend/web/index.php?r=user/index')
+    axios.post(`${Vue.prototype.api}/user/index`)
     .then(function (response) {
       if(response.data.code === 200){
         next()
@@ -34,7 +34,6 @@ Vue.use(Router)
   }
 
 export default new Router({
-  mode: 'history',
   routes: [
     {
       path: '/',
