@@ -5,14 +5,14 @@
     </div>
     <div class="content">
       <div class="title">
-        0120340-快客便利店
+        {{storeList.store_number}}-{{storeList.storename}}
       </div>
       <div class="address">
         <img src="../assets/ic_location@3x.png" alt="">
-        <span>上海市徐汇区肇嘉浜路789号</span>
+        <span>{{storeList.address}}</span>
       </div>
       <div class="time">
-        2017-08-29  13:25
+        {{reportList.created_at|dataFormYMD}}
       </div>
     </div>
     <div class="interval"></div>
@@ -23,9 +23,9 @@
       <div class="allDetail">
         <div class="detail">
           <span class="span1">纯净度:</span>
-          <span class="span2">65.9%</span>
+          <span class="span2">{{reportList.purity*100}}%</span>
           <img :src="ic_upUrl" alt="">
-          <span class="span3">+10.56%</span>
+          <span class="span3"><span v-if="reportList.purity_change>0">+</span>{{reportList.purity_change}}%</span>
         </div>
         <div class="lineAll">
           <div class="lineBottom"></div>
@@ -35,9 +35,9 @@
       <div class="allDetail">
         <div class="detail">
           <span class="span1">利用率:</span>
-          <span class="span2">65.9%</span>
+          <span class="span2">{{reportList.saturation*100}}%</span>
           <img src="../assets/ic_up@3x.png" alt="">
-          <span class="span3">+10.56%</span>
+          <span class="span3">+{{reportList.saturation_change*100}}%</span>
         </div>
         <div class="lineAll">
           <div class="lineBottom"></div>
@@ -47,8 +47,8 @@
       <div class="allDetail">
         <div class="detail">
           <span class="span1">空缺率:</span>
-          <span class="span2">65.9%</span>
-          <span class="span4">空缺数:</span><span class="span5">99</span>
+          <span class="span2">{{reportList.sku_lack_num/reportList.sku_total_num*100}}%</span>
+          <span class="span4">空缺数:</span><span class="span5">{{reportList.sku_lack_num}}</span>
           <img :src="ic_upUrl" alt="">
           <span class="span3">+10.56%</span>
         </div>
@@ -64,17 +64,13 @@
       </div>
     </div>
     <div class="tree">
-      <div class="treeLi" v-for="(v,index) in dataList">
-        <div class="li" @click="liClick(v)">
-          <img src="../assets/ic_unfold@3x.png"  :class="[v.childShow?'imgTranform':'','imgList']" alt=""><span>{{v.title}}</span>
+      <div class="treeLi" v-for="(v,index) in skuseriesList">
+        <div class="li" @click="liClick(v,$event)">
+          <img src="../assets/ic_unfold@3x.png"  :class="[v.childShow?'imgTranform':'','imgList']" alt=""><span>{{v.sku_name}} ({{v.length}})</span>
         </div>
-        <div v-if="v.childShow"  v-for="(vC,indexC) in v.childrenList">
-          <div @click="childClick(vC)" :class="[vC.colorChange?'bgBlue':'','li mgLeft10']" >
-            <img src="../assets/ic_unfold@3x.png"  :class="[vC.childrenShow?'imgTranform':'','imgList']" alt="">
-            <span>{{vC.children1}}</span>
-          </div>
-          <div :class="[vC.colorChange?'bgBlue':'','li mgLeft20']" @click="getGoods(vCC)" v-for="(vCC,indexCC) in vC.childrenHave"  v-if="vC.childrenShow">
-            <span>{{vCC.title}}</span>
+        <div v-if="v.childShow"  v-for="(vC,indexC) in v.ArrObjList">
+          <div @click="childClick(vC,$event)" class="li mgLeft10 queryList" >
+           {{vC.name}}({{vC.num}})
           </div>
         </div>
       </div>
@@ -84,7 +80,7 @@
         识别图片
       </div>
       <div class="floatRight">
-        <img :src="iconFlag?ic_upChoutUrl:ic_upChoutAUrl" @click="changeImg" alt=""><span>显示所有</span>
+        <img :src="iconFlag?ic_upChoutAUrl:ic_upChoutUrl" @click="changeImg"  alt=""><span>显示所有</span>
       </div>
     </div>
     <div  class="imgMain">
@@ -97,12 +93,12 @@
       </div>
     </div>
     <div class="imgStyle">
-      <div class="imgBottom" v-for="v in imgListB" @click="getBigimg(v)">
-        <img src="../assets/ic_scene_hotsale@3x.png" alt="">
+      <div class="imgBottom" v-for="v in imgList" @click="getBigimg(v)">
+        <img :src="v" alt="">
       </div>
     </div>
     <div class="Dialogue" v-if="imgFlag" @click="close">
-      <img :src="viewUrl" alt="">
+      <img :src="vueUrl" alt="">
     </div>
   </div>
 </template>
@@ -116,60 +112,155 @@ export default {
   name: 'Freezerdetails',
   data () {
     return {
+      vueUrl:'',
+      bboxes:[],
       imgFlag:false,
-      imgListB:[{},{},{},{},{},{}],
+      imgList:[],
       scale:100,
-      viewUrl:viewIcon,
-      iconFlag:true,
+      viewUrl:'',
+      iconFlag:false,
       ic_upChoutUrl:ic_upChout,
       ic_upChoutAUrl:ic_upChoutA,
       ic_upUrl:ic_up,
       loadFlag:true,
-      dataList:[{
-        title:'美汁源',
-        childShow:false,
-        childrenList:[{
-          colorChange:false,
-          children1:'果粒奶优300ml',
-          childrenShow:false,
-          childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        },{
-          colorChange:false,
-          children1:'果粒奶优300ml',
-          childrenShow:false,
-          childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        }]
-      },{
-        title:'美汁源',
-        childShow:false,
-        childrenList:[{
-          colorChange:false,
-          children1:'果粒奶优300ml',
-          childrenShow:false,
-          childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        },{
-          colorChange:false,
-          children1:'果粒奶优300ml',
-          childrenShow:false,
-          childrenHave:[{title:'热带水果300ml'},{title:'热带水果500ml'}]
-        }]
-      }]
+      dataList:[],
+      sceneList:{},
+      storeList:{},
+      skuList:[],
+      skuseriesList:[],
+      reportList:{},
+      sku_lack_num:'',
+      tempList:[],
+      numList:[],
+      store_reportList:{},
+      id:'',
+      reportFristList:{},
+      reportFristList1:{},
+      clickId:''
     }
   },
   mounted(){
     this.initCanvas()
     setTimeout(()=>{
-      this.loadFlag = false
-      this.$refs.rootRefs.style.overflow = 'scroll'
     },200)
+    this.getAjaxList()
+  },
+  filters:{
+    dataFormYMD(date){
+      if(date == null || date == '' || date == 0){
+        return ''
+      }else{
+        var d = new Date(Number(date)*1000);
+        var year = d.getFullYear();
+        var month = d.getMonth() + 1<10?'0' + (d.getMonth() + 1) :d.getMonth() + 1;
+        var day = d.getDate() <10 ? '0' + d.getDate() : '' + d.getDate();
+        var hour = d.getHours() <10 ? '0'+d.getHours(): '' + d.getHours();
+        var minutes = d.getMinutes()<10?'0' + d.getMinutes() : '' + d.getMinutes();
+        var seconds = d.getSeconds()<10?'0' + d.getSeconds() : '' + d.getSeconds();;
+        return year+ '-' + month + '-' + day+' ' + hour + ':' + minutes
+      }
+    }
   },
   methods:{
     close(){
       this.imgFlag = false
     },
+    getAjaxList(){
+      var that  = this
+      this.Axios.post(`${this.api}/scene/getreport?id=1`)
+      .then(function (data) {
+        if(data.data.code==200){
+          that.loadFlag = false
+          that.$refs.rootRefs.style.overflow = 'scroll'
+        }
+        that.sceneList = data.data.data.scene
+        that.storeList = data.data.data.store
+        that.skuList = data.data.data.sku
+        that.reportList = data.data.data.report
+        that.store_reportList = data.data.data.store_report
+        data.data.data.picture.forEach((val,index)=>{
+          if(val.type == 1){
+            that.viewUrl = val.url
+          }else{
+            that.imgList.push(val.url)
+          }
+        })
+        that.initCanvas()
+        for(var i=0;i<data.data.data.skuseries.length;i++){
+          data.data.data.skuseries[i].arr1 = []
+          data.data.data.skuseries[i].arr = []
+          data.data.data.skuseries[i].length = ''
+          data.data.data.skuseries[i].childShow = false
+          var obj = {name:'',num:0}
+          that.skuList.forEach((val,index)=>{
+            if(val.series_id == data.data.data.skuseries[i].series_id){
+              obj.num++
+              if(!obj.name){
+                obj.name = val.sku_name
+                obj={name:'',num:0}
+              }
+              data.data.data.skuseries[i].arr1.push(obj)
+              data.data.data.skuseries[i].arr.push(val.sku_name)
+            }
+            data.data.data.skuseries[i].length = data.data.data.skuseries[i].arr.length
+          })
+        }
+          for(var v=0;v<data.data.data.skuseries.length;v++){
+            that.tempList.push(...data.data.data.skuseries[v].arr)
+          }
+        that.skuseriesList = data.data.data.skuseries
+        Array.prototype.unique = function() {
+          var n = [];
+          var obj = {};
+          for(var i = 0; i<this.length; i++) {
+            var item = this[i];
+            var key = typeof(item) + item;
+              if(!obj[key]){
+                n.push(this[i])
+                obj[key] = true
+              }
+          }
+          return n;
+        }
+
+        for(var k=0;k<that.skuseriesList.length;k++){
+          that.skuseriesList[k].arr = that.skuseriesList[k].arr.unique()
+        }
+
+        for(var o=0;o<that.skuseriesList.length;o++){
+          for(var r=0;r<that.skuseriesList[o].arr.length;r++){
+            var num = 0
+            for(var b=0;b<that.tempList.length;b++){
+              if(that.skuseriesList[o].arr[r] == that.tempList[b]){
+                num++
+              }
+            }
+            that.numList.push(num)
+          }
+        }
+        // console.log(that.skuseriesList)
+        for(var w=0;w<that.skuseriesList.length;w++){
+          that.skuseriesList[w].arr2 = that.numList.splice(0,that.skuseriesList[w].arr.length)
+        }
+        for(var m=0;m<that.skuseriesList.length;m++){
+          that.skuseriesList[m].ArrObjList = []
+          for(var z=0;z<that.skuseriesList[m].arr.length;z++){
+            var ArrObj = {name:'',num:''}
+            ArrObj.name = that.skuseriesList[m].arr[z]
+            ArrObj.num = that.skuseriesList[m].arr2[z]
+            that.$set(ArrObj, 'colorChange', false);
+            that.skuseriesList[m].ArrObjList.push(ArrObj)
+          }
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
     getBigimg(v){
       document.body.style.overflow='hidden';
       document.body.style.height='100%';
+      this.vueUrl = v
       this.imgFlag = true
     },
     initCanvas(){
@@ -201,10 +292,6 @@ export default {
       }, 100);
     },
     showAll: function () {
-        this.bboxes = [{x1:200,y1:200,x2:300,y2:300,truncated:false,color:'red'}]
-        if (!(this.bboxes.length)) {
-            return;
-        }
         var that = this;
         var canvas = document.getElementById("imgCanvas");
         var context = canvas.getContext("2d");
@@ -240,22 +327,57 @@ export default {
         }
       }
     },
-    childClick(v){
-      this.colorChangeList()
+    childClick(v,event){
+      if(!event){
+        return
+      }
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
+      event.target.style.backgroundColor ='#D0E4F2'
       v.colorChange = true
-      v.childrenShow = true
+      this.bboxes =[]
+      for(var i=0;i<this.skuList.length;i++){
+        var obj = {truncated:false,color:'red'}
+        if(this.skuList[i].sku_name == v.name){
+          obj.x1 = this.skuList[i].x1
+          obj.x2 =this.skuList[i].x2
+          obj.y1 = this.skuList[i].y1
+          obj.y2 = this.skuList[i].y2
+          this.bboxes.push(obj)
+        }
+      }
+      this.showAll(this.bboxes)
       this.iconFlag = false
     },
-    liClick(v){
-      console.log(v)
+    liClick(v,event){
+      event.stopPropagation();
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
       v.childShow = !v.childShow
       this.iconFlag = false
     },
     changeImg(){
       if(!this.iconFlag){
-        this.colorChangeList()
+        // this.colorChangeList()
+        for(var i=0;i<this.skuList.length;i++){
+          var obj = {truncated:false,color:'red'}
+          obj.x1 = this.skuList[i].x1
+          obj.x2 =this.skuList[i].x2
+          obj.y1 = this.skuList[i].y1
+          obj.y2 = this.skuList[i].y2
+          this.bboxes.push(obj)
+        }
+         this.showAll(this.bboxes)
+      }else{
+        console.log(5)
+        this.bboxes = []
+        this.showAll(this.bboxes)
       }
-      this.iconFlag = !this.iconFlag
+        this.iconFlag = !this.iconFlag
     },
     circleSet(num,dom){
       var circleLength = Math.floor(2 * Math.PI * dom.getAttribute("r"));
@@ -279,7 +401,7 @@ export default {
     height:100%;
     top:0;
     left:0;
-    background:red;
+    background:#fff;
   }
   .bgBlue{
     background:#fff;
@@ -451,6 +573,9 @@ export default {
         margin-left:1.1vw;
         font-family: 'NotoSansCJKsc-Regular';
         font-size: 16px;
+        height:6.7vw;
+        line-height:6.7vw;
+        vertical-align: top;
         color: rgba(0,0,0,0.54);
       }
     }
@@ -486,6 +611,9 @@ export default {
       color: rgba(0,0,0,0.87);
       .mgLeft10{
         padding-left:10vw;
+      }
+      .queryList{
+        background:#fff;
       }
       .mgLeft20{
         padding-left:16.6vw;

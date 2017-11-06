@@ -58,7 +58,7 @@
           <span class="time twoTime" style="width:56px;">备注名:</span>
           <input class="nameipt ml5"   v-model="Memoname" type="" name="">
         </div>
-        <span class="search" @click="Brush">刷选</span>
+        <span class="search" @click="Brush">筛选</span>
       </div>
     </div>
     <div class="table" v-if="questionFalg">

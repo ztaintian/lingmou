@@ -86,7 +86,7 @@
                 <img :src="iconFoldURl"  :class="v.childShow?'imgTranform':''" alt=""><span>{{v.sku_name}} ({{v.length}})</span>
               </div>
               <div v-if="v.childShow" v-for="(vC,indexC) in v.ArrObjList"  @click.stop.prevent="childClick(vC,$event)">
-                <span style="display:block" :class="[vC.colorChange?'bgBlue':'','li mgLeft10  queryList']" >
+                <span style="display:block" class="li mgLeft10  queryList" >
                   {{vC.name}}({{vC.num}})
                 </span>
               </div>

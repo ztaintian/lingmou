@@ -54,7 +54,7 @@
           <span class="time twoTime">营业所:</span>
           <input class="nameipt ml5"   v-model="groupNumber" type="" name="">
         </div>
-        <span class="search" @click="Brush">刷选</span>
+        <span class="search" @click="Brush">筛选</span>
       </div>
     </div>
     <div class="table">
