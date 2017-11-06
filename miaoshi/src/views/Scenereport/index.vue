@@ -31,7 +31,7 @@
         </div>
         <div class="salereport">
           <span class="time twoTime">报告编号:</span>
-          <input class="nameipt ml5"   v-model="reportNumber" type="" name="">
+          <input class="nameipt ml3"   v-model="reportNumber" type="" name="">
         </div>
         <div class="salereport">
           <span class="time twoTime" style="width:56px;">线路:</span>
@@ -285,6 +285,9 @@ export default {
         }
         .ml5{
           margin-left:5px;
+        }
+        .ml3{
+          margin-left: 3px;
         }
         .search{
           display:inline-block;

@@ -36,7 +36,7 @@
             </div>
           </div>
           <div class="secrit" @click="Disable(v)">
-            禁用
+            {{v.state==0?'启用':'禁用'}}
           </div>
           <div v-if="v.openShow" class="messageBox">
             <img class="img" :src="sanjiaoUrl" alt="">
@@ -44,7 +44,7 @@
               账号：{{v.username}}
             </div>
             <div class="decrite">
-              确定禁用该帐号？
+              确定{{v.state==0?'启用':'禁用'}}该帐号？
             </div>
             <div @click="confimOpen(v)" class="btnAA btnAAS">
                确定
@@ -142,14 +142,26 @@ export default {
     },
     confimOpen(v){
       var that  = this
-      this.Axios.post(`${this.api}/user/userstop`,{id:v.id})
-      .then(function (data) {
-        v.openShow = false
-        that.getAjaxList()
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      console.log()
+      if(v.state == 1){
+        this.Axios.post(`${this.api}/user/userstop`,{id:v.id})
+        .then(function (data) {
+          v.openShow = false
+          that.getAjaxList()
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }else{
+        this.Axios.post(`${this.api}/user/useropen`,{id:v.id})
+        .then(function (data) {
+          v.openShow = false
+          that.getAjaxList()
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
     },
     passwordInit(v){
       this.allHidden()
