@@ -150,8 +150,8 @@ export default {
     getDate(num){
       var nowDate = new Date().getTime()-24*60*60*1000
       var nowDatelast = new Date().getTime()-24*60*60*1000*num
-      this.dataTime = new Date(nowDatelast).getFullYear()+'-'+new Date(nowDatelast).getMonth()+'-'+new Date(nowDatelast).getDate()+' 00:00:00'
-      this.dataTime2 = new Date(nowDate).getFullYear()+'-'+new Date(nowDate).getMonth()+'-'+new Date(nowDate).getDate()+' 23:59:59'
+      this.dataTime = new Date(nowDatelast).getFullYear()+'-'+(new Date(nowDatelast).getMonth()+1)+'-'+new Date(nowDatelast).getDate()+' 00:00:00'
+      this.dataTime2 = new Date(nowDate).getFullYear()+'-'+(new Date(nowDate).getMonth()+1)+'-'+new Date(nowDate).getDate()+' 23:59:59'
     },
     Brush(){//刷选
       this.clickBrush = true
@@ -196,12 +196,6 @@ export default {
       for(var i=0;i<this.tableList.length;i++){
         this.tableList[i].showBc = false
       }
-    },
-    getDate(num){
-      var nowDate = new Date().getTime()-24*60*60*1000
-      var nowDatelast = new Date().getTime()-24*60*60*1000*num
-      this.dataTime = new Date(nowDatelast).getFullYear()+'-'+new Date(nowDatelast).getMonth()+'-'+new Date(nowDatelast).getDate()+' 00:00:00'
-      this.dataTime2 = new Date(nowDate).getFullYear()+'-'+new Date(nowDate).getMonth()+'-'+new Date(nowDate).getDate()+' 23:59:59'
     },
     choiceData(num){
       if(num === 1){
