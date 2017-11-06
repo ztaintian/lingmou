@@ -36,6 +36,9 @@ export default {
     	bntIf:false
     }
   },
+  mounted(){
+    this.ifBnt()
+  },
   methods:{
   	ifBnt(){
   		if(this.accountFlag && this.passFlag){
