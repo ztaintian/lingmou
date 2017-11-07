@@ -84,7 +84,7 @@
           <div class="titl">所属售点</div>
           <div class="box">
             <div class="ttdetail">
-              <span>快客徐汇店 000222888</span><span class="detail">详情></span>
+              <span>{{storeList.storename}} {{storeList.store_number}}</span><span class="detail">详情></span>
             </div>
             <p><span>售点sku数：23；</span><span>必备sku数：15/16；</span><span>重点sku数：9/12</span></p>
           </div>
@@ -104,7 +104,9 @@ export default {
       storeList:{},
       titleList:{},
       q_id:'',
-      store_id:''
+      store_id:'',
+      nextId:'',
+      preId:''
 
     }
   },
@@ -129,8 +131,10 @@ export default {
     },
     choice(num){
       if(num === 0){
+        this.nextId = ''
         console.log('下一个')
       }else{
+        this.preId = ''
         console.log('上一个')
       }
     }

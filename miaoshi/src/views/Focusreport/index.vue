@@ -74,7 +74,7 @@
       </div>
       <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']" @click="pointofsaledetails(v)" >
         <div class="W170 publicCss">{{v.created_at|dataForm}}</div>
-        <div class="W100 publicCss">{{v.store_number}}</div>
+        <div class="W100 publicCss">{{v.store_report_number}}</div>
         <div class="W150 publicCss" style="">{{v.storename}}</div>
         <div class="W70 publicCss">{{v.group_number}}</div>
         <div class="W70 publicCss">{{v.line_number}}</div>
@@ -135,9 +135,9 @@ export default {
       if(this.clickBrush){
         if(this.statusVal == '已完成'){
           this.num_type_id = 1
-        }else if(this.statusVal == '未完成'){
-          this.num_type_id = 2
-        }else if(this.statusVal == '全部'){
+        }else if(this.statusVal == '进行中'){
+          this.num_type_id = 0
+        }else if(this.statusVal == '全部' || this.statusVal == ''){
           this.num_type_id = ''
         }
         this.getAjaxList(`${this.api}/store-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_report_number=${this.reportNumber}&status=${this.num_type_id}&group_number=${this.groupNumber}&line_number=${this.lineNumber}&store_name=${this.storeName}`)
@@ -159,9 +159,9 @@ export default {
       this.time2 = this.dataTime2?(new Date(this.dataTime2).getTime())/1000:''
       if(this.statusVal == '已完成'){
         this.num_type_id = 1
-      }else if(this.statusVal == '未完成'){
-        this.num_type_id = 2
-      }else if(this.statusVal == '全部'){
+      }else if(this.statusVal == '进行中'){
+        this.num_type_id = 0
+      }else if(this.statusVal == '全部' || this.statusVal == '' ){
         this.num_type_id = ''
       }
       this.nowNum = '1'

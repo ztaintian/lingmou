@@ -45,10 +45,29 @@
         <div class="W584 txl publicCss">{{v.title}}</div>
         <div class="W120 publicCss">{{v.finish_n}}</div>
         <div class="W120 publicCss">{{new Date().getTime()>(v.endtime*1000)?'过期':'进行中'}}</div>
-        <div class="W280 publicCss" style="text-align:right;"><!-- <span style="cursor: pointer;color:#2D78B3;margin-right:30px;" @click="questionnairedetails(v)">详情</span> --><span style="cursor: pointer;color:#2D78B3;margin-right:16px;" @click="del(v)">删除</span></div>
+        <div class="W280 publicCss operation" style="text-align:right;"><!-- <span style="cursor: pointer;color:#2D78B3;margin-right:30px;" @click="questionnairedetails(v)">详情</span> --><span style="cursor: pointer;color:#2D78B3;margin-right:16px;" @click="del(v)">删除</span>
+          <div v-if="v.openShow" class="messageBox">
+            <img class="img1" :src="sanjiaoUrl" alt="">
+            <div class="count">
+              问卷名称：{{v.title}}
+            </div>
+            <div class="decrite">
+              确定删除该问卷？
+            </div>
+            <div @click="confimOpen(v)" class="btnAA btnAAS">
+               确定
+            </div>
+            <div @click="canlve(v)" class="btnAA btnAAC">
+               取消
+            </div>
+          </div>
+        </div>
+        <div style="clear: both;"></div>
       </div>
     </div>
-    <Pages  v-if="totleNums/20>1"  :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
+      <div style="height:60px;">
+        <Pages style="margin-top:30px;" v-if="totleNums/20>1?true:false" :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
+      </div>
   </div>
 </template>
 
@@ -58,6 +77,7 @@ import freezerIcon from '@/assets/ic_scene_freezer@1x.png'
 import hotsaleIcon from '@/assets/ic_scene_hotsale@1x.png'
 import shelveIcon from '@/assets/ic_scene_shelve@1x.png'
 import Pages from '@/components/pages'
+import sanjiao from '@/assets/sj@1x.png'
 
 export default {
   name: 'Scenemanagement',
@@ -70,7 +90,8 @@ export default {
       hotsaleUrl:hotsaleIcon,
       shelveUrl:shelveIcon,
       hookUrl:hookicon,
-      tableList:[]
+      tableList:[],
+      sanjiaoUrl:sanjiao
     }
   },
   mounted(){
@@ -83,21 +104,28 @@ export default {
   },
   methods:{
     del(v){
+      v.openShow = true
+    },
+    confimOpen(v){
       var that = this
       this.Axios.post(`${this.api}/question/delnaire`,{id:v.id})
       .then(function (data) {
-        console.log(data)
-         that.getAjaxList()
+        that.getAjaxList()
       })
       .catch(function (error) {
         console.log(error);
       });
-
+    },
+    canlve(v){
+      v.openShow = false
     },
     getAjaxList(){
       var that = this
       this.Axios.get(`${this.api}/question/naire?page=${this.nowNum}&per-page=20`)
       .then(function (data) {
+        data.data.data.forEach((val,index)=>{
+          val.openShow = false
+        })
         that.tableList = data.data.data;
         that.totleNums = data.data.pagelist.count
         that.nowNum = data.data.pagelist.page
@@ -116,14 +144,14 @@ export default {
 <style lang="scss">
   .scenemanagement{
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
-    overflow: hidden;
     width:100%;
     background: #FFFFFF;
     border-radius: 4px;
     font-size: 14px;
     .top{
       width:1120px;
-      margin:30px auto 16px;
+      padding-top:30px;
+      margin:0 auto 16px;
       height:28px;
       .tit{
         font-size: 20px;
@@ -198,7 +226,7 @@ export default {
         border-radius: 4px;
         background: #F5F5F5;
       }
-      overflow:hidden;
+      clear: both;
       vertical-align: middle;
       line-height:40px;
       .publicCss{
@@ -215,8 +243,90 @@ export default {
       }
     }
     .tablelist{
-      overflow: hidden;
       border-bottom: 1px solid #E0E0E0;
+      position:relative;
+      .messageBox{
+        position:absolute;
+        z-index:777;
+        width:280px;
+        height:145px;
+        background:#000;
+        background: #FFFFFF;
+        border: 1px solid #E0E0E0;
+        box-shadow: 0 4px 12px 0 rgba(0,0,0,0.12);
+        border-radius: 4px;
+        top:40px;
+        right:10px;
+        text-align: center;
+      }
+      .ml76{
+        right:76px;
+      }
+      .img1{
+        position:absolute;
+        top:-9px;
+        right:30px;
+      }
+      .operation{
+        text-align: right;
+        .secrit{
+          display:inline-block;
+          cursor: pointer;
+          color:#2D78B3;
+          margin-right: 22px;
+        }
+        .count{
+          font-family: "Microsoft YaHei";
+          font-size: 14px;
+          color: #000000;
+          font-weight:bold;
+          margin:20px 0 0 0;
+          line-height:20px;
+        }
+        .decrite{
+          font-weight:bold;
+          font-size: 14px;
+          color: #000000;
+        }
+        .btnAA{
+          float: left;
+          width:80px;
+          height:30px;
+          text-align: center;
+          line-height: 30px;
+          margin-top:10px;
+          cursor:pointer;
+        }
+        .btnAAS{
+          background: #2D78B3;
+          border-radius: 4px;
+          margin-right:10px;
+          margin-left:50px;
+          border: 1px solid #E0E0E0;
+          font-size: 14px;
+          color: #FFFFFF;
+        }
+        .btnAAC{
+          background: #F5F5F5;
+          border: 1px solid #E0E0E0;
+          border-radius: 4px;
+          font-size: 14px;
+          color: #333333;
+        }
+        .tipBox{
+          position: absolute;
+          color: #000000;
+          top:0;
+          left:0;
+          width:280px;
+          background: #FFFFFF;
+          border: 1px solid #E0E0E0;
+          box-shadow: 0 4px 12px 0 rgba(0,0,0,0.12);
+          border-radius: 4px;
+          height:145px;
+          z-index: 99999;
+        }
+      }
       .img{
         width:36px;
         height:36px;

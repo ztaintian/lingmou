@@ -109,7 +109,7 @@ export default {
       window.location.href = `${this.apiLoad}/uploads/demo.xls`
     },
     pointofsaledetails(v){
-      this.$router.push({path:'/home/pointofsaledetails',query:{}})
+      // this.$router.push({path:'/home/pointofsaledetails',query:{}})
     },
     enter(v,index){
       for(var i=0;i<this.tableList.length;i++){

@@ -24,23 +24,23 @@
         <div class="W240 publicCss operation">
           <span @click="edit(v)">编辑</span>
           <span @click="firbid(v)">{{v.status==0?'启用':'禁用'}}</span>
+          <div v-if="v.openShow" class="messageBox">
+            <img class="img1" :src="sanjiaoUrl" alt="">
+            <div class="count">
+              账号：{{v.username}}
+            </div>
+            <div class="decrite">
+              确定{{v.status==0?'启用':'禁用'}}该帐号？
+            </div>
+            <div @click="confimOpen(v)" class="btnAA btnAAS">
+               确定
+            </div>
+            <div @click="canlve(v)" class="btnAA btnAAC">
+               取消
+            </div>
+          </div>
         </div>
         <div style="clear: both;"></div>
-        <!-- <div v-if="v.openShow" class="messageBox">
-          <img class="img" :src="sanjiaoUrl" alt="">
-          <div class="count">
-            账号：{{v.username}}
-          </div>
-          <div class="decrite">
-            确定{{v.status==0?'禁用':'启用'}}该帐号？
-          </div>
-          <div @click="confimOpen(v)" class="btnAA btnAAS">
-             确定
-          </div>
-          <div @click="canlve(v)" class="btnAA btnAAC">
-             取消
-          </div>
-        </div> -->
         <div class="messagebox" v-show="v.editBoxShow" @click="v.editBoxShow=false">
         </div>
         <div class="messagecont"  v-show="v.editBoxShow">
@@ -48,10 +48,11 @@
             编辑管理员
           </div>
           <div class="use">
-            <input  v-model="v.username" disabled="disabled" :class="[editAccountFlag?'linelast':'']" type="" name="" placeholder="用户名">
+            <input  v-model="v.username"  disabled="disabled" :class="[editAccountFlag?'linelast':'']" type="" name="" placeholder="用户名">
           </div>
           <div class="use">
-            <input type="password"   :class="[editPassFlag?'linelast':'']"   v-model="editPass" name="" placeholder="密码">
+             <!-- v-model="editPass" -->
+            <input type="password"   :class="[editPassFlag?'linelast':'']"  v-model="editPass"  name="" placeholder="密码">
           </div>
           <div @click="save(v)" :class="[editBntIf?'bntlast':'bnt','addPublic']">
             保存
@@ -59,7 +60,9 @@
         </div>
       </div>
     </div>
-    <Pages v-if="totleNums/20>1?true:false" :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
+    <div style="height:60px;">
+      <Pages style="margin-top:30px;" v-if="totleNums/20>1?true:false" :totlePages.sync="totleNums" :nowPages.sync="nowNum"></Pages>
+    </div>
     <div class="messagebox" v-if="boxShow" @click="boxShow=false">
     </div>
     <div class="messagecont" v-if="boxShow">
@@ -138,16 +141,28 @@ export default {
         console.log(error);
       });
     },
+    allHidden(){
+      for(var i=0;i<this.tableList.length;i++){
+        this.tableList[i].tipShow = false
+        this.tableList[i].openShow = false
+      }
+    },
     firbid(v){//'启用':'禁用'
+      this.allHidden()
+      v.openShow = true
+    },
+    confimOpen(v){
       if(v.status == 0){
-        v.openShow = true
         this.firbidAjax(`${this.api}/user/adminopen`,v.id)
       }else{
-        v.openShow = true
         this.firbidAjax(`${this.api}/user/admindel`,v.id)
       }
     },
+    canlve(v){
+      v.openShow = false
+    },
     edit(v){//编辑
+      this.allHidden()
       this.editAccount = '';
       this.editPass = '';
       v.editBoxShow = true
@@ -247,7 +262,6 @@ export default {
 <style lang="scss">
   .administratorsettings{
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
-    overflow: hidden;
     width:100%;
     background: #FFFFFF;
     border-radius: 4px;
@@ -346,7 +360,7 @@ export default {
         border-radius: 4px;
         background: #F5F5F5;
       }
-      overflow:hidden;
+      clear:both;
       vertical-align: middle;
       line-height:40px;
       .publicCss{
@@ -380,6 +394,74 @@ export default {
         top:40px;
         right:20px;
         text-align: center;
+      }
+      .ml76{
+        right:76px;
+      }
+      .img1{
+        position:absolute;
+        top:-9px;
+        right:30px;
+      }
+      .operation{
+        text-align: right;
+        .secrit{
+          display:inline-block;
+          cursor: pointer;
+          color:#2D78B3;
+          margin-right: 22px;
+        }
+        .count{
+          font-family: "Microsoft YaHei";
+          font-size: 14px;
+          color: #000000;
+          font-weight:bold;
+          margin:20px 0 0 0;
+          line-height:20px;
+        }
+        .decrite{
+          font-weight:bold;
+          font-size: 14px;
+          color: #000000;
+        }
+        .btnAA{
+          float: left;
+          width:80px;
+          height:30px;
+          text-align: center;
+          line-height: 30px;
+          margin-top:10px;
+          cursor:pointer;
+        }
+        .btnAAS{
+          background: #2D78B3;
+          border-radius: 4px;
+          margin-right:10px;
+          margin-left:50px;
+          border: 1px solid #E0E0E0;
+          font-size: 14px;
+          color: #FFFFFF;
+        }
+        .btnAAC{
+          background: #F5F5F5;
+          border: 1px solid #E0E0E0;
+          border-radius: 4px;
+          font-size: 14px;
+          color: #333333;
+        }
+        .tipBox{
+          position: absolute;
+          color: #000000;
+          top:0;
+          left:0;
+          width:280px;
+          background: #FFFFFF;
+          border: 1px solid #E0E0E0;
+          box-shadow: 0 4px 12px 0 rgba(0,0,0,0.12);
+          border-radius: 4px;
+          height:145px;
+          z-index: 99999;
+        }
       }
       .img{
         width:36px;

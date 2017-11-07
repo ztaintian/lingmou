@@ -121,7 +121,7 @@
         </div>
       </div>
       <div class="bottom">
-        <div class="title">原图（6）</div>
+        <div class="title">原图（{{imgList.length}}）</div>
         <div class="img" v-for="v in imgList">
           <img @click="img(v)"  style="cursor:pointer;" :src="v" alt="">
         </div>
@@ -186,7 +186,7 @@ export default {
     getAjaxListFirst(){
       var that  = this
       this.id = this.$router.currentRoute.query.id
-      this.Axios.post(`${this.api}/store-report/report`,{"id":1})
+      this.Axios.post(`${this.api}/store-report/report`,{"id":this.id})
       .then(function (data) {
         that.reportFristList = data.data.data.report
         that.reportFristList1 = data.data.data.report.store
@@ -223,15 +223,15 @@ export default {
       var that  = this
       this.Axios.post(`${this.api}/scene-report/report`,{id:that.clickId})
       .then(function (data) {
-        console.log(data)
         that.sceneList = data.data.data.scene
         that.storeList = data.data.data.store
         that.skuList = data.data.data.sku
         that.reportList = data.data.data.report
         that.store_reportList = data.data.data.store_report
+        that.viewUrl = data.data.data.report.image
         data.data.data.picture.forEach((val,index)=>{
           if(val.type == 1){
-            that.viewUrl = val.url
+            // that.viewUrl = val.url
           }else{
             that.imgList.push(val.url)
           }
@@ -289,7 +289,7 @@ export default {
             that.numList.push(num)
           }
         }
-        // console.log(that.skuseriesList)
+
         for(var w=0;w<that.skuseriesList.length;w++){
           that.skuseriesList[w].arr2 = that.numList.splice(0,that.skuseriesList[w].arr.length)
         }
@@ -303,7 +303,7 @@ export default {
             that.skuseriesList[m].ArrObjList.push(ArrObj)
           }
         }
-            console.log(that.skuseriesList)
+
       })
       .catch(function (error) {
         console.log(error);
@@ -434,16 +434,15 @@ export default {
     },
     liClick(v,event){
       event.stopPropagation();
-      var domList = document.querySelectorAll('.queryList')
-      for(var a=0; a<domList.length;a++){
-        domList[a].style.backgroundColor = '#fff'
-      }
       v.childShow = !v.childShow
       this.iconFlag = false
     },
     changeImg(){
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
       if(!this.iconFlag){
-        // this.colorChangeList()
         for(var i=0;i<this.skuList.length;i++){
           var obj = {truncated:false,color:'red'}
           obj.x1 = this.skuList[i].x1

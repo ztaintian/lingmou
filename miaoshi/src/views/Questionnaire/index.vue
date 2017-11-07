@@ -57,18 +57,18 @@
 		  		<img :src="v.radioShow2?radioaimgUrl:radioimgUrl" alt="" @click="radioQus(indexQ,2,v)"><span class="radioText">多选</span>
 		  		<img :src="v.radioShow3?radioaimgUrl:radioimgUrl" alt="" @click="radioQus(indexQ,3,v)"><span class="radioText">填空</span>
 		  	</div>
-		  	<div class="zune choiceOne" v-for="(vC,indexC) in v.choiceList">
+		  	<div class="zune choiceOne" v-if="v.choiceShow" v-for="(vC,indexC) in v.choiceList">
 			  	<span class="name choiceSpan" style="font-family: 'Microsoft YaHei'">选项{{indexC+1}}</span>
 			  	<div style="height:46px;">
 				  	<div :class="[vC.choiceGetColcor?'fontColor':'','right']">
 					  	<input class="nameipt" type="" v-model="vC.choiceIpt" @blur="getBlur(vC)" @focus="getFocus(vC,indexC,indexQ)"  name="">
-					  	<span class="errorRed count errorTip" v-show="(fishFlag||choiceFlag)&&vC.choiceIpt.length==0">（请填写问题的选项）</span>
+					  	<span class="errorRed count errorTip" v-show="(fishFlag||choiceFlag||addFlag)&&vC.choiceIpt.length==0">（请填写问题的选项）</span>
 				  		<span class="count" :class="[((fishFlag||choiceFlag)&&vC.choiceIpt.length==0)?'errorRed':'','count']">{{vC.choiceIpt.length}}/35</span>
 				  	</div>
 				  	<span class="delchoice" @click="delChoice(indexC,indexQ)" v-if="vC.delCe">删除选项</span>
 			  	</div>
 		  	</div>
-		  	<div class="addchoice" v-if="v.choiceList.length<8"  @click="addChoice(indexQ)">
+		  	<div class="addchoice"  v-if="(v.choiceList.length<8) && (v.choiceShow)"  @click="addChoice(indexQ)">
 		  		<a href="javascript:;" >＋添加选项</a>
 		  	</div>
   		</div>
@@ -97,6 +97,7 @@ export default {
           return time.getTime() < Date.now() - 8.64e7;
         }
       },
+      addFlag:false,
     	nameGetColor:false,
     	fishFlag:false,
     	choiceFlag:false,
@@ -110,7 +111,7 @@ export default {
     	timeDate:[],
     	selecttime:'00时',
     	radio:false,
-    	questionList:[{titleGetColcor:false,radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceList:[{delCe:false,choiceIpt:'',choiceGetColcor:false},{delCe:false,choiceIpt:'',choiceGetColcor:false},{delCe:false,choiceIpt:'',choiceGetColcor:false}],delShow:true,mustAddFlag:false}],
+    	questionList:[{titleGetColcor:false,radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceShow:true,choiceList:[{delCe:false,choiceIpt:'',choiceGetColcor:false},{delCe:false,choiceIpt:'',choiceGetColcor:false},{delCe:false,choiceIpt:'',choiceGetColcor:false}],delShow:true,mustAddFlag:false}],
     	bacStyles:'background:  #F5F5F5 url('+icon+')  no-repeat;background-position:95% 40%;'
     }
   },
@@ -167,29 +168,36 @@ export default {
   		v.choiceGetColcor =false
   	},
   	saved:function(){//完成
-  		this.fishFlag = true; 
+  		this.fishFlag = true;
+  		if(this.nameQuestion == null || this.nameQuestion == ''){
+  			this.$message({
+  				message:'请填写问卷名称'
+  			});
+  			return
+  		}
+  		var d = new Date(this.value1)
+  		var YMD = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
+  		if((new Date().getTime()) > (new Date(YMD+' '+this.selecttime.substr(0, 2)+':00'+':00').getTime())){
+  			this.$message({
+  				message:'问卷时间只能在当前时间之后'
+  			});
+  			return
+  		}
   		//input值判断
   		for(var j=0;j<this.questionList.length;j++){
   			this.questionList[j].mustAddFlag = false
 	  		for(var i=0;i<this.questionList[j].choiceList.length;i++){
 	  			if(this.questionList[j].title==null||this.questionList[j].title==''||this.questionList[j].choiceList[i].choiceIpt == '' || this.questionList[j].choiceList[i].choiceIpt==null){
 	  				this.questionList[j].mustAddFlag = true
+	  				this.$message({
+  						message:'请填写问题及选项'
+  					});
 	  				return
 	  			}
 	  		}
   		}
   		//后台数据处理
-  		var d = new Date(this.value1)
-  		var YMD = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
-  		if(this.nameQuestion == null || this.nameQuestion == ''){
-  			return
-  		}
-  		if((new Date().getTime()) > (new Date(YMD+' '+this.selecttime.substr(0, 2)+':00'+':00').getTime())){
-  			this.$message({
-  				message:'截止时间不能小于当前时间'
-  			});
-  			return
-  		}
+
   		var data = {
   			title:this.nameQuestion,
   			endtime:(new Date(YMD+' '+this.selecttime.substr(0, 2)+':00'+':00').getTime())/1000,
@@ -243,19 +251,22 @@ export default {
   			this.questionList[indexQ].choiceList[1].delCe = false
   		}
   	},
-  	radioQus:function(index,num,bb){//单选、多选判断
+  	radioQus:function(index,num,v){//单选、多选判断
   		if(num === 1){
   			this.questionList[index].radioShow1 = true
   			this.questionList[index].radioShow2 = false
   			this.questionList[index].radioShow3 = false
+  			v.choiceShow = true
   		}else if(num === 2){
   			this.questionList[index].radioShow1 = false
   			this.questionList[index].radioShow2 = true
   			this.questionList[index].radioShow3 = false
+  			v.choiceShow = true
   		}else{
   			this.questionList[index].radioShow1 = false
   			this.questionList[index].radioShow2 = false
   			this.questionList[index].radioShow3 = true
+  			v.choiceShow = false
   		}
   	},
   	addQuestion(){//添加问题
@@ -282,6 +293,12 @@ export default {
 
   	},
   	addChoice:function(index){//添加选项
+  		this.addFlag = true
+  		for(var i=0;i<this.questionList[index].choiceList.length;i++){
+  			if(this.questionList[index].choiceList[i].choiceIpt == '' || this.questionList[index].choiceList[i].choiceIpt == null){
+  				return
+  			}
+  		}
   		this.questionList[index].choiceList.push({delCe:false,choiceIpt:''})
   		this.lastoneC(index)
   	},
@@ -290,6 +307,16 @@ export default {
   		this.lastoneC(indexQ)
   	},
   	show:function(v){//展开逻辑
+  		this.choiceFlag = true
+  		for(var j=0;j<this.questionList.length;j++){
+  			this.questionList[j].mustAddFlag = false
+	  		for(var i=0;i<this.questionList[j].choiceList.length;i++){
+	  			if(this.questionList[j].title==null||this.questionList[j].title==''||this.questionList[j].choiceList[i].choiceIpt == '' || this.questionList[j].choiceList[i].choiceIpt==null){
+	  				this.questionList[j].mustAddFlag = true
+	  				return
+	  			}
+	  		}
+  		}
 			for(var i =0;i<this.questionList.length;i++){
 				this.questionList[i].show = false
 			}

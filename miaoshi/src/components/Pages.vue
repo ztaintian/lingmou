@@ -57,9 +57,11 @@ export default {
   },
   methods:{
     jumpLeave(){
+      console.log(3)
       this.jumpBc = false
     },
     jumpHover(){
+      console.log(4)
       this.jumpBc = true
     },
     imgLeave(){
@@ -108,7 +110,7 @@ export default {
 
 <style lang="scss" scoped>
   .buleColor{
-    background: #2D78B3;
-    color:#fff;
+    background: #2D78B3!important;
+    color:#fff!important;
   }
 </style>

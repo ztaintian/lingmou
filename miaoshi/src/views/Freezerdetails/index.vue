@@ -18,7 +18,7 @@
               <circle class="demo2" cx="52" cy="52" id="J_demo1"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
             </svg>
             <div class="percentage">
-              {{reportList.purity*100}}%
+              {{reportList.purity}}%
             </div>
             <div class="describe">
               纯净度
@@ -30,7 +30,7 @@
               <circle class="demo2" cx="52" cy="52" id="J_demo2"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
             </svg>
             <div class="percentage">
-              {{reportList.saturation*100}}%
+              {{reportList.saturation}}%
             </div>
             <div class="describe">
               饱和度
@@ -42,7 +42,7 @@
               <circle class="demo2" cx="52" cy="52" id="J_demo3"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
             </svg>
             <div class="percentage">
-              {{reportList.sku_lack_num/reportList.sku_total_num*100}}%
+              {{reportList.empty_rate}}%
             </div>
             <div class="describe">
               空缺率
@@ -103,7 +103,7 @@
         </div>
       </div>
       <div class="bottom">
-        <div class="title">原图（6）</div>
+        <div class="title">原图（{{imgList.length}}）</div>
         <div class="img" @click="img(v)" v-for="v in imgList">
           <img :src="v" alt="">
         </div>
@@ -190,17 +190,18 @@ export default {
         that.skuList = data.data.data.sku
         that.reportList = data.data.data.report
         that.store_reportList = data.data.data.store_report
+        that.viewUrl =data.data.data.report.image
         data.data.data.picture.forEach((val,index)=>{
           if(val.type == 1){
-            that.viewUrl = val.url
+            // that.viewUrl = val.url
           }else{
             that.imgList.push(val.url)
           }
         })
         that.initCanvas()
-        that.circleSet(100-data.data.data.report.purity*100, document.querySelector("#J_demo1"))
-        that.circleSet(100-data.data.data.report.purity*100, document.querySelector("#J_demo2"))
-        that.circleSet(100-(that.reportList.sku_lack_num/that.reportList.sku_total_num)*100, document.querySelector("#J_demo3"))
+        that.circleSet(100-data.data.data.report.purity, document.querySelector("#J_demo1"))
+        that.circleSet(100-data.data.data.report.saturation, document.querySelector("#J_demo2"))
+        that.circleSet(100-that.reportList.empty_rate, document.querySelector("#J_demo3"))
 
         // for(var i=0;i<data.data.data.skuseries.length;i++){
         //   data.data.data.skuseries[i].arr = []
@@ -267,8 +268,6 @@ export default {
         for(var k=0;k<that.skuseriesList.length;k++){
           that.skuseriesList[k].arr = that.skuseriesList[k].arr.unique()
         }
-        // console.log(that.tempList[0].arr)
-        // console.log(that.skuseriesList)
         for(var o=0;o<that.skuseriesList.length;o++){
           for(var r=0;r<that.skuseriesList[o].arr.length;r++){
             var num = 0
@@ -280,7 +279,6 @@ export default {
             that.numList.push(num)
           }
         }
-        // console.log(that.skuseriesList)
         for(var w=0;w<that.skuseriesList.length;w++){
           that.skuseriesList[w].arr2 = that.numList.splice(0,that.skuseriesList[w].arr.length)
         }
@@ -294,7 +292,6 @@ export default {
             that.skuseriesList[m].ArrObjList.push(ArrObj)
           }
         }
-            console.log(that.skuseriesList)
       })
       .catch(function (error) {
         console.log(error);
@@ -377,9 +374,6 @@ export default {
         context.strokeRect(x1 * that.scale / 100, y1 * that.scale / 100, (x2 - x1) * that.scale / 100, (y2 - y1) * that.scale / 100);
         context.closePath();
     },
-    getGoods(v){
-      console.log(v)
-    },
     colorChangeList(){
       for(var i=0;i<this.dataList.length;i++){
         for(var j=0;j<this.dataList[i].childrenList.length;j++){
@@ -414,16 +408,15 @@ export default {
     },
     liClick(v,event){
       event.stopPropagation();
-      var domList = document.querySelectorAll('.queryList')
-      for(var a=0; a<domList.length;a++){
-        domList[a].style.backgroundColor = '#fff'
-      }
       v.childShow = !v.childShow
       this.iconFlag = false
     },
     changeImg(){
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
       if(!this.iconFlag){
-        // this.colorChangeList()
         for(var i=0;i<this.skuList.length;i++){
           var obj = {truncated:false,color:'red'}
           obj.x1 = this.skuList[i].x1

@@ -41,7 +41,7 @@ export default {
   },
   methods:{
   	ifBnt(){
-  		if(this.accountFlag && this.passFlag){
+  		if(this.account && this.pass){
   			this.bntIf = true
   		}else{
   			this.bntIf = false
