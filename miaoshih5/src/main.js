@@ -6,8 +6,16 @@ import router from './router'
 import axios from 'axios'
 Vue.config.productionTip = false
 Vue.prototype.Axios = axios
-Vue.prototype.api = '/api'
+
 /* eslint-disable no-new */
+
+if(process.env.NODE_ENV == 'development'){//开发环境
+  Vue.prototype.api = '/api'
+}else{
+	Vue.prototype.api = 'http://ubuntu.zhixiang.co:8082'
+}
+
+
 new Vue({
   el: '#app',
   router,

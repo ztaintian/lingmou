@@ -23,38 +23,38 @@
       <div class="allDetail">
         <div class="detail">
           <span class="span1">纯净度:</span>
-          <span class="span2">{{reportList.purity*100}}%</span>
+          <span class="span2">{{reportList.purity}}%</span>
           <img :src="ic_upUrl" alt="">
           <span class="span3"><span v-if="reportList.purity_change>0">+</span>{{reportList.purity_change}}%</span>
         </div>
         <div class="lineAll">
-          <div class="lineBottom"></div>
-          <div class="line"></div>
+          <div class="lineBottom" ref="lineAll"></div>
+          <div class="line" ref="lineG"></div>
         </div>
       </div>
       <div class="allDetail">
         <div class="detail">
           <span class="span1">利用率:</span>
-          <span class="span2">{{reportList.saturation*100}}%</span>
+          <span class="span2">{{reportList.saturation}}%</span>
           <img src="../assets/ic_up@3x.png" alt="">
-          <span class="span3">+{{reportList.saturation_change*100}}%</span>
+          <span class="span3"><span v-if="reportList.saturation_change>0">+</span>{{reportList.saturation_change}}%</span>
         </div>
         <div class="lineAll">
           <div class="lineBottom"></div>
-          <div class="line bgColorBlur"></div>
+          <div class="line bgColorBlur" ref="lineB"></div>
         </div>
       </div>
       <div class="allDetail">
         <div class="detail">
           <span class="span1">空缺率:</span>
-          <span class="span2">{{reportList.sku_lack_num/reportList.sku_total_num*100}}%</span>
+          <span class="span2">{{reportList.empty_rate}}%</span>
           <span class="span4">空缺数:</span><span class="span5">{{reportList.sku_lack_num}}</span>
           <img :src="ic_upUrl" alt="">
-          <span class="span3">+10.56%</span>
+          <span class="span3"><span v-if="reportList.saturation_change>0">+</span>{{reportList.empty_rate_change}}%</span>
         </div>
         <div class="lineAll">
           <div class="lineBottom"></div>
-          <div class="line bgColorRed"></div>
+          <div class="line bgColorRed" ref="lineR" ></div>
         </div>
       </div>
     </div>
@@ -89,7 +89,7 @@
     </div>
     <div class="Skunum marginTop">
       <div class="title">
-        原图(6张)
+        原图({{imgList.length}}张)
       </div>
     </div>
     <div class="imgStyle">
@@ -136,13 +136,11 @@ export default {
       id:'',
       reportFristList:{},
       reportFristList1:{},
-      clickId:''
+      clickId:'',
+      sceneId:''
     }
   },
   mounted(){
-    this.initCanvas()
-    setTimeout(()=>{
-    },200)
     this.getAjaxList()
   },
   filters:{
@@ -162,12 +160,17 @@ export default {
     }
   },
   methods:{
+    styleWidth(dom,per){
+      dom.style.width = this.$refs.lineAll.clientWidth*per + 'px'
+    },
     close(){
       this.imgFlag = false
     },
     getAjaxList(){
       var that  = this
-      this.Axios.post(`${this.api}/scene/getreport?id=1`)
+      this.idPass = this.$router.currentRoute.query.report_id?this.$router.currentRoute.query.report_id:''
+      this.sceneId = this.$router.currentRoute.query.scene_id?this.$router.currentRoute.query.scene_id:''
+      this.Axios.post(`${this.api}/scene/getreport?report_id=${this.idPass}&scene_id=${this.sceneId}`)
       .then(function (data) {
         if(data.data.code==200){
           that.loadFlag = false
@@ -178,6 +181,7 @@ export default {
         that.skuList = data.data.data.sku
         that.reportList = data.data.data.report
         that.store_reportList = data.data.data.store_report
+        that.viewUrl = data.data.data.report.image
         data.data.data.picture.forEach((val,index)=>{
           if(val.type == 1){
             that.viewUrl = val.url
@@ -185,6 +189,9 @@ export default {
             that.imgList.push(val.url)
           }
         })
+        that.styleWidth(that.$refs.lineG,that.reportList.purity)
+        that.styleWidth(that.$refs.lineB,that.reportList.saturation)
+        that.styleWidth(that.$refs.lineR,that.reportList.sku_lack_num/that.reportList.sku_total_num)
         that.initCanvas()
         for(var i=0;i<data.data.data.skuseries.length;i++){
           data.data.data.skuseries[i].arr1 = []
@@ -353,16 +360,15 @@ export default {
     },
     liClick(v,event){
       event.stopPropagation();
-      var domList = document.querySelectorAll('.queryList')
-      for(var a=0; a<domList.length;a++){
-        domList[a].style.backgroundColor = '#fff'
-      }
       v.childShow = !v.childShow
       this.iconFlag = false
     },
     changeImg(){
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
       if(!this.iconFlag){
-        // this.colorChangeList()
         for(var i=0;i<this.skuList.length;i++){
           var obj = {truncated:false,color:'red'}
           obj.x1 = this.skuList[i].x1
@@ -399,6 +405,7 @@ export default {
     z-index: 1000;
     width:100%;
     height:100%;
+    overflow: scroll;
     top:0;
     left:0;
     background:#fff;
