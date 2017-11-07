@@ -396,6 +396,7 @@ export default {
     },
     img(v){
       this.editBoxShow = true
+      this.vueUrl = v
     },
     getGoods(v){
       console.log(v)

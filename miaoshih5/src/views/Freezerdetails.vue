@@ -98,7 +98,7 @@
       </div>
     </div>
     <div class="Dialogue" v-if="imgFlag" @click="close">
-      <img :src="vueUrl" alt="">
+      <img class="imgStyle" :src="vueUrl" alt="">
     </div>
   </div>
 </template>
@@ -116,7 +116,7 @@ export default {
       bboxes:[],
       imgFlag:false,
       imgList:[],
-      scale:100,
+      scale:38,
       viewUrl:'',
       iconFlag:false,
       ic_upChoutUrl:ic_upChout,
@@ -184,14 +184,14 @@ export default {
         that.viewUrl = data.data.data.report.image
         data.data.data.picture.forEach((val,index)=>{
           if(val.type == 1){
-            that.viewUrl = val.url
+            // that.viewUrl = val.url
           }else{
             that.imgList.push(val.url)
           }
         })
-        that.styleWidth(that.$refs.lineG,that.reportList.purity)
-        that.styleWidth(that.$refs.lineB,that.reportList.saturation)
-        that.styleWidth(that.$refs.lineR,that.reportList.sku_lack_num/that.reportList.sku_total_num)
+        that.styleWidth(that.$refs.lineG,that.reportList.purity/100)
+        that.styleWidth(that.$refs.lineB,that.reportList.saturation/100)
+        that.styleWidth(that.$refs.lineR,that.reportList.empty_rate/100)
         that.initCanvas()
         for(var i=0;i<data.data.data.skuseries.length;i++){
           data.data.data.skuseries[i].arr1 = []
@@ -409,6 +409,9 @@ export default {
     top:0;
     left:0;
     background:#fff;
+    .imgStyle{
+      width:100%;
+    }
   }
   .bgBlue{
     background:#fff;
@@ -651,7 +654,7 @@ export default {
   }
   .imgMain{
     width:91.1vw;
-    height:161.1vw;
+    height:135vw;
     margin:0 auto;
     vertical-align: middle;
     position:relative;

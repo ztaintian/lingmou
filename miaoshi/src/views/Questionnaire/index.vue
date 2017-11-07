@@ -285,7 +285,7 @@ export default {
   		}
 			this.fishFlag = false
 			this.choiceFlag = false
-  		this.questionList.push({radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceList:[{delCe:false,choiceIpt:''},{delCe:false,choiceIpt:''},{delCe:false,choiceIpt:''}],delShow:true,mustAddFlag:false})
+  		this.questionList.push({radioShow1:true,radioShow2:false,radioShow3:false,title:'',error:true,show:true,radio:'radio0',choiceShow:true,choiceList:[{delCe:false,choiceIpt:''},{delCe:false,choiceIpt:''},{delCe:false,choiceIpt:''}],delShow:true,mustAddFlag:false})
   		if(this.questionList.length > 1){
   			this.questionList[0].delShow = true;
   		}
