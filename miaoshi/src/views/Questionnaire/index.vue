@@ -257,15 +257,19 @@ export default {
   			this.questionList[index].radioShow2 = false
   			this.questionList[index].radioShow3 = false
   			v.choiceShow = true
+  			v.choiceList = [{delCe:false,choiceIpt:'',choiceGetColcor:false},{delCe:false,choiceIpt:'',choiceGetColcor:false},{delCe:false,choiceIpt:'',choiceGetColcor:false}]
+
   		}else if(num === 2){
   			this.questionList[index].radioShow1 = false
   			this.questionList[index].radioShow2 = true
   			this.questionList[index].radioShow3 = false
   			v.choiceShow = true
+  			v.choiceList = [{delCe:false,choiceIpt:'',choiceGetColcor:false},{delCe:false,choiceIpt:'',choiceGetColcor:false},{delCe:false,choiceIpt:'',choiceGetColcor:false}]
   		}else{
   			this.questionList[index].radioShow1 = false
   			this.questionList[index].radioShow2 = false
   			this.questionList[index].radioShow3 = true
+  			v.choiceList = []
   			v.choiceShow = false
   		}
   	},

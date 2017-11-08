@@ -1,8 +1,8 @@
 <template>
   <div class="messagebox">
     <div class="messagecont">
-       <img  style="height:500px;width:200px;" :src="imgUrl" alt="">
-      <div style="cursor:pointer;margin-left:94px;font-size:20px;color:#000;" @click="cancle">
+       <img  style="height:500px;width:300px;" :src="imgUrl" alt="">
+      <div style="cursor:pointer;margin-top: 5px;margin-left:145px;font-size:20px;color:#000;" @click="cancle">
         X
       </div>
     </div>
@@ -46,7 +46,8 @@ export default {
     .messagecont{
       position:absolute;
       left:50%;
-      margin-left:-100px;
+      top:50px;
+      margin-left:-150px;
       .bntlast{
         background:#324656;
         cursor:pointer;

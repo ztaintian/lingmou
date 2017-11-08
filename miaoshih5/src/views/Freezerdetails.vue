@@ -34,7 +34,7 @@
       </div>
       <div class="allDetail">
         <div class="detail">
-          <span class="span1">利用率:</span>
+          <span class="span1">纯净度:</span>
           <span class="span2">{{reportList.saturation}}%</span>
           <img src="../assets/ic_up@3x.png" alt="">
           <span class="span3"><span v-if="reportList.saturation_change>0">+</span>{{reportList.saturation_change}}%</span>
