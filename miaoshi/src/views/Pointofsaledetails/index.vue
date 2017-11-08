@@ -104,7 +104,7 @@
                 <img :src="iconFoldURl"  :class="v.childShow?'imgTranform':''" alt=""><span>{{v.sku_name}} ({{v.length}})</span>
               </div>
               <div v-if="v.childShow" v-for="(vC,indexC) in v.ArrObjList"  @click.stop.prevent="childClick(vC,$event)">
-                <span style="display:block" class="li mgLeft10  queryList" >
+                <span style="display:block" :class="[v.childShowColor?'backgroundBlur':'','li mgLeft10  queryList']" >
                   {{vC.name}}({{vC.num}})
                 </span>
               </div>
@@ -203,6 +203,10 @@ export default {
       });
     },
     nextList(){
+      this.navList.forEach((v,index)=>{
+        v.navFlag = false
+        v.clickFlag = false
+      })
       this.clickId--
       if(this.clickId<=0){
         return
@@ -213,6 +217,10 @@ export default {
       this.getAjaxList()
     },
     preList(){
+      this.navList.forEach((v,index)=>{
+        v.navFlag = false
+        v.clickFlag = false
+      })
       this.clickId++
       this.imgList =[]
       this.vueUrl =''
@@ -242,6 +250,7 @@ export default {
           data.data.data.skuseries[i].arr = []
           data.data.data.skuseries[i].length = ''
           data.data.data.skuseries[i].childShow = false
+          data.data.data.skuseries[i].childShowColor = false
           var obj = {name:'',num:0}
           that.skuList.forEach((val,index)=>{
             if(val.series_id == data.data.data.skuseries[i].series_id){
@@ -378,6 +387,7 @@ export default {
         context.closePath();
     },
     navClick(v){
+      this.bboxes = []
       for(var i=0;i<this.navList.length;i++){
         this.navList[i].clickFlag = false
       }
@@ -435,6 +445,22 @@ export default {
     },
     liClick(v,event){
       event.stopPropagation();
+      this.bboxes =[]
+      for(var i=0;i<this.skuList.length;i++){
+        var obj = {truncated:false,color:'red'}
+        if(this.skuList[i].series_id == v.series_id){
+          obj.x1 = this.skuList[i].x1
+          obj.x2 =this.skuList[i].x2
+          obj.y1 = this.skuList[i].y1
+          obj.y2 = this.skuList[i].y2
+          this.bboxes.push(obj)
+        }
+      }
+      this.showAll(this.bboxes)
+      for(var c=0;c<this.skuseriesList.length;c++){
+        this.skuseriesList[c].childShowColor = false
+      }
+      v.childShowColor = true
       v.childShow = !v.childShow
       this.iconFlag = false
     },
@@ -696,6 +722,9 @@ export default {
               background:#fff;
               .mgLeft10{
                 padding-left:15px;
+              }
+              .backgroundBlur{
+                background:#D0E4F2;
               }
               .mgLeft20{
                 padding-left:57px;

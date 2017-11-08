@@ -5,7 +5,7 @@
     </div>
     <div class="content">
       <div class="title">
-        {{storeList.store_number}}-{{storeList.storename}}
+        {{storeList.storename}} {{reportList.scene_report_number}}
       </div>
       <div class="address">
         <img src="../assets/ic_location@3x.png" alt="">
@@ -34,7 +34,7 @@
       </div>
       <div class="allDetail">
         <div class="detail">
-          <span class="span1">纯净度:</span>
+          <span class="span1">饱和度:</span>
           <span class="span2">{{reportList.saturation}}%</span>
           <img src="../assets/ic_up@3x.png" alt="">
           <span class="span3"><span v-if="reportList.saturation_change>0">+</span>{{reportList.saturation_change}}%</span>
@@ -361,6 +361,18 @@ export default {
     liClick(v,event){
       event.stopPropagation();
       v.childShow = !v.childShow
+      this.bboxes = []
+      for(var i=0;i<this.skuList.length;i++){
+        var obj = {truncated:false,color:'red'}
+        if(this.skuList[i].series_id == v.series_id){
+          obj.x1 = this.skuList[i].x1
+          obj.x2 =this.skuList[i].x2
+          obj.y1 = this.skuList[i].y1
+          obj.y2 = this.skuList[i].y2
+          this.bboxes.push(obj)
+        }
+      }
+      this.showAll(this.bboxes)
       this.iconFlag = false
     },
     changeImg(){
@@ -379,7 +391,6 @@ export default {
         }
          this.showAll(this.bboxes)
       }else{
-        console.log(5)
         this.bboxes = []
         this.showAll(this.bboxes)
       }
