@@ -9,56 +9,56 @@
           {{reportFristList1.group_number}}／{{reportFristList1.line_number}}／{{reportFristList.created_at|dataFormYMD}}
         </div>
       </div>
-<!--       <div class="center">
+      <div class="center">
         <div class="left">
           <div class="titl">场景数据</div>
           <div class="cycly">
-            <div class="percentage">
-              65.9%
+            <div class="percentage" style="color:#50B7EB;font-weight:bold;">
+              {{store_reportList.purity}}%
             </div>
-            <div class="describe">
+            <div class="describe" >
               冰柜纯净度
             </div>
-            <img class="Unqualified" :src="iconUnqualifiedUrl" alt="">
+            <!-- <img class="Unqualified" :src="iconUnqualifiedUrl" alt=""> -->
           </div>
           <div class="cycly">
-            <div class="percentage">
-              65.9%
+            <div class="percentage" style="color:#54D17D;font-weight:bold;">
+              {{store_reportList.saturation}}%
             </div>
             <div class="describe">
-              冰柜纯净度
+              冰柜饱和度
             </div>
-            <img class="Unqualified" :src="iconUnqualifiedUrl" alt="">
+            <!-- <img class="Unqualified" :src="iconUnqualifiedUrl" alt=""> -->
           </div>
           <div class="cycly">
-            <div class="percentage">
-              65.9%
+            <div class="percentage" style="color:#E62E3A;font-weight:bold;">
+              {{store_reportList.sku_total_num}}
             </div>
             <div class="describe">
-              冰柜纯净度
+              售点SKU数
             </div>
-            <img class="Unqualified" :src="iconUnqualifiedUrl" alt="">
+            <!-- <img class="Unqualified" :src="iconUnqualifiedUrl" alt=""> -->
           </div>
           <div class="cycly">
-            <div class="percentage">
-              65.9%
+            <div class="percentage" style="color:#333333;font-weight:bold;">
+             {{store_reportList.sku_necessary_num_act}}/{{store_reportList.sku_necessary_num}}
             </div>
             <div class="describe">
-              冰柜纯净度
+              必备SKU数
             </div>
-            <img class="Unqualified" :src="iconUnqualifiedUrl" alt="">
+            <!-- <img class="Unqualified" :src="iconUnqualifiedUrl" alt=""> -->
           </div>
           <div class="cycly">
-            <div class="percentage">
-              65.9%
+            <div class="percentage" style="color:#333333;font-weight:bold;">
+               {{store_reportList.sku_important_num_act}}/{{store_reportList.sku_important_num}}
             </div>
             <div class="describe">
-              冰柜纯净度
+              重点SKU数
             </div>
-            <img class="Unqualified" :src="iconUnqualifiedUrl" alt="">
+            <!-- <img class="Unqualified" :src="iconUnqualifiedUrl" alt=""> -->
           </div>
         </div>
-      </div> -->
+      </div>
       <div class="sku">
         <div class="left">
           <div class="title">
@@ -82,7 +82,7 @@
       </div>
       <div class="picture">
         <div class="sence">
-          场景（5）
+          场景（{{navList.length}}）
         </div>
         <div class="nav">
           <div v-for="v in navList" style="width:160px;height:40px;display:inline-block;">
@@ -237,6 +237,7 @@ export default {
         that.reportList = data.data.data.report
         that.store_reportList = data.data.data.store_report
         that.viewUrl = data.data.data.report.image
+        document.title = data.data.data.store.storename+'-'+data.data.data.store.store_number
         data.data.data.picture.forEach((val,index)=>{
           if(val.type == 1){
             // that.viewUrl = val.url
@@ -391,6 +392,7 @@ export default {
       for(var i=0;i<this.navList.length;i++){
         this.navList[i].clickFlag = false
       }
+      this.iconFlag =false
       v.clickFlag = true
       this.clickId = v.id
       this.imgList = []
@@ -445,6 +447,10 @@ export default {
     },
     liClick(v,event){
       event.stopPropagation();
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
       this.bboxes =[]
       for(var i=0;i<this.skuList.length;i++){
         var obj = {truncated:false,color:'red'}
@@ -563,6 +569,7 @@ export default {
               margin-top:6px;
               font-size: 14px;
               color: #000000;
+              font-weight:bold;
             }
           }
           .titl{

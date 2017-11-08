@@ -5,7 +5,7 @@
 	  	<div style="height:46px;">
 		  	<div :class="[nameGetColor?'fontColor':'','right']">
 			  	<input class="nameipt" @focus="nameGetFocus" @blur="nameGetblur" v-model="nameQuestion" type="" name="">
-			  	<span class="errorRed count errorTip" v-show="fishFlag&&nameQuestion.length==0">（请填写问题的选项）</span>
+			  	<span class="errorRed count errorTip" v-show="fishFlag&&nameQuestion.length==0">（请填写问卷名称）</span>
 		  		<span :class="[(fishFlag&&nameQuestion.length==0)?'errorRed':'','count']">{{nameQuestion.length}}/35</span>
 		  	</div>
 	  	</div>

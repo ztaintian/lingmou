@@ -61,7 +61,7 @@
             </div>
           </div>
         </div>
-        <div class="right">
+        <div class="right" v-if="store_reportList.status==1">
           <div class="titl">所属售点</div>
           <div class="box">
             <div class="ttdetail">
@@ -109,14 +109,7 @@
         </div>
       </div>
     </div>
-    <div class="messagebox" v-if="editBoxShow">
-      <div class="messagecont">
-         <img  style="height:500px;width:200px;" :src="vueUrl" alt="">
-        <div style="cursor:pointer;margin-left:94px;font-size:20px;color:#000;" @click="cancle">
-          X
-        </div>
-      </div>
-    </div>
+    <img-model  v-if="editBoxShow" :imgUrl="vueUrl" :editBoxShow.sync="editBoxShow"></img-model>
   </div>
 </template>
 
@@ -128,9 +121,10 @@ import iconEnlarge from '@/assets/ic_bigger_normal@1x.png'
 import iconNarrow from '@/assets/ic_smaller_normal@1x.png'
 import iconVue from '@/assets/vue.png'
 import viewIcon from '@/assets/view.jpeg'
-
+import ImgModel from '@/components/ImgModel'
 export default {
   name: 'Freezerdetails',
+  components:{'img-model':ImgModel},
   data () {
     return {
       editBoxShow:false,
@@ -191,6 +185,7 @@ export default {
         that.reportList = data.data.data.report
         that.store_reportList = data.data.data.store_report
         that.viewUrl =data.data.data.report.image
+        document.title = data.data.data.scene.name+'-'+data.data.data.report.scene_report_number
         data.data.data.picture.forEach((val,index)=>{
           if(val.type == 1){
             // that.viewUrl = val.url
@@ -409,6 +404,10 @@ export default {
     },
     liClick(v,event){
       event.stopPropagation();
+      var domList = document.querySelectorAll('.queryList')
+      for(var a=0; a<domList.length;a++){
+        domList[a].style.backgroundColor = '#fff'
+      }
       this.bboxes =[]
       for(var i=0;i<this.skuList.length;i++){
         var obj = {truncated:false,color:'red'}

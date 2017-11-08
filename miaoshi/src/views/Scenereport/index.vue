@@ -129,7 +129,7 @@ export default {
       lastMounth:false,
       salePoint:'',
       salePointList:['快客','全家'],
-      statusList:['冰柜','货架','堆头','问卷'],
+      statusList:['全部','冰柜','货架','堆头','问卷'],
       all:true,
       compent:false,
       ing:false,
@@ -153,6 +153,8 @@ export default {
           this.num_type_id = 3
         }else if(this.statusVal == '问卷'){
            this.num_type_id = 4
+        }else if(this.statusVal == '全部'){
+           this.num_type_id = ''
         }
         this.getAjaxList(`${this.api}/scene-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
       }else{
@@ -192,6 +194,9 @@ export default {
       }else if(this.statusVal == '问卷'){
         this.num_type_id = 4
         this.questionFalg = false
+      }else if(this.statusVal == '全部'){
+        this.num_type_id = ''
+        this.questionFalg = true
       }
       this.nowNum = '1'
       this.getAjaxList(`${this.api}/scene-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_name=${this.salePoint}&scene_report_number=${this.reportNumber}&type_id=${this.num_type_id}&group_number=${this.SalesOffice}&line_number=${this.lineNumber}&name=${this.Memoname}`)
@@ -205,7 +210,8 @@ export default {
     },
     freezerdetails(v){
       if(this.questionFalg){
-        this.$router.push({path:'/home/freezerdetails',query:{id:v.id}})
+        // this.$router.push({path:'/home/freezerdetails',query:{id:v.id}})
+        window.open(`${this.api}/index.html#/home/freezerdetails?id=${v.id}`)
       }else{
         this.$router.push({path:`/home/questionnairedetails`,query:{q_id:v.q_id,store_id:v.store_id}})
       }

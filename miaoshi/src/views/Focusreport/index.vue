@@ -112,7 +112,7 @@ export default {
       lastMounth:false,
       salePoint:'',
       salePointList:['快客','全家'],
-      statusList:['全部','已完成','进行中'],
+      statusList:['全部','已完成'],
       all:true,
       compent:false,
       ing:false,
@@ -184,7 +184,8 @@ export default {
       });
     },
     pointofsaledetails(v){
-      this.$router.push(`/home/pointofsaledetails?id=${v.id}`)
+      // this.$router.push(`/home/pointofsaledetails?id=${v.id}`)
+      window.open(`${this.api}/index.html#/home/freezerdetails?id=${v.id}`)
     },
     enter(v,index){
       for(var i=0;i<this.tableList.length;i++){
