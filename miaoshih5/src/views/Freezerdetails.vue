@@ -23,9 +23,9 @@
       <div class="allDetail">
         <div class="detail">
           <span class="span1">纯净度:</span>
-          <span class="span2">{{reportList.purity}}%</span>
+          <span class="span2">{{Number(reportList.purity).toFixed(1)}}%</span>
           <img :src="ic_upUrl" alt="">
-          <span class="span3"><span v-if="reportList.purity_change>0">+</span>{{reportList.purity_change}}%</span>
+          <span class="span3"><span v-if="reportList.purity_change>0">+</span>{{Number(reportList.purity_change).toFixed(1)}}%</span>
         </div>
         <div class="lineAll">
           <div class="lineBottom" ref="lineAll"></div>
@@ -35,9 +35,9 @@
       <div class="allDetail">
         <div class="detail">
           <span class="span1">饱和度:</span>
-          <span class="span2">{{reportList.saturation}}%</span>
+          <span class="span2">{{Number(reportList.saturation).toFixed(1)}}%</span>
           <img src="../assets/ic_up@3x.png" alt="">
-          <span class="span3"><span v-if="reportList.saturation_change>0">+</span>{{reportList.saturation_change}}%</span>
+          <span class="span3"><span v-if="reportList.saturation_change>0">+</span>{{Number(reportList.saturation_change).toFixed(1)}}%</span>
         </div>
         <div class="lineAll">
           <div class="lineBottom"></div>
@@ -47,10 +47,10 @@
       <div class="allDetail">
         <div class="detail">
           <span class="span1">空缺率:</span>
-          <span class="span2">{{reportList.empty_rate}}%</span>
+          <span class="span2">{{Number(reportList.empty_rate).toFixed(1)}}%</span>
           <span class="span4">空缺数:</span><span class="span5">{{reportList.sku_lack_num}}</span>
           <img :src="ic_upUrl" alt="">
-          <span class="span3"><span v-if="reportList.saturation_change>0">+</span>{{reportList.empty_rate_change}}%</span>
+          <span class="span3"><span v-if="reportList.saturation_change>0">+</span>{{Number(reportList.empty_rate_change).toFixed(1)}}%</span>
         </div>
         <div class="lineAll">
           <div class="lineBottom"></div>

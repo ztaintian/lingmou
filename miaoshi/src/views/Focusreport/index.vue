@@ -185,7 +185,7 @@ export default {
     },
     pointofsaledetails(v){
       // this.$router.push(`/home/pointofsaledetails?id=${v.id}`)
-      window.open(`${this.api}/index.html#/home/freezerdetails?id=${v.id}`)
+      window.open(`${this.api}/index.html#/home/pointofsaledetails?id=${v.id}`)
     },
     enter(v,index){
       for(var i=0;i<this.tableList.length;i++){

@@ -14,7 +14,7 @@
           <div class="titl">场景数据</div>
           <div class="cycly">
             <div class="percentage" style="color:#50B7EB;font-weight:bold;">
-              {{store_reportList.purity}}%
+              {{Number(store_reportList.purity).toFixed(1)}}%
             </div>
             <div class="describe" >
               冰柜纯净度
@@ -23,7 +23,7 @@
           </div>
           <div class="cycly">
             <div class="percentage" style="color:#54D17D;font-weight:bold;">
-              {{store_reportList.saturation}}%
+              {{Number(store_reportList.saturation).toFixed(1)}}%
             </div>
             <div class="describe">
               冰柜饱和度

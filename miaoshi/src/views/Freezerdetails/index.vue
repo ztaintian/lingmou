@@ -18,7 +18,7 @@
               <circle class="demo2" cx="52" cy="52" id="J_demo1"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
             </svg>
             <div class="percentage">
-              {{reportList.purity}}%
+              {{Number(reportList.purity).toFixed(1)}}%
             </div>
             <div class="describe">
               纯净度
@@ -30,7 +30,7 @@
               <circle class="demo2" cx="52" cy="52" id="J_demo2"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
             </svg>
             <div class="percentage">
-              {{reportList.saturation}}%
+              {{Number(reportList.saturation).toFixed(1)}}%
             </div>
             <div class="describe">
               饱和度
@@ -42,7 +42,7 @@
               <circle class="demo2" cx="52" cy="52" id="J_demo3"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
             </svg>
             <div class="percentage">
-              {{reportList.empty_rate}}%
+              {{Number(reportList.empty_rate).toFixed(1)}}%
             </div>
             <div class="describe">
               空缺率
