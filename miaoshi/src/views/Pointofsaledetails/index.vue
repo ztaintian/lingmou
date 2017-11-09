@@ -195,6 +195,7 @@ export default {
           val.clickFlag = false
         })
         that.navList = data.data.data.scene_id
+        that.navList[0].clickFlag = true
         that.clickId = data.data.data.scene_id[0].id
         that.getAjaxList()
       })

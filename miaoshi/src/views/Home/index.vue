@@ -51,7 +51,7 @@
   			</div>
   		</div>
   		<div class="top" v-else-if="type==3">
-  			<span class="forcereport">售点设置</span>
+  			<span class="forcereport">售点管理</span>
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>{{useName}}</span>

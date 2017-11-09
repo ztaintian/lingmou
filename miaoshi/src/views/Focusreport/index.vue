@@ -75,7 +75,7 @@
       <div v-for="(v,index) in tableList" @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']" @click="pointofsaledetails(v)" >
         <div class="W170 publicCss">{{v.created_at|dataForm}}</div>
         <div class="W100 publicCss">{{v.store_report_number}}</div>
-        <div class="W150 publicCss" style="">{{v.storename}}</div>
+        <div class="W150 publicCss" style="width: 150px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;">{{v.storename}}</div>
         <div class="W70 publicCss">{{v.group_number}}</div>
         <div class="W70 publicCss">{{v.line_number}}</div>
         <div class="W80 publicCss">{{v.sku_total_num}}</div>
