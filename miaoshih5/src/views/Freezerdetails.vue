@@ -116,7 +116,7 @@ export default {
       bboxes:[],
       imgFlag:false,
       imgList:[],
-      scale:38,
+      scale:100,
       viewUrl:'',
       iconFlag:false,
       ic_upChoutUrl:ic_upChout,
@@ -142,6 +142,16 @@ export default {
   },
   mounted(){
     this.getAjaxList()
+    var that = this
+    var evt = "onorientationchange" in window ? "orientationchange" : "resize";
+    window.addEventListener(evt,resize,false);
+      function resize(fals) {
+        if(window.orientation == 0 || window.orientation == 180) {
+          that.initCanvas()
+        }else {
+          that.initCanvas()
+        }
+    }
   },
   filters:{
     dataFormYMD(date){
@@ -279,8 +289,12 @@ export default {
       var image = new Image();
       image.src = this.viewUrl;
       image.onload = function () {
-          canvas.width = image.width * that.scale / 100;
-          canvas.height = image.height * that.scale / 100;
+          var scrrrnWidth = screen.width
+          var screenHeight = screen.height
+          var wscal = scrrrnWidth/image.width
+          that.scale = 100*wscal
+          canvas.width = image.width *that.scale / 100;
+          canvas.height = image.height *that.scale / 100;
           canvas1.width = canvas.width;
           canvas1.height = canvas.height;
           context.fillStyle = "black";

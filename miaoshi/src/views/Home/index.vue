@@ -15,7 +15,7 @@
   	</div>
   	<div class="right" id="right">
   		<div class="top" v-if="type==4">
-  			<span>场景管理</span>
+  			<span class="forcereport">场景管理</span>
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>{{useName}}</span>
