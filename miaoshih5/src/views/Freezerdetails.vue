@@ -182,6 +182,7 @@ export default {
         that.reportList = data.data.data.report
         that.store_reportList = data.data.data.store_report
         that.viewUrl = data.data.data.report.image
+        document.title = data.data.data.scene.name+'-'+data.data.data.report.scene_report_number
         data.data.data.picture.forEach((val,index)=>{
           if(val.type == 1){
             // that.viewUrl = val.url

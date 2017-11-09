@@ -90,7 +90,7 @@
           </div>
         </div>
         <div class="title">
-          <span>识别产品（共{{reportList.sku_total_num}}，top{{reportList.sku_necessary_num_act}}，重点{{reportList.sku_important_num_act}}）</span>
+          <span>识别产品（共{{skuList.length-reportList.sku_lack_num}}）</span>
           <div class="img">
             <img :src="iconFlag?iconUrlA:iconUrl" @click="changeImg" alt="">
           </div>
