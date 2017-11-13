@@ -15,6 +15,7 @@ import Sellpoint from '@/views/Sellpoint'
 import Freezerdetails from '@/views/Freezerdetails'
 import Pointofsaledetails from '@/views/Pointofsaledetails'
 import Questionnairedetails from '@/views/Questionnairedetails'
+import Questionnairestatistics from '@/views/Questionnairestatistics'
 import Test from '@/views/Test'
 import axios from 'axios'
 Vue.use(Router)
@@ -150,6 +151,14 @@ export default new Router({
           path: 'questionnairedetails',
           name: 'questionnairedetails',
           component: Questionnairedetails,
+          beforeEnter:(to, from, next)=>{
+           axiosIfLongin(next)
+          }
+        },
+        {
+          path: 'questionnairestatistics',
+          name: 'questionnairestatistics',
+          component: Questionnairestatistics,
           beforeEnter:(to, from, next)=>{
            axiosIfLongin(next)
           }

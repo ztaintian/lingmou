@@ -33,8 +33,8 @@
   		</div>
   		<div class="top" v-else-if="type==5">
   			<span :class="[activeR?'bgActive':'','forcereport']" @click="Sku(1)">可识别sku</span>
-  			<span :class="[activeM?'bgActive':'','forcereport','tv']" @click="Sku(2)">必备sku</span>
-  			<span :class="[activeI?'bgActive':'','forcereport','tv']" @click="Sku(3)">重点sku</span>
+  			<span :class="[activeM?'bgActive':'','forcereport','tv']" @click="Sku(2)">必备／重点sku</span>
+  			<!-- <span :class="[activeI?'bgActive':'','forcereport','tv']" @click="Sku(3)">重点sku</span> -->
   			<div class="use">
   				<img :src="useimg" alt="">
   				<span>{{useName}}</span>
@@ -148,6 +148,10 @@ export default {
 	  		this.iconShow()
 	  		break;
 	  		case '/home/scenemanagement':
+	  		this.type = 4
+	  		this.iconShow()
+	  		break;
+	  		case '/home/Questionnairestatistics':
 	  		this.type = 4
 	  		this.iconShow()
 	  		break;
