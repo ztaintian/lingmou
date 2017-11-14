@@ -6,7 +6,7 @@
         <span class="pre" @click="nextList">下一个</span>
         <span class="pre"  @click="preList">上一个</span>
         <div class="tip">
-          {{storeList.group_number}}／{{storeList.line_number}}／2017-11-18／{{storeList.storename}}
+          {{storeList.group_number}}／{{storeList.line_number}}／{{reportList.created_at|dataFormYMD}}／{{storeList.storename}}
         </div>
       </div>
       <div class="center">

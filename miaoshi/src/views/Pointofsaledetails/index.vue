@@ -247,6 +247,7 @@ export default {
           }
         })
         that.initCanvas()
+        that.tempList = []
         for(var i=0;i<data.data.data.skuseries.length;i++){
           data.data.data.skuseries[i].arr1 = []
           data.data.data.skuseries[i].arr = []
@@ -288,7 +289,7 @@ export default {
         for(var k=0;k<that.skuseriesList.length;k++){
           that.skuseriesList[k].arr = that.skuseriesList[k].arr.unique()
         }
-
+        that.numList = []
         for(var o=0;o<that.skuseriesList.length;o++){
           for(var r=0;r<that.skuseriesList[o].arr.length;r++){
             var num = 0

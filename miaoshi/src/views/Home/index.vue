@@ -165,6 +165,11 @@ export default {
 	  		this.iconShow()
 	  		this.skuStatus(2)
 	  		break;
+	  		case '/home/addSKU':
+	  		this.type = 5
+	  		this.iconShow()
+	  		this.skuStatus(4)
+	  		break;
 	  		case '/home/importsku':
 	  		this.type = 5
 	  		this.iconShow()
@@ -214,11 +219,16 @@ export default {
 					this.activeM = true
 					this.activeI = false
 					this.$router.push('/home/mustsku')
-			}else{
+			}else if(num === 3){
 					this.activeR = false
 					this.activeM = false
 					this.activeI = true
 					this.$router.push('/home/importsku')
+			}else if(num === 4){
+					this.activeR = false
+					this.activeM = true
+					this.activeI = false
+					this.$router.push('/home/addSKU')
 			}
   	},
   	Sku(num){
