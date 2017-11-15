@@ -2,11 +2,11 @@
   <div class="Questionnairestatistics">
     <div class="content">
       <div class="top">
-        <span class="title">{{titleList.title}}</span>
+        <span class="title">{{choiceList.title}}</span>
         <div class="tip">
-          <span>有效期：2017年11月12日 12：20～2017年12月12日 12：20</span>
-          <span style="margin:auto  40px;">状态：进行中／已过期</span>
-          <span>完成人数：10人</span>
+          <span>有效期：{{choiceList.created_at|dataFormYMD}}～{{choiceList.endtime|dataFormYMD}}</span>
+          <span style="margin:auto  40px;">状态：<span v-if="(new Date()).getTime()< choiceList.endtime*1000" style="color:#3DB866;">进行中</span><span style="color:red;" v-if="(new Date()).getTime()>= choiceList.endtime*1000">已过期</span></span>
+          <span>完成人数：{{choiceList.finish_n}}人</span>
         </div>
       </div>
       <div class="tab">
@@ -14,41 +14,175 @@
         <span  @click="questionTab(2,$event)" :class="!questionTabFlag?'borderBottom':''">答卷列表</span>
       </div>
       <div class="questionTab" v-if="questionTabFlag">
-        <div class="title">
-          1、可口可乐新品在上海市徐汇区家乐福在国庆期间有哪些优惠促销活动？（单选题）
-        </div>
-        <div style="margin-top:12px;margin-bottom:30px;">
-          <div style="margin-top:8px;" v-for="v in box">
-            <div class="lineAll">
-              <div class="lineBottom"></div>
-              <div class="line bgColorBlur" ref="lineB"></div>
+        <div v-for="(v,index) in questionsList">
+          <div v-if="v.type==1">
+            <div class="title">
+              {{v.sort}}、{{v.content}}？（单选题）
             </div>
-            <span style="margin-left:10px;color:#3DB866;">
-              45.5%（999）
-            </span><span style="margin-left:20px;color:#707070;">可口可乐</span>
-          </div>
-        </div>
-        <div class="title">
-          2、可口可乐新品在上海市徐汇区家乐福在国庆期间有哪些优？（多选题）
-        </div>
-        <div style="margin-top:12px;margin-bottom:30px;">
-          <div style="margin-top:8px;" v-for="v in box">
-            <div class="lineAll">
-              <div class="lineBottom"></div>
-              <div class="line bgColorBlur" ref="lineB"></div>
+            <div style="margin-top:12px;margin-bottom:30px;">
+              <div style="margin-top:8px;" v-if="answersList[index].option1 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option1*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option1*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option1}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option2 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option2*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option2*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option2}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option3 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option3*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option3*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option3}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option4 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option4*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option4*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option4}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option5 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option5*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option5*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option5}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option6 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option6*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option6*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option6}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option7 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option7*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option7*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option7}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option8 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option8*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option8*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option8}}</span>
+              </div>
             </div>
-            <span style="margin-left:10px;color:#3DB866;">
-              45.5%（999）
-            </span><span style="margin-left:20px;color:#707070;">可口可乐</span>
           </div>
-        </div>
-        <div class="title">
-         3、可口可乐新品在上海市徐汇区家乐福在国庆期间有哪些优惠促销活动期间有哪些优惠促销活动？（填空题）
-        </div>
-        <div style="margin-top:16px;margin-bottom:30px;">
-          <div style="margin-top:8px;" v-for="v in box">
-            <div style="color: #707070;">
-              填写答案1、可口可乐新品在上海市徐汇区家乐福在国庆期间有促销果冻
+          <div v-if="v.type==2">
+            <div class="title">
+              {{v.sort}}、{{v.content}}？（多选题）
+            </div>
+            <div style="margin-top:12px;margin-bottom:30px;">
+          <div style="margin-top:8px;" v-if="answersList[index].option1 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option1*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option1*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option1}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option2 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option2*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option2*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option2}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option3 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option3*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option3*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option3}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option4 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option4*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option4*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option4}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option5 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option5*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option5*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option5}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option6 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option6*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option6*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option6}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option7 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option7*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option7*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option7}}</span>
+              </div>
+              <div style="margin-top:8px;" v-if="answersList[index].option8 != 0">
+                <div class="lineAll">
+                  <div class="lineBottom"></div>
+                  <div class="line bgColorBlur" :style="{ width: answersList[index].option8*100/choiceList.finish_n  + 'px' }" ref="lineB"></div>
+                </div>
+                <span style="margin-left:10px;color:#3DB866;">
+                  {{Number(answersList[index].option8*100/choiceList.finish_n).toFixed(1)}}%（{{choiceList.finish_n}}）
+                </span><span style="margin-left:20px;color:#707070;">{{v.option8}}</span>
+              </div>
+            </div>
+          </div>
+          <div v-if="v.type==3">
+            <div class="title">
+             {{v.sort}}、{{v.content}}？（填空题）
+            </div>
+            <div style="margin-top:16px;margin-bottom:30px;">
+              <div style="margin-top:8px;" v-for="(vv,indexcc) in answersList[index].answer">
+                <div style="color: #707070;">
+                  填写答案{{1+indexcc}}、{{vv.answer}}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -64,32 +198,35 @@
             <div class="W120 publicCss">线路</div>
             <div class="W220 publicCss">操作</div>
           </div>
-          <div  class="tablelist">
-            <div class="W100 publicCss"></div>
-            <div class="W140 publicCss"></div>
-            <div class="W200 publicCss"></div>
-            <div class="W200 publicCss">可口可乐</div>
-            <div class="W140 publicCss"></div>
-            <div class="W120 publicCss"></div>
-            <div class="W220 publicCss"></div>
+          <div  :class="[v.showBc?'tablelistBc':'','tablelist']" @mouseenter="enter(v)" @mouseleave="leave(v)" v-for="v in choiceListlist">
+            <div class="W100 publicCss">{{v.id}}</div>
+            <div class="W140 publicCss">{{v.questionnaier_number}}</div>
+            <div class="W200 publicCss">{{v.created_at|dataForm}}</div>
+            <div class="W200 publicCss">{{v.storename}}</div>
+            <div class="W140 publicCss">{{v.group_number}}</div>
+            <div class="W120 publicCss">{{v.line_number}}</div>
+            <div class="W220 publicCss"><span style="color:#2D78B3;cursor:pointer;" @click="See(v)">查看</span></div>
           </div>
         </div>
+        <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1" :nowPages.sync="nowNum"></Pages>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
+import Pages from '@/components/pages'
 export default {
   name: 'Questionnairestatistics',
+  components:{Pages},
   data () {
     return {
+      totleNums:0,
+      nowNum:'1',
       choiceList:[],
-      storeList:{},
-      titleList:{
-        title:'问卷名称问卷名称问卷名称'
-      },
+      choiceListlist:[],
+      questionsList:[],
+      answersList:[],
       questionTabFlag:true,
       box:[{},{},{}],
       q_id:'',
@@ -101,9 +238,40 @@ export default {
   mounted(){
     // this.q_id = this.$router.currentRoute.query.q_id
     // this.store_id = this.$router.currentRoute.query.store_id
-    // this.getAjaxList()
+    this.getAjaxList()
+    this.getAjaxListlist()
+  },
+  filters:{
+    dataFormYMD(date){
+      if(date == null || date == '' || date == 0){
+        return ''
+      }else{
+        var d = new Date(Number(date)*1000);
+        var year = d.getFullYear();
+        var month = d.getMonth() + 1<10?'0' + (d.getMonth() + 1) :d.getMonth() + 1;
+        var day = d.getDate() <10 ? '0' + d.getDate() : '' + d.getDate();
+        var hour = d.getHours() <10 ? '0'+d.getHours(): '' + d.getHours();
+        var minutes = d.getMinutes()<10?'0' + d.getMinutes() : '' + d.getMinutes();
+        var seconds = d.getSeconds()<10?'0' + d.getSeconds() : '' + d.getSeconds();;
+        return year+ '年' + month + '月' + day+'日 ' + hour + ':' + minutes
+      }
+    }
+  },
+  watch:{
+    nowNum(){
+      this.getAjaxListlist()
+    }
   },
   methods:{
+    See(v){
+      this.$router.push(`/home/questionnairedetailscopy?q_id=${v.qid}&store_id=${v.store_id}`)
+    },
+    enter(v){
+      v.showBc = true
+    },
+    leave(v){
+      v.showBc = false
+    },
     questionTab(v,e){
       if(v===1){
         this.questionTabFlag = true
@@ -113,12 +281,26 @@ export default {
     },
     getAjaxList(){
       var that  = this
-      this.Axios.post(`${this.api}/question/content`,{q_id:this.q_id ,store_id:this.store_id})
+      var id = this.$router.currentRoute.query.id
+      this.Axios.post(`${this.api}/question/naire-statis`,{id:id})
       .then(function (data) {
-        console.log(data.data)
         that.choiceList = data.data.data
-        that.storeList = data.data.store
-        that.titleList = data.data.naire
+        that.questionsList = data.data.data.questions
+        that.answersList = data.data.data.answer
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    getAjaxListlist(){
+      var that  = this
+      var id = this.$router.currentRoute.query.id
+      this.Axios.get(`${this.api}/question/answer-list?page=${this.nowNum}&per-page=20&id=${id}`)
+      .then(function (data) {
+        data.data.data.forEach((val,index)=>{
+          val.showBc = false
+        })
+        that.choiceListlist = data.data.data
       })
       .catch(function (error) {
         console.log(error);
@@ -268,6 +450,9 @@ export default {
         height:36px;
         vertical-align: middle;
       }
+    }
+    .tablelistBc{
+      background: #F5F5F5;
     }
       }
     }

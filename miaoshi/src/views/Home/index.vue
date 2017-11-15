@@ -155,6 +155,10 @@ export default {
 	  		this.type = 4
 	  		this.iconShow()
 	  		break;
+	  		case '/home/questionnairedetailscopy':
+	  		this.type = 4
+	  		this.iconShow()
+	  		break;
 	  		case '/home/distinguishsku':
 	  		this.type = 5
 	  		this.iconShow()

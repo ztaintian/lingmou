@@ -3,20 +3,20 @@
     <div class="table">
       <div class="Theaded">
         <div class="W200 publicCss">编号</div>
-        <div class="W120 publicCss">图片</div>
-        <div class="W360 publicCss">sku名</div>
-        <div class="W200 publicCss">父品牌</div>
-        <div class="W120 publicCss">必备</div>
-        <div class="W120 publicCss">重点</div>
+        <div class="W240 publicCss">图片</div>
+        <div class="W380 publicCss">sku名</div>
+        <div class="W300 publicCss">父品牌</div>
+<!--         <div class="W120 publicCss">必备</div>
+        <div class="W120 publicCss">重点</div> -->
       </div>
       <div v-for="(v,index) in tableList" class="tablelist">
         <div class="W200 publicCss">{{v.id}}</div>
-        <div class="W120 publicCss"><img  class="img" :src="v.picture" alt=""></div>
-        <div class="W360 publicCss">{{v.sku_name}}</div>
-        <div class="W200 publicCss">可口可乐</div>
-        <div class="W120 publicCss"><img v-if="v.is_b == 1" class="imgHook" :src="hookUrl" alt=""></div>
+        <div class="W240 publicCss"><img  class="img" :src="v.picture" alt=""></div>
+        <div class="W380 publicCss">{{v.sku_name}}</div>
+        <div class="W300 publicCss">可口可乐</div>
+<!--         <div class="W120 publicCss"><img v-if="v.is_b == 1" class="imgHook" :src="hookUrl" alt=""></div>
         <div class="W120 publicCss"><img  v-if="v.is_z == 1" class="imgHook" :src="hookUrl" alt=""></div>
-      </div>
+ -->      </div>
     </div>
     <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1" :bntShowPage.sync="bntShow"  :nowPages.sync="nowNum"></Pages>
   </div>

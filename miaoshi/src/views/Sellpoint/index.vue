@@ -7,31 +7,36 @@
     <div class="table">
       <div class="Theaded">
         <div class="W100 publicCss">营业所编号</div>
-        <div class="W100 publicCss">拜访线路</div>
-        <div class="W100 publicCss">售点编号</div>
-        <div class="W222 publicCss">名称</div>
+        <div class="W80 publicCss">拜访线路</div>
+        <div class="W80 publicCss">售点类型</div>
+        <div class="W80 publicCss">售点编号</div>
+        <div class="W150 publicCss">名称</div>
         <div class="W178 publicCss">地址</div>
-        <div class="W100 publicCss">联系人</div>
+        <div class="W80 publicCss">联系人</div>
         <div class="W120 publicCss">手机号</div>
-        <div class="W100 publicCss">拜访频率</div>
-        <div class="W100 publicCss">星期几</div>
+        <div class="W80 publicCss">稽查顺序号</div>
+        <div class="W80 publicCss">拜访频率</div>
+        <div class="W80 publicCss">星期几</div>
       </div>
       <div v-for="(v,index) in tableList"  @mouseenter="enter(v,index)" @mouseleave="leave(v,index)" :class="[v.showBc?'tablelistBc':'','tablelist']" @click="pointofsaledetails(v)">
         <div class="W100 publicCss">{{v.group_number}}</div>
-        <div class="W100 publicCss">{{v.line_number}}</div>
-        <div class="W100 publicCss">{{v.store_number}}</div>
-        <div class="W222 publicCss">{{v.storename}}</div>
+        <div class="W80 publicCss">{{v.line_number}}</div>
+        <div class="W80 publicCss">{{v.typename}}</div>
+        <div class="W80 publicCss">{{v.store_number}}</div>
+        <div class="W150 publicCss">{{v.storename}}</div>
         <div class="W178 publicCss" style="width: 178px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;">{{v.address}}</div>
-        <div class="W100 publicCss">{{v.username}}</div>
+        <div class="W80 publicCss">{{v.username}}</div>
         <div class="W120 publicCss ">{{v.mobile}}</div>
-        <div class="W100 publicCss ">{{v.check_f}}</div>
-        <div class="W100 publicCss ">{{v.week}}</div>
+        <div class="W80 publicCss ">{{v.top}}</div>
+        <div class="W80 publicCss ">{{v.check_f}}</div>
+        <div class="W80 publicCss ">{{v.week}}</div>
       </div>
     </div>
     <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1"  :nowPages.sync="nowNum"></Pages>
     <div class="messagebox" v-if="boxShow" @click="boxShow=false">
     </div>
     <div class="messagecont" v-if="boxShow">
+      <img @click="boxShow=false" :src="cleanAA" style="position:absolute;top:-6px;right:-6px;z-index: 9999;" alt="">
       <iframe id="hiddenIframe" style="border-width:0;width:0;height:0;" name="posthere"></iframe>
       <form target="posthere" :action="formUrl" method="post" enctype="multipart/form-data">
         <div class="addGY">
@@ -60,12 +65,14 @@
 import hookicon from '@/assets/ic_yes@1x.png'
 import exporticon from '@/assets/ic_import@1x.png'
 import Pages from '@/components/pages'
+import cleanimg from '@/assets/ic_cancel@122x.png'
 
 export default {
   name: 'Sellpoint',
   components:{Pages},
   data () {
     return {
+      cleanAA:cleanimg,
       formUrl:'',
       totleNums:0,
       nowNum:'1',
@@ -215,7 +222,6 @@ export default {
       width:100%;
     }
     .messagecont{
-      overflow:hidden;
       position:fixed;
       top:50%;
       z-index: 5555;

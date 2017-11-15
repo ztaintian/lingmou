@@ -135,7 +135,7 @@ export default {
       });
     },
     questionnairedetails(v){
-      this.$router.push('/home/Questionnairestatistics')
+      this.$router.push(`/home/Questionnairestatistics?id=${v.id}`)
     },
     newQuestion(){
       this.$router.push('/home/questionnaire')

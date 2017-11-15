@@ -1,6 +1,6 @@
 <template>
   <div class="mustsku">
-    <div style="overflow:hidden;">
+    <div style="overflow:hidden;position:fixed;background:#fff;z-index:888;width:100%;">
       <div style="float: left;margin-top: 30px; margin-left:30px; ">
         渠道：
       </div>
@@ -11,7 +11,7 @@
         <img :src="lastLast?radioaimgUrl:radioimgUrl" alt="" @click="choiceData(4)"><span class="radioText">烟酒行</span>
       </div>
     </div>
-    <div style="font-size: 18px;color: #000000;margin-left:28px;margin-top: 30px;">
+    <div style="font-size: 18px;color: #000000;margin-left:28px;margin-top: 90px;">
       <span>必备SKU</span><span style="float: right;margin-right:22px;height:30px;line-height: 30px;text-align: center;display:inline-block;background:#4285BA;width:100px;border-radius: 4px;color:#fff;font-size:14px;" >添加</span>
     </div>
     <div class="table">
@@ -69,8 +69,8 @@
           <div class="W360 publicCss title">可口可乐罐装300ml、可口可乐罐装300ml可口可乐罐装300ml、装300ml</div>
           <div class="W300" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">可口可乐罐装300ml、可口可乐罐装300ml</div>
           <div class="W140" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">2019-12-12 23:45</div>
-          <div class="W100 publicCss"><span style="display:inline-block;width:50px;text-align: center;color:#2D78B3;cursor: pointer;">修改</span><span style="width:50px;text-align: center;display:inline-block;color:#D61E2A ;cursor: pointer;" @click="del(v)">删除</span>
-           <div v-if="v.openShow" class="messageBox">
+          <div class="W100 publicCss"><span @click="modify(v)" style="display:inline-block;width:50px;text-align: center;color:#2D78B3;cursor: pointer;">修改</span><span style="width:50px;text-align: center;display:inline-block;color:#D61E2A ;cursor: pointer;" @click="del(v)">删除</span>
+            <div v-if="v.openShow" class="messageBox">
               <img class="img1" :src="sanjiaoUrl" alt="">
               <div class="count">
                 确认删除”{{v.username}}”？
@@ -86,10 +86,22 @@
               </div>
             </div>
           </div>
+          <div class="messagebox" v-if="v.editBoxShow"></div>
+          <div class="messagecont" v-if="v.editBoxShow">
+            <div class="addGY">
+              修改提示
+            </div>
+            <div class="use">
+              修改该必备/重点SKU后，之后的售点报告将立即按新的标准执行，在此之前已生成的售点报告仍沿用之前的标准不受影响。
+            </div>
+            <div style="margin-top:30px;">
+              <span class="confim ml150" @click="confimAdd(v)">确认</span><span class="confim ml20" @click="canverAdd(v)">取消</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1"  :nowPages.sync="nowNum"></Pages>
+    <!-- <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1"  :nowPages.sync="nowNum"></Pages> -->
   </div>
 </template>
 
@@ -126,6 +138,16 @@ export default {
     }
   },
   methods:{
+    confimAdd(v){
+      console.log(1)
+    },
+    canverAdd(v){
+      v.editBoxShow = false
+    },
+    modify(v){
+      console.log(v)
+      v.editBoxShow = true
+    },
     addSKU(num){
       this.$router.push('/home/addSKU')
       console.log(num)
@@ -137,6 +159,7 @@ export default {
       for(var i=0;i<this.tableList.length;i++){
         this.tableList[i].tipShow = false
         this.tableList[i].openShow = false
+        this.tableList[i].editBoxShow = false
       }
     },
     canlve(v){
@@ -178,6 +201,7 @@ export default {
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
           val.openShow = false
+          val.editBoxShow = false
         })
         that.tableList = data.data.data
         that.totleNums = data.data.pagelist.count
@@ -199,6 +223,78 @@ export default {
     background: #FFFFFF;
     border-radius: 4px;
     font-size: 14px;
+    .messagebox{
+      position: fixed;
+      top:0;
+      left:0;
+      height:100%;
+      z-index: 3333;
+      background: rgba(0,0,0,0.4);
+      width:100%;
+    }
+    .messagecont{
+        overflow:hidden;
+        position:fixed;
+        top:50%;
+        margin-top:-127px;
+        left:50%;
+        z-index: 5555;
+        margin-left: -260px;
+        .addGY{
+          font-family: MicrosoftYaHei;
+          margin:30px 0 25px 0;
+          font-size: 20px;
+          color: #000000;
+          text-align: center;
+          letter-spacing: 0;
+          font-weight:bold;
+        }
+        .addPublic{
+          background: #C1C7CC;
+          border-radius: 4px;
+          width:100px;
+          height:30px;
+          margin:0 auto;
+          margin-top:20px;
+          text-align: center;
+          line-height:30px;
+          color:#FFFFFF;
+        }
+        .bntlast{
+          background:#324656;
+          cursor:pointer;
+        }
+        .use{
+          width:414px;
+          margin:0 auto;
+          line-height:25px;
+          font-family: PingFangSC-Regular;
+          font-size: 14px;
+          color: #333333;
+          letter-spacing: 0;
+        }
+        .confim{
+          text-align: center;
+          line-height:30px;
+          font-family: PingFangSC-Regular;
+          color: #FFFFFF;
+          background: #2D78B3;
+          border-radius: 4px;
+          display:inline-block;
+          width:100px;
+          height:30px;
+        }
+        .ml150{
+          margin-left:150px;
+        }
+        .ml20{
+          margin-left:20px;
+        }
+        background:#fff;
+        border-radius: 4px;
+        height:211px;
+        width:520px;
+    }
     .dataImg{
       display: inline-block;
       margin-left: 10px;

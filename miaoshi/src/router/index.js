@@ -17,6 +17,7 @@ import Pointofsaledetails from '@/views/Pointofsaledetails'
 import Questionnairedetails from '@/views/Questionnairedetails'
 import Questionnairestatistics from '@/views/Questionnairestatistics'
 import AddSKU from '@/views/AddSKU'
+import Questionnairedetailscopy from '@/views/Questionnairedetailscopy'
 import Test from '@/views/Test'
 import axios from 'axios'
 Vue.use(Router)
@@ -160,6 +161,14 @@ export default new Router({
           path: 'questionnairestatistics',
           name: 'questionnairestatistics',
           component: Questionnairestatistics,
+          beforeEnter:(to, from, next)=>{
+           axiosIfLongin(next)
+          }
+        },
+        {
+          path: 'questionnairedetailscopy',
+          name: 'questionnairedetailscopy',
+          component: Questionnairedetailscopy,
           beforeEnter:(to, from, next)=>{
            axiosIfLongin(next)
           }
