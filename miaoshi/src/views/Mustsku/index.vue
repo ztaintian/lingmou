@@ -14,7 +14,7 @@
       </div>
     </div>
     <div style="font-size: 18px;color: #000000;margin-left:28px;margin-top: 90px;">
-      <span>必备SKU</span><span style="float: right;margin-right:22px;height:30px;line-height: 30px;text-align: center;display:inline-block;background:#4285BA;width:100px;border-radius: 4px;color:#fff;font-size:14px;" >添加</span>
+      <span>必备SKU</span><span style="float: right;margin-right:22px;height:30px;line-height: 30px;text-align: center;display:inline-block;background:#4285BA;width:100px;border-radius: 4px;color:#fff;font-size:14px;margin-bottom:10px;cursor:pointer;" @click="addSKU(1)">添加</span>
     </div>
     <div class="table">
       <div class="Theaded">
@@ -66,7 +66,7 @@
       </div>
     </div>
     <div style="font-size: 18px;color: #000000;margin-left:28px;margin-top: 30px;">
-      <span>重点SKU类</span><span style="float: right;margin-right:22px;height:30px;line-height: 30px;text-align: center;display:inline-block;background:#4285BA;width:100px;border-radius: 4px;color:#fff;font-size:14px; cursor:pointer;" @click="addSKU(1)">添加</span>
+      <span>重点SKU类</span><span style="float: right;margin-right:22px;height:30px;line-height: 30px;text-align: center;display:inline-block;background:#4285BA;width:100px;border-radius: 4px;color:#fff;font-size:14px; cursor:pointer; margin-bottom:10px;cursor:pointer;" @click="addSKU(2)">添加</span>
     </div>
     <div class="table">
       <div class="Theaded">
@@ -180,7 +180,6 @@ export default {
       v.showBc = false
     },
     confimAdd(v){
-     
     },
     canverAdd(v){
       v.editBoxShow = false
@@ -387,7 +386,6 @@ export default {
       margin-bottom: 30px;
       border-bottom: 0;
       box-sizing:border-box;
-      
       min-height:40px;
       .Theaded{
         overflow:hidden;

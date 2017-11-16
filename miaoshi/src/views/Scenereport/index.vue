@@ -61,6 +61,9 @@
         <span class="search" @click="Brush">筛选</span>
       </div>
     </div>
+    <div style="height:44px;line-height:44px;text-align: right;margin-right:28px;cursor:pointer;" @click="exportFile">
+      <img :src="exportUrl" alt="" style="margin-top:-2px;vertical-align:middle;"><span style="display:inline-block;color: #2D78B3;">导出Excel</span>
+    </div>
     <div class="table" v-if="questionFalg">
       <div class="Theaded">
         <div class="W200 publicCss">时间</div>
@@ -105,12 +108,13 @@
 import iconradio from '@/assets/ic_not selected@1x.png'
 import iconradioActive from '@/assets/ic_selected@1x.png'
 import Pages from '@/components/pages'
-
+import exporticon from '@/assets/ic_import@1x.png'
 export default {
   name: 'Focusreport',
   components:{Pages},
   data () {
     return {
+      exportUrl:exporticon,
       questionFalg:true,
       SalesOffice:'',
       Memoname:'',
@@ -163,6 +167,9 @@ export default {
     }
   },
   methods:{
+    exportFile(){
+
+    },
     getAjaxList(url){
       var that  = this
       this.Axios.get(url)
@@ -276,7 +283,7 @@ export default {
       width:1090px;
       background: #F5F5F5;
       border-radius: 4px;
-      margin:24px 0 20px 24px;
+      margin:24px 0 0 24px;
       padding:20px 0 4px 30px;
       .sameBlock{
         margin-bottom: 16px;
