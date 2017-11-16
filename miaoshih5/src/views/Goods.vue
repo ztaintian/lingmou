@@ -28,7 +28,7 @@
       </div>
       <div class="allDetail">
         <div class="detail">
-          <span class="span1">纯净度:</span>
+          <span class="span1">占有率:</span>
           <span class="span2">{{Number(reportList.purity).toFixed(1)}}%</span>
           <img :src="ic_upUrl" alt="">
           <span class="span3"><span v-if="reportList.purity_change>0">+</span>{{Number(reportList.purity_change).toFixed(1)}}%</span>
@@ -38,7 +38,7 @@
           <div class="line" ref="lineG"></div>
         </div>
       </div>
-      <div class="allDetail">
+     <!--  <div class="allDetail">
         <div class="detail">
           <span class="span1">饱和度:</span>
           <span class="span2">{{Number(reportList.saturation).toFixed(1)}}%</span>
@@ -56,13 +56,13 @@
           <span class="span2">{{Number(reportList.empty_rate).toFixed(1)}}%</span>
           <span class="span4">空缺数:</span><span class="span5">{{reportList.sku_lack_num}}</span>
           <img :src="ic_upUrl" alt="">
-          <span class="span3"><span v-if="reportList.empty_rate_change>0">+</span>{{Number(reportList.empty_rate_change).toFixed(1)}}%</span>
+          <span class="span3"><span v-if="reportList.saturation_change>0">+</span>{{Number(reportList.empty_rate_change).toFixed(1)}}%</span>
         </div>
         <div class="lineAll">
           <div class="lineBottom"></div>
           <div class="line bgColorRed" ref="lineR" ></div>
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="Skunum">
       <div class="title">
@@ -207,8 +207,6 @@ export default {
           }
         })
         that.styleWidth(that.$refs.lineG,that.reportList.purity/100)
-        that.styleWidth(that.$refs.lineB,that.reportList.saturation/100)
-        that.styleWidth(that.$refs.lineR,that.reportList.empty_rate/100)
         that.initCanvas()
         for(var i=0;i<data.data.data.skuseries.length;i++){
           data.data.data.skuseries[i].arr1 = []

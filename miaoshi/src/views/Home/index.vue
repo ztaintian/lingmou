@@ -169,7 +169,7 @@ export default {
 	  		this.iconShow()
 	  		this.skuStatus(2)
 	  		break;
-	  		case '/home/addSKU':
+	  		case '/home/aaasku':
 	  		this.type = 5
 	  		this.iconShow()
 	  		this.skuStatus(4)
@@ -232,7 +232,6 @@ export default {
 					this.activeR = false
 					this.activeM = true
 					this.activeI = false
-					this.$router.push('/home/addSKU')
 			}
   	},
   	Sku(num){
@@ -295,7 +294,7 @@ export default {
 		background:#F0F0F0;
 	}
 	.left{
-		z-index: 999;
+		z-index: 9999999;
 		float:left;
 		height:100%;
 		position: fixed;

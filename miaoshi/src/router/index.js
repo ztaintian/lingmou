@@ -16,7 +16,7 @@ import Freezerdetails from '@/views/Freezerdetails'
 import Pointofsaledetails from '@/views/Pointofsaledetails'
 import Questionnairedetails from '@/views/Questionnairedetails'
 import Questionnairestatistics from '@/views/Questionnairestatistics'
-import AddSKU from '@/views/AddSKU'
+import Aaasku from '@/views/Aaasku'
 import Questionnairedetailscopy from '@/views/Questionnairedetailscopy'
 import Test from '@/views/Test'
 import axios from 'axios'
@@ -174,9 +174,9 @@ export default new Router({
           }
         },
         {
-          path: 'addSKU',
-          name: 'addSKU',
-          component: AddSKU,
+          path: 'aaasku',
+          name: 'aaasku',
+          component: Aaasku,
           beforeEnter:(to, from, next)=>{
            axiosIfLongin(next)
           }

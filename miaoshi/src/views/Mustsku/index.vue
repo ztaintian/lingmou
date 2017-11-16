@@ -189,8 +189,7 @@ export default {
       v.editBoxShow = true
     },
     addSKU(num){
-      this.$router.push('/home/addSKU')
-      console.log(num)
+      this.$router.push(`/home/aaasku?type=${num}`)
     },
     confimOpen(v){
       var that  = this

@@ -12,7 +12,7 @@
       <div class="lineLine"></div>
       <div class="selectContent">
         <div style="padding:5px 0 5px 12px;" :class="[v.colrBack?'backMouse':'']" @mouseenter="enter(v)" @mouseleave="leave(v)" @click="selectConfimShow(v)" v-for="v in selectListShow">
-          <span  style="vertical-align: middle;font-size: 14px;color: #333333;">{{v.name}}</span><img :src="v.show?yesIMG:''"  style="vertical-align:middle;cursor:pointer;float: right;margin-right:8px;" alt="">
+          <span  style="vertical-align: middle;font-size: 14px;color: #333333;">{{v.g_name}}</span><img :src="v.show?yesIMG:''"  style="vertical-align:middle;cursor:pointer;float: right;margin-right:8px;" alt="">
         </div>
       </div>
     </div>
@@ -35,12 +35,12 @@
       </div>
       <div style="margin-bottom: 20px;">
         <span style="width:70px;text-align: right;display: inline-block;height:42px;line-height: 42px;float: left;font-weight: bold;">适用渠道：</span>
-        <div ref="seacrhTilt" class="nameipt1 minHEight" style="display: inline-block;" type="" name="">  <span v-for="v in tagList" class="tag" v-if="v.show">{{v.name}}<img :src="cleanIMG" alt="" class="img" @click="imgClenn(v)"></span><img class="img1" :src="selectIMG" @click="showSearch()" alt="">
+        <div ref="seacrhTilt" class="nameipt1 minHEight" style="display: inline-block;" type="" name="">  <span v-for="v in tagList" class="tag" v-if="v.show">{{v.typename}}<img :src="cleanIMG" alt="" class="img" @click="imgClenn(v)"></span><img class="img1" :src="selectIMG" @click="showSearch()" alt="">
       </div>
       <div style="position:relative;">
         <div class="modelSeach"  v-if="seachShow">
-          <img :src="seachIMG" class="seachIMg" alt=""><input type="" placeholder="搜索已有可识别SKU" class="inputSeach" name="">
-          <div class="lineLine"></div>
+          <!-- <img :src="seachIMG" class="seachIMg" alt=""><input type="" placeholder="搜索已有可识别SKU" class="inputSeach" name=""> -->
+          <!-- <div class="lineLine"></div> -->
           <div class="selectContent">
             <div style="margin-top:11px;margin-left:12px;" v-for="v in selectList">
               <img :src="v.show?onIMG:offIMG" @click="selectConfim(v)" style="vertical-align:middle;cursor:pointer;" alt=""><span style="vertical-align: middle;font-size: 14px;color: #333333;">{{v.typename}}</span>
@@ -50,15 +50,15 @@
       </div>
       </div>
       <div>
-        <span style="width:72px;text-align: right;display: inline-block;height:42px;line-height: 42px;float: left;font-weight: bold;">包含SKU：</span><div class="nameipt1 minHEight" style="display: inline-block;" type="" name=""><span v-for="v in skuListTag" class="tag" v-if="v.show">{{v.name}}<img :src="cleanIMG" alt="" class="img" @click="skuimgClenn(v)"></span><img class="img1" :src="selectIMG" @click="showSearch1" alt=""></div>
+        <span style="width:72px;text-align: right;display: inline-block;height:42px;line-height: 42px;float: left;font-weight: bold;">包含SKU：</span><div class="nameipt1 minHEight" style="display: inline-block;" type="" name=""><span v-for="v in skuListTag" class="tag" v-if="v.show">{{v.sku_name}}<img :src="cleanIMG" alt="" class="img" @click="skuimgClenn(v)"></span><img class="img1" :src="selectIMG" @click="showSearch1" alt=""></div>
       </div>
       <div style="position:relative;">
         <div class="modelSeach"  v-if="seachShow1">
-          <img :src="seachIMG" class="seachIMg" alt=""><input type="" placeholder="搜索已有可识别SKU" class="inputSeach" name="">
+          <img :src="seachIMG" class="seachIMg" @click="selectConfim(v)" alt=""><input type="" placeholder="搜索已有可识别SKU" v-model="textSeach" class="inputSeach" name="">
           <div class="lineLine"></div>
           <div class="selectContent">
             <div style="margin-top:11px;margin-left:12px;" v-for="v in skuList">
-              <img :src="v.show?onIMG:offIMG" @click="selectConfim(v)" style="vertical-align:middle;cursor:pointer;" alt=""><span style="vertical-align: middle;font-size: 14px;color: #333333;">{{v.name}}</span>
+              <img :src="v.show?onIMG:offIMG" @click="SkuselectConfim(v)" style="vertical-align:middle;cursor:pointer;" alt=""><span style="vertical-align: middle;font-size: 14px;color: #333333;">{{v.sku_name}}</span>
             </div>
           </div>
         </div>
@@ -78,7 +78,7 @@
        新增该必备/重点SKU后，之后的售点报告将立即按新的标准执行，在此之前已生成的售点报告仍沿用之前的标准不受影响。
       </div>
       <div style="margin-top:30px;">
-        <span class="confim ml150" @click="confimAdd">确认</span><span class="confim ml20" @click="canverAdd">取消</span>
+        <span class="confim ml150" @click="confimAdd">确认</span><span class="confim ml20" @click="canverAdd" style="background:#fff;color: #333333;background: #F5F5F5;border: 1px solid #E0E0E0;border-radius: 4px;">取消</span>
       </div>
 
     </div>
@@ -96,10 +96,11 @@ import hookicon6 from '@/assets/ic_cancel@1x.png'
 import hookicon7 from '@/assets/ic_yes@11x.png'
 
 export default {
-  name: 'Addsku',
+  name: 'Aaasku',
   data () {
     return {
       g_name:'',
+      textSeach:'',
       copyBoxShow:false,
       saveBoxShow:false,
       editBoxShow:false,
@@ -117,28 +118,43 @@ export default {
       skuList:[],
       skuListTag:[],
       selectList:[],
-      selectListShow:[{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false},{show:false,name:'可口可乐罐装300ml1',colrBack:false}],
+      selectListShow:[],
       seachShow:false,
       seachShow1:false
     }
   },
   mounted(){
     this.getAjaxListstoretype()
+    this.getAjaxListskus()
+
   },
   watch:{
+    textSeach(val){
+      this.getAjaxListskus()
+    }
   },
   methods:{
-    getAjaxList(){
+    getAjaxListSave(){
       var that  = this
       var type = this.$router.currentRoute.query.type
-      this.Axios.post(`${this.api}/scene-report/report`,{g_name:this.g_name,type:type})
+      this.Axios.post(`${this.api}/sku/save`,{g_name:this.g_name,type:type,storeType:this.tagList,skus:this.skuListTag})
+      .then(function (data) {
+        that.saveBoxShow = false
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    getAjaxListGrounp(){
+      var that  = this
+      var type = this.$router.currentRoute.query.type
+      this.Axios.post(`${this.api}/sku/group-sku`,{type:type})
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
-          val.showBc = false
+          val.show = false
+          val.colrBack = false
         })
-        that.tableList = data.data.data
-        that.totleNums = data.data.pagelist.count
-        that.nowNum = data.data.pagelist.page
+        that.selectListShow = data.data.data
       })
       .catch(function (error) {
         console.log(error);
@@ -158,21 +174,27 @@ export default {
         console.log(error);
       });
     },
-    // getAjaxListstoretype(){
-    //   var that  = this
-    //   var type = this.$router.currentRoute.query.type
-    //   this.Axios.post(`${this.api}/sku/store-type`)
-    //   .then(function (data) {
-    //     console.log(data)
-    //     data.data.data.forEach((val,index)=>{
-    //       val.show = false
-    //     })
-    //     that.selectList = data.data.data
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
-    // },
+    getAjaxListskus(){
+      var that  = this
+      var type = this.$router.currentRoute.query.type
+      this.Axios.post(`${this.api}/sku/skus`,{sku_name:that.textSeach})
+      .then(function (data) {
+        data.data.data.forEach((val,index)=>{
+          val.show = false
+        })
+        that.skuListTag.forEach((val,index)=>{
+          for(var i=0;i<data.data.data.length;i++){
+            if(val.id == data.data.data[i].id){
+              data.data.data[i].show = true
+            }
+          }
+        })
+        that.skuList = data.data.data
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
     enter(v){
       v.colrBack=true
     },
@@ -180,7 +202,7 @@ export default {
       v.colrBack=false
     },
     confimAdd(){
-
+      this.getAjaxListSave()
     },
     canverAdd(){
       this.saveBoxShow = false
@@ -192,21 +214,57 @@ export default {
       this.editBoxShow = false
     },
     quickCopy(){
+      this.getAjaxListGrounp()
       this.copyBoxShow = true
     },
     quickCopyIMg(){
       this.editBoxShow = true
     },
     selectConfimShow(v){
+      var that = this
+      this.selectListShow.forEach((val,index)=>{
+        val.show =false
+      })
       v.show = !v.show
+      this.Axios.post(`${this.api}/sku/find-one`,{id:v.id})
+      .then(function (data) {
+        that.skuListTag = []
+        that.tagList =[]
+        that.copyBoxShow = false
+        that.g_name = data.data.data.g_name
+        data.data.data.skus.forEach((val,index)=>{
+          val.show = true
+        })
+        that.skuListTag = data.data.data.skus
+        data.data.data.storeType.forEach((val,index)=>{
+          val.show = true
+        })
+        that.tagList = data.data.data.storeType
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    SkuselectConfim(v){
+      v.show = !v.show
+      if(v.show){
+        this.skuListTag.push({sku_name:v.sku_name,show:true,id:v.id})
+      }else{
+        for(var i=0;i<this.skuListTag.length;i++){
+          if(v.sku_name == this.skuListTag[i].sku_name ){
+            this.skuListTag[i].show = false
+          }
+
+        }
+      }
     },
     selectConfim(v){
       v.show = !v.show
       if(v.show){
-        this.tagList.push({name:v.typename,show:true,id:v.id})
+        this.tagList.push({typename:v.typename,show:true,id:v.id})
       }else{
         for(var i=0;i<this.tagList.length;i++){
-          if(v.name == this.tagList[i].name ){
+          if(v.typename == this.tagList[i].typename ){
             this.tagList[i].show = false
           }
 
@@ -226,6 +284,14 @@ export default {
     imgClenn(v){
       v.show = false
       this.selectList.forEach((val,index)=>{
+        if(v.id == val.id){
+          val.show = false
+        }
+      })
+    },
+    skuimgClenn(v){
+      v.show = false
+      this.skuList.forEach((val,index)=>{
         if(v.id == val.id){
           val.show = false
         }
