@@ -6,9 +6,11 @@
       </div>
       <div class="dataImg" style="float: left;margin-top: 27px;">
         <img  :src="yestoday?radioaimgUrl:radioimgUrl" alt="" @click="choiceData(1)"><span class="radioText">全部</span>
-        <img :src="lastSeven?radioaimgUrl:radioimgUrl" alt="" @click="choiceData(2)"><span class="radioText">大型商超</span>
-        <img :src="lastMounth?radioaimgUrl:radioimgUrl" alt="" @click="choiceData(3)"><span class="radioText">便利店</span>
-        <img :src="lastLast?radioaimgUrl:radioimgUrl" alt="" @click="choiceData(4)"><span class="radioText">烟酒行</span>
+        <div v-for="v in topList" style="display:inline-block;">
+          <img :src="v.lastSeven?radioaimgUrl:radioimgUrl" alt="" @click="choiceData(v)"><span class="radioText">{{v.typename}}</span>
+        </div>
+       <!--  <img :src="lastMounth?radioaimgUrl:radioimgUrl" alt="" @click="choiceData(3)"><span class="radioText">便利店</span>
+        <img :src="lastLast?radioaimgUrl:radioimgUrl" alt="" @click="choiceData(4)"><span class="radioText">烟酒行</span> -->
       </div>
     </div>
     <div style="font-size: 18px;color: #000000;margin-left:28px;margin-top: 90px;">
@@ -24,17 +26,17 @@
         <div class="W100 publicCss">操作</div>
       </div>
       <div class="imgMain" style="height:354px;overflow-y:scroll;overflow-x: hidden;border-bottom:1px solid #eee;">
-        <div v-for="(v,index) in tableList" class="tablelist">
+        <div v-for="(v,index) in tableList" @mouseenter="enter(v)" @mouseleave="leave(v)" :class="[v.showBc?'tablelistBc':'','tablelist']" >
           <div class="W100" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">{{v.id}}</div>
-          <div class="W120" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">CAN可乐</div>
-          <div class="W360 publicCss title">可口可乐罐装300ml、可口可乐罐装300ml可口可乐罐装300ml、装300ml</div>
-          <div class="W300" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">可口可乐罐装300ml、可口可乐罐装300ml</div>
-          <div class="W140" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">2019-12-12 23:45</div>
-          <div class="W100 publicCss"><span style="display:inline-block;width:50px;text-align: center;color:#2D78B3;cursor: pointer;">修改</span><span style="width:50px;text-align: center;display:inline-block;color:#D61E2A ;cursor: pointer;" @click="del(v)">删除</span>
-           <div v-if="v.openShow" class="messageBox">
+          <div class="W120" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">{{v.g_name}}</div>
+          <div class="W360 publicCss title"><span v-for="(vc,indexc) in v.storeType">{{vc.typename}}<span v-if="(indexc+1) !=v.storeType.length">、</span></span></div>
+          <div class="W300" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;"><span v-for="(vcc,indexccc) in v.skus">{{vcc.sku_name}}<span v-if="(indexccc+1) !=v.skus.length">、</span></span></div>
+          <div class="W140" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">{{v.created_at|dataFormYMD}}</div>
+          <div class="W100 publicCss"><span style="display:inline-block;width:50px;text-align: center;color:#2D78B3;cursor: pointer;" @click="modify(v)">修改</span><span style="width:50px;text-align: center;display:inline-block;color:#D61E2A ;cursor: pointer;" @click="del(v)">删除</span>
+            <div v-if="v.openShow" class="messageBox">
               <img class="img1" :src="sanjiaoUrl" alt="">
               <div class="count">
-                确认删除”{{v.username}}”？
+                确认删除”{{v.g_name}}”？
               </div>
               <div class="decrite">
                 删除该必备/重点SKU后，之后的售点报告将立即按新的标准执行，在此之前已生成的售点报告仍沿用之前的标准不受影响。
@@ -47,6 +49,19 @@
               </div>
             </div>
           </div>
+          <div class="messagebox" v-if="v.editBoxShow"></div>
+          <div class="messagecont" v-if="v.editBoxShow">
+            <div class="addGY">
+              修改提示
+            </div>
+            <div class="use">
+              修改该必备/重点SKU后，之后的售点报告将立即按新的标准执行，在此之前已生成的售点报告仍沿用之前的标准不受影响。
+            </div>
+            <div style="margin-top:30px;">
+              <span class="confim ml150" @click="confimAdd(v)">确认</span><span class="confim ml20" @click="canverAdd(v)">取消</span>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -63,11 +78,11 @@
         <div class="W100 publicCss">操作</div>
       </div>
       <div class="imgMain" style="height:354px;overflow-y:scroll;overflow-x: hidden;border-bottom:1px solid #eee;">
-        <div v-for="(v,index) in tableList" class="tablelist">
+        <div v-for="(v,index) in importTableList"  @mouseenter="enter(v)" @mouseleave="leave(v)" :class="[v.showBc?'tablelistBc':'','tablelist']" >
           <div class="W100" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">{{v.id}}</div>
-          <div class="W120" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">CAN可乐</div>
-          <div class="W360 publicCss title">可口可乐罐装300ml、可口可乐罐装300ml可口可乐罐装300ml、装300ml</div>
-          <div class="W300" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">可口可乐罐装300ml、可口可乐罐装300ml</div>
+          <div class="W120" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">{{v.g_name}}</div>
+          <div class="W360 publicCss title"><span v-for="(vc,indexc) in v.storeType">{{vc.typename}}<span v-if="(indexc+1) !=v.storeType.length">、</span></span></div>
+          <div class="W300" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;display:flex;"><span v-for="(vcc,indexccc) in v.skus">{{vcc.sku_name}}<span v-if="(indexccc+1) !=v.skus.length">、</span></span></div>
           <div class="W140" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">2019-12-12 23:45</div>
           <div class="W100 publicCss"><span @click="modify(v)" style="display:inline-block;width:50px;text-align: center;color:#2D78B3;cursor: pointer;">修改</span><span style="width:50px;text-align: center;display:inline-block;color:#D61E2A ;cursor: pointer;" @click="del(v)">删除</span>
             <div v-if="v.openShow" class="messageBox">
@@ -101,7 +116,6 @@
         </div>
       </div>
     </div>
-    <!-- <Pages :totlePages.sync="totleNums" v-if="totleNums/20>1"  :nowPages.sync="nowNum"></Pages> -->
   </div>
 </template>
 
@@ -126,20 +140,47 @@ export default {
       totleNums:0,
       nowNum:'1',
       hookUrl:hookicon,
-      tableList:[]
+      tableList:[],
+      importTableList:[],
+      topList:[],
+      topId:''
     }
   },
   mounted(){
-    this.getAjaxList()
+    this.getAjaxListTop()
+    this.getAjaxListMust(this.topId)
+    this.getAjaxListImport(this.topId)
   },
   watch:{
     nowNum(){
       this.getAjaxList()
     }
   },
+  filters:{
+    dataFormYMD(date){
+      if(date == null || date == '' || date == 0){
+        return ''
+      }else{
+        var d = new Date(Number(date)*1000);
+        var year = d.getFullYear();
+        var month = d.getMonth() + 1<10?'0' + (d.getMonth() + 1) :d.getMonth() + 1;
+        var day = d.getDate() <10 ? '0' + d.getDate() : '' + d.getDate();
+        var hour = d.getHours() <10 ? '0'+d.getHours(): '' + d.getHours();
+        var minutes = d.getMinutes()<10?'0' + d.getMinutes() : '' + d.getMinutes();
+        var seconds = d.getSeconds()<10?'0' + d.getSeconds() : '' + d.getSeconds();;
+        return year+ '-' + month + '-' + day+' ' + hour + ':' + minutes
+      }
+    }
+  },
   methods:{
+    enter(v){
+      v.showBc = true
+    },
+    leave(v){
+      v.showBc = false
+    },
     confimAdd(v){
-      console.log(1)
+     
     },
     canverAdd(v){
       v.editBoxShow = false
@@ -153,7 +194,16 @@ export default {
       console.log(num)
     },
     confimOpen(v){
-
+      var that  = this
+      this.Axios.post(`${this.api}/sku/del`,{id:v.id})
+      .then(function (data) {
+        v.openShow =false
+        that.getAjaxListMust(that.topId)
+        that.getAjaxListImport(that.topId)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     },
     allHidden(){
       for(var i=0;i<this.tableList.length;i++){
@@ -168,44 +218,66 @@ export default {
     del(v){
       this.allHidden()
       v.openShow = true
+
     },
-    choiceData(num){
-      if(num === 1){
+    choiceData(v){
+      if(v === 1){
         this.yestoday = true
-        this.lastSeven = false
-        this.lastMounth = false
-         this.lastLast = false
-        // this.getDate(num)
-      }else if(num === 2){
-        this.yestoday = false
-        this.lastSeven = true
-        this.lastMounth = false
-         this.lastLast = false
-        // this.getDate(7)
-      }else if(num === 3){
-        this.yestoday = false
-        this.lastSeven = false
-        this.lastMounth = true
-         this.lastLast = false
-        // this.getDate(30)
+        for(var i=0; i<this.topList.length;i++){
+          this.topList[i].lastSeven = false
+        }
+        this.topId = ''
+        this.getAjaxListMust(this.topId)
+        this.getAjaxListImport(this.topId)
       }else{
         this.yestoday = false
-        this.lastSeven = false
-        this.lastMounth = false
-        this.lastLast = true
+        for(var i=0; i<this.topList.length;i++){
+          this.topList[i].lastSeven = false
+        }
+        v.lastSeven =true
+        this.topId = v.id
+        this.getAjaxListMust(this.topId)
+        this.getAjaxListImport(this.topId)
       }
     },
-    getAjaxList(){
+    getAjaxListTop(){
       var that  = this
-      this.Axios.get(`${this.api}/sku/index?page=${this.nowNum}&per-page=20&type=1`)
+      this.Axios.post(`${this.api}/sku/store-type`)
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
-          val.openShow = false
-          val.editBoxShow = false
+          val.lastSeven = false
+        })
+        that.topList = data.data.data
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    getAjaxListMust(type_id){
+      var that  = this
+      this.Axios.post(`${this.api}/sku/bb-sku`,{type_id:type_id})
+      .then(function (data) {
+        data.data.data.forEach((val,index)=>{
+          val.openShow =false
+          val.showBc =false
+          val.editBoxShow =false
         })
         that.tableList = data.data.data
-        that.totleNums = data.data.pagelist.count
-        that.nowNum = data.data.pagelist.page
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+    getAjaxListImport(type_id){
+      var that  = this
+      this.Axios.post(`${this.api}/sku/zd-sku`,{type_id:type_id})
+      .then(function (data) {
+        data.data.data.forEach((val,index)=>{
+          val.openShow =false
+          val.showBc =false
+          val.editBoxShow =false
+        })
+        that.importTableList = data.data.data
       })
       .catch(function (error) {
         console.log(error);
@@ -274,6 +346,7 @@ export default {
           letter-spacing: 0;
         }
         .confim{
+          cursor:pointer;
           text-align: center;
           line-height:30px;
           font-family: PingFangSC-Regular;
@@ -334,9 +407,6 @@ export default {
         text-align: center;
         vertical-align: middle;
         color: #000000;
-      }
-      .title{
-        line-height:25px;
       }
       .blueClocor{
         color:#3DB866;
@@ -443,5 +513,9 @@ export default {
       min-height:40px;
       border-bottom: 1px solid #E0E0E0;
     }
+    .tablelistBc{
+      background: #F5F5F5;
+    }
+
   }
 </style>

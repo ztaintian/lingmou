@@ -33,7 +33,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/api':{
-            target: 'http://192.168.3.162:8080/',
+            target: 'http://192.168.3.176:8080/',
             // target: 'http://ubuntu.zhixiang.co:8081',
             changeOrigin: true,
             pathRewrite:{
