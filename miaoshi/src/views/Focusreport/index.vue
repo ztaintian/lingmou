@@ -38,9 +38,9 @@
           <input class="nameipt ml5"   v-model="lineNumber" type="" name="">
         </div>
       </div>
-      <div class="sameBlock">
+      <div class="sameBlock" style="margin-left:-26px;">
         <div class="salereport">
-          <span class="time twoTimeTwo">状态:</span>
+          <span class="time twoTimeTwo" style="width:70px;">任务类型:</span>
           <el-select class="salePoint" v-model="statusVal" placeholder="请选择">
             <el-option
               v-for="item in statusList"
@@ -57,7 +57,7 @@
         <span class="search" @click="Brush">筛选</span>
       </div>
     </div>
-    <div style="height:44px;line-height:44px;text-align: right;margin-right:28px;cursor:pointer;" @click="exportFile">
+    <div style="height:44px;line-height:44px;text-align: right;float: right;margin-right:28px;cursor:pointer;width:90px;" @click="exportFile">
       <img :src="exportUrl" alt="" style="margin-top:-2px;vertical-align:middle;"><span style="display:inline-block;color: #2D78B3;">导出Excel</span>
     </div>
     <div class="table">
@@ -117,7 +117,7 @@ export default {
       lastMounth:false,
       salePoint:'',
       salePointList:['快客','全家'],
-      statusList:['全部','已完成'],
+      statusList:['全部','计划','临时'],
       all:true,
       compent:false,
       ing:false,
@@ -138,14 +138,14 @@ export default {
   watch:{
     nowNum(){
       if(this.clickBrush){
-        if(this.statusVal == '已完成'){
+        if(this.statusVal == '临时'){
           this.num_type_id = 1
-        }else if(this.statusVal == '进行中'){
+        }else if(this.statusVal == '计划'){
           this.num_type_id = 0
         }else if(this.statusVal == '全部' || this.statusVal == ''){
           this.num_type_id = ''
         }
-        this.getAjaxList(`${this.api}/store-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_report_number=${this.reportNumber}&status=${this.num_type_id}&group_number=${this.groupNumber}&line_number=${this.lineNumber}&store_name=${this.storeName}`)
+        this.getAjaxList(`${this.api}/store-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_report_number=${this.reportNumber}&task_type=${this.num_type_id}&group_number=${this.groupNumber}&line_number=${this.lineNumber}&store_name=${this.storeName}`)
       }else{
         this.getAjaxList(`${this.api}/scene-report/index?page=${this.nowNum}&per-page=20`)
       }
@@ -153,7 +153,7 @@ export default {
   },
   methods:{
     exportFile(){
-
+      window.location.href = `${this.apiLoad}/store-report/export-excel`
     },
     getDate(num){
       var nowDate = new Date().getTime()-24*60*60*1000
@@ -165,15 +165,15 @@ export default {
       this.clickBrush = true
       this.time1 = this.dataTime?(new Date(this.dataTime).getTime())/1000:''
       this.time2 = this.dataTime2?(new Date(this.dataTime2).getTime())/1000:''
-      if(this.statusVal == '已完成'){
+      if(this.statusVal == '临时'){
         this.num_type_id = 1
-      }else if(this.statusVal == '进行中'){
+      }else if(this.statusVal == '计划'){
         this.num_type_id = 0
       }else if(this.statusVal == '全部' || this.statusVal == '' ){
         this.num_type_id = ''
       }
       this.nowNum = '1'
-      this.getAjaxList(`${this.api}/store-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_report_number=${this.reportNumber}&status=${this.num_type_id}&group_number=${this.groupNumber}&line_number=${this.lineNumber}&store_name=${this.storeName}`)
+      this.getAjaxList(`${this.api}/store-report/index?page=${this.nowNum}&per-page=20&starttime=${this.time1}&endtime=${this.time2}&store_report_number=${this.reportNumber}&task_type=${this.num_type_id}&group_number=${this.groupNumber}&line_number=${this.lineNumber}&store_name=${this.storeName}`)
 
     },
     getAjaxList(url){

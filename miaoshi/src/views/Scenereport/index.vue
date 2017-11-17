@@ -61,7 +61,7 @@
         <span class="search" @click="Brush">筛选</span>
       </div>
     </div>
-    <div style="height:44px;line-height:44px;text-align: right;margin-right:28px;cursor:pointer;" @click="exportFile">
+    <div style="height:44px;line-height:44px;text-align: right;float: right;margin-right:28px;cursor:pointer;width:90px;" @click="exportFile">
       <img :src="exportUrl" alt="" style="margin-top:-2px;vertical-align:middle;"><span style="display:inline-block;color: #2D78B3;">导出Excel</span>
     </div>
     <div class="table" v-if="questionFalg">
@@ -168,7 +168,7 @@ export default {
   },
   methods:{
     exportFile(){
-
+      window.location.href = `${this.apiLoad}/scene-report/export-excel`
     },
     getAjaxList(url){
       var that  = this
@@ -217,8 +217,14 @@ export default {
     },
     freezerdetails(v){
       if(this.questionFalg){
-        // this.$router.push({path:'/home/freezerdetails',query:{id:v.id}})
-        window.open(`${this.api}/index.html#/home/freezerdetails?id=${v.id}`)
+        console.log(v.id)
+        if(v.type_id == 1){
+          // this.$router.push({path:'/home/freezerdetails',query:{id:v.id}})
+          window.open(`${this.api}/index.html#/home/freezerdetails?id=${v.id}`)
+        }else{
+          // this.$router.push({path:'/home/storagerack',query:{id:v.id}})
+          window.open(`${this.api}/index.html#/home/storagerack?id=${v.id}`)
+        }
       }else{
         this.$router.push({path:`/home/questionnairedetails`,query:{q_id:v.q_id,store_id:v.store_id}})
       }

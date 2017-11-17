@@ -13,6 +13,7 @@ import Administratorsettings from '@/views/Administratorsettings'
 import Usermanagement from '@/views/Usermanagement'
 import Sellpoint from '@/views/Sellpoint'
 import Freezerdetails from '@/views/Freezerdetails'
+import Storagerack from '@/views/Storagerack'
 import Pointofsaledetails from '@/views/Pointofsaledetails'
 import Questionnairedetails from '@/views/Questionnairedetails'
 import Questionnairestatistics from '@/views/Questionnairestatistics'
@@ -137,6 +138,14 @@ export default new Router({
           path: 'freezerdetails',
           name: 'freezerdetails',
           component: Freezerdetails,
+          beforeEnter:(to, from, next)=>{
+           axiosIfLongin(next)
+          }
+        },
+        {
+          path: 'storagerack',
+          name: 'storagerack',
+          component: Storagerack,
           beforeEnter:(to, from, next)=>{
            axiosIfLongin(next)
           }

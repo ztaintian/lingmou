@@ -58,7 +58,7 @@
               修改该必备/重点SKU后，之后的售点报告将立即按新的标准执行，在此之前已生成的售点报告仍沿用之前的标准不受影响。
             </div>
             <div style="margin-top:30px;">
-              <span class="confim ml150" @click="confimAdd(v)">确认</span><span class="confim ml20" @click="canverAdd(v)">取消</span>
+              <span class="confim ml150" @click="confimAdd(v,1)">确认</span><span class="confim ml20" @click="canverAdd(v)" style="background: #F5F5F5;border: 1px solid #E0E0E0;color:#333333;border-radius: 4px;">取消</span>
             </div>
           </div>
 
@@ -82,7 +82,7 @@
           <div class="W100" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">{{v.id}}</div>
           <div class="W120" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">{{v.g_name}}</div>
           <div class="W360 publicCss title"><span v-for="(vc,indexc) in v.storeType">{{vc.typename}}<span v-if="(indexc+1) !=v.storeType.length">、</span></span></div>
-          <div class="W300" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;display:flex;"><span v-for="(vcc,indexccc) in v.skus">{{vcc.sku_name}}<span v-if="(indexccc+1) !=v.skus.length">、</span></span></div>
+          <div class="W300" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;"><span v-for="(vcc,indexccc) in v.skus">{{vcc.sku_name}}<span v-if="(indexccc+1) !=v.skus.length">、</span></span></div>
           <div class="W140" style="height:100%;float: left;text-align:center;vertical-align:middle;justify-content:center;">2019-12-12 23:45</div>
           <div class="W100 publicCss"><span @click="modify(v)" style="display:inline-block;width:50px;text-align: center;color:#2D78B3;cursor: pointer;">修改</span><span style="width:50px;text-align: center;display:inline-block;color:#D61E2A ;cursor: pointer;" @click="del(v)">删除</span>
             <div v-if="v.openShow" class="messageBox">
@@ -110,7 +110,7 @@
               修改该必备/重点SKU后，之后的售点报告将立即按新的标准执行，在此之前已生成的售点报告仍沿用之前的标准不受影响。
             </div>
             <div style="margin-top:30px;">
-              <span class="confim ml150" @click="confimAdd(v)">确认</span><span class="confim ml20" @click="canverAdd(v)">取消</span>
+              <span class="confim ml150" @click="confimAdd(v,2)">确认</span><span class="confim ml20" style="background: #F5F5F5;border: 1px solid #E0E0E0;color:#333333;border-radius: 4px;" @click="canverAdd(v)">取消</span>
             </div>
           </div>
         </div>
@@ -179,7 +179,8 @@ export default {
     leave(v){
       v.showBc = false
     },
-    confimAdd(v){
+    confimAdd(v,num){
+      this.$router.push(`/home/aaasku?type=${num}&id=${v.id}`)
     },
     canverAdd(v){
       v.editBoxShow = false

@@ -1,5 +1,5 @@
 <template>
-  <div class="freezerdetails">
+  <div class="storagerack">
     <div class="content">
       <div class="top">
         <span class="title">{{sceneList.name}}（{{reportList.scene_report_number}}）</span>
@@ -21,10 +21,10 @@
               {{Number(reportList.purity).toFixed(1)}}%
             </div>
             <div class="describe">
-              纯净度
+              占有率
             </div>
           </div>
-          <div class="cycly">
+        <!--   <div class="cycly">
             <svg >
               <circle cx="52" cy="52" r="50" fill="none" stroke="#54D17D" stroke-width="3" stroke-linecap="round"/>
               <circle class="demo2" cx="52" cy="52" id="J_demo2"  r="50" fill="none" stroke="#EBEEF0" stroke-width="4" stroke-dasharray="0,10000"/>
@@ -59,7 +59,7 @@
             <div class="describe">
               空缺数
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="right" v-if="store_reportList.status==1">
           <div class="titl">所属售点</div>
@@ -123,7 +123,7 @@ import iconVue from '@/assets/vue.png'
 import viewIcon from '@/assets/view.jpeg'
 import ImgModel from '@/components/ImgModel'
 export default {
-  name: 'Freezerdetails',
+  name: 'Storagerack',
   components:{'img-model':ImgModel},
   data () {
     return {
@@ -195,8 +195,8 @@ export default {
         })
         that.initCanvas()
         that.circleSet(100-data.data.data.report.purity, document.querySelector("#J_demo1"))
-        that.circleSet(100-data.data.data.report.saturation, document.querySelector("#J_demo2"))
-        that.circleSet(100-that.reportList.empty_rate, document.querySelector("#J_demo3"))
+        // that.circleSet(100-data.data.data.report.saturation, document.querySelector("#J_demo2"))
+        // that.circleSet(100-that.reportList.empty_rate, document.querySelector("#J_demo3"))
 
         // for(var i=0;i<data.data.data.skuseries.length;i++){
         //   data.data.data.skuseries[i].arr = []
@@ -456,7 +456,7 @@ export default {
           obj.y2 = this.skuList[i].y2
           this.bboxes.push(obj)
         }
-         this.showAll(this.bboxes)
+        this.showAll(this.bboxes)
       }else{
         console.log(5)
         this.bboxes = []
@@ -474,7 +474,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .freezerdetails{
+  .storagerack{
     font-family: 'Microsoft YaHei','Avenir', Helvetica, Arial, sans-serif;
     overflow: hidden;
     width:100%;

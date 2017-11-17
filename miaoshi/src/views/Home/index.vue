@@ -137,6 +137,12 @@ export default {
 	  		this.activeF = false
 	  		this.activeC = true
 	  		break;
+	  		case '/home/storagerack':
+	  		this.type = 1
+	  		this.iconShow()
+	  		this.activeF = false
+	  		this.activeC = true
+	  		break;
 	  		case '/home/questionnairedetails':
 	  		this.type = 1
 	  		this.iconShow()

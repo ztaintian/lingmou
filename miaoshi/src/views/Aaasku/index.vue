@@ -1,7 +1,7 @@
 <template>
   <div class="addsku">
     <div style="font-size: 18px;color: #000000;font-weight: bold;margin-top: 24px;margin-left: 30px;margin-bottom: 20px;">
-      添加必备SKU类
+      {{addList}}{{classList}}SKU类
     </div>
     <div class="copy" >
       <span @click="quickCopy">快速复制</span><img @click="quickCopyIMg" :src="howIMG" alt="">
@@ -31,11 +31,11 @@
     <img  class="imgCa"  v-if="editBoxShow" :src="canceIMG" @click="imgC" style="" alt="">
     <div style="margin-left: 30px;">
       <div style="margin-bottom: 20px;">
-        <span style="width:70px;text-align: right;display: inline-block;font-weight: bold;">类名：</span><input :class="[nameGetColor?'fontColor':'','nameipt']" v-model="g_name" @focus="nameGetFocus" @blur="nameGetblur"  type="" name="">
+        <span style="width:70px;text-align: right;display: inline-block;font-weight: bold;">类名：</span><input :class="[nameGetColor?'fontColor':'','nameipt']" style="height:42px;width:602px;" v-model="g_name" @focus="nameGetFocus" @blur="nameGetblur"  type="" name="">
       </div>
       <div style="margin-bottom: 20px;">
         <span style="width:70px;text-align: right;display: inline-block;height:42px;line-height: 42px;float: left;font-weight: bold;">适用渠道：</span>
-        <div ref="seacrhTilt" class="nameipt1 minHEight" style="display: inline-block;" type="" name="">  <span v-for="v in tagList" class="tag" v-if="v.show">{{v.typename}}<img :src="cleanIMG" alt="" class="img" @click="imgClenn(v)"></span><img class="img1" :src="selectIMG" @click="showSearch()" alt="">
+        <div ref="seacrhTilt" class="nameipt1 minHEight" style="display: inline-block;" type="" name="">  <span v-for="(v,indexaa) in tagList" class="tag" v-if="v.show">{{v.typename}}<img :src="cleanIMG" alt="" class="img" @click="imgClenn(v,indexaa)"></span><img class="img1" :src="selectIMG" @click="showSearch()" alt="">
       </div>
       <div style="position:relative;">
         <div class="modelSeach"  v-if="seachShow">
@@ -50,7 +50,7 @@
       </div>
       </div>
       <div>
-        <span style="width:72px;text-align: right;display: inline-block;height:42px;line-height: 42px;float: left;font-weight: bold;">包含SKU：</span><div class="nameipt1 minHEight" style="display: inline-block;" type="" name=""><span v-for="v in skuListTag" class="tag" v-if="v.show">{{v.sku_name}}<img :src="cleanIMG" alt="" class="img" @click="skuimgClenn(v)"></span><img class="img1" :src="selectIMG" @click="showSearch1" alt=""></div>
+        <span style="width:72px;text-align: right;display: inline-block;height:42px;line-height: 42px;float: left;font-weight: bold;">包含SKU：</span><div class="nameipt1 minHEight" style="display: inline-block;" type="" name=""><span v-for="(v,indexbb) in skuListTag" class="tag" v-if="v.show">{{v.sku_name}}<img :src="cleanIMG" alt="" class="img" @click="skuimgClenn(v,indexbb)"></span><img class="img1" :src="selectIMG" @click="showSearch1" alt=""></div>
       </div>
       <div style="position:relative;">
         <div class="modelSeach"  v-if="seachShow1">
@@ -65,8 +65,8 @@
       </div>
     </div>
     <div class="bottom">
-      <span class="save">保存并继续添加</span>
-      <span class="save save1" @click="saveShow">保存</span>
+      <span class="save" @click="savAndadd" v-if="showFlag">保存并继续添加</span>
+      <span class="save save1" style="background: #4285BA;color:#fff;" @click="saveShow">{{saveModify}}</span>
       <span class="save save1">取消</span>
     </div>
     <div class="messagebox" v-if="saveBoxShow"></div>
@@ -80,7 +80,18 @@
       <div style="margin-top:30px;">
         <span class="confim ml150" @click="confimAdd">确认</span><span class="confim ml20" @click="canverAdd" style="background:#fff;color: #333333;background: #F5F5F5;border: 1px solid #E0E0E0;border-radius: 4px;">取消</span>
       </div>
-
+    </div>
+    <div class="messagebox" v-if="addsaveBoxShow"></div>
+    <div class="messagecont" v-if="addsaveBoxShow">
+      <div class="addGY">
+        保存提示
+      </div>
+      <div class="use">
+       新增该必备/重点SKU后，之后的售点报告将立即按新的标准执行，在此之前已生成的售点报告仍沿用之前的标准不受影响。
+      </div>
+      <div style="margin-top:30px;">
+        <span class="confim ml150" @click="addconfimAdd">确认</span><span class="confim ml20" @click="addcanverAdd" style="background:#fff;color: #333333;background: #F5F5F5;border: 1px solid #E0E0E0;border-radius: 4px;">取消</span>
+      </div>
     </div>
   </div>
 </template>
@@ -99,6 +110,11 @@ export default {
   name: 'Aaasku',
   data () {
     return {
+      addsaveBoxShow:false,
+      showFlag:true,
+      addList:'',
+      saveModify:'',
+      classList:'',
       g_name:'',
       textSeach:'',
       copyBoxShow:false,
@@ -124,9 +140,41 @@ export default {
     }
   },
   mounted(){
+    var that = this
     this.getAjaxListstoretype()
     this.getAjaxListskus()
-
+    if(this.$router.currentRoute.query.type==1){
+      this.classList = '必备'
+    }else{
+       this.classList = '重点'
+    }
+    if(this.$router.currentRoute.query.id){
+      this.addList = '修改'
+      this.saveModify = '保存修改'
+      this.showFlag = false
+      this.Axios.post(`${this.api}/sku/find-one`,{id:this.$router.currentRoute.query.id})
+      .then(function (data) {
+        that.skuListTag = []
+        that.tagList =[]
+        that.copyBoxShow = false
+        that.g_name = data.data.data.g_name
+        data.data.data.skus.forEach((val,index)=>{
+          val.show = true
+        })
+        that.skuListTag = data.data.data.skus
+        data.data.data.storeType.forEach((val,index)=>{
+          val.show = true
+        })
+        that.tagList = data.data.data.storeType
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }else{
+      this.addList = '添加'
+      this.showFlag = true
+      this.saveModify = '保存'
+    }
   },
   watch:{
     textSeach(val){
@@ -137,9 +185,32 @@ export default {
     getAjaxListSave(){
       var that  = this
       var type = this.$router.currentRoute.query.type
-      this.Axios.post(`${this.api}/sku/save`,{g_name:this.g_name,type:type,storeType:this.tagList,skus:this.skuListTag})
+      var id = this.$router.currentRoute.query.id
+      var skuListTag = []
+      var tagList = []
+      this.skuListTag.forEach((val,index)=>{
+        if(val.show){
+          skuListTag.push(val)
+        }
+      })
+      this.tagList.forEach((val,index)=>{
+        if(val.show){
+          tagList.push(val)
+        }
+      })
+      this.Axios.post(`${this.api}/sku/save`,{id:id,g_name:this.g_name,type:type,storeType:tagList,skus:skuListTag})
       .then(function (data) {
-        that.saveBoxShow = false
+        if(data.data.code == 200){
+          that.$router.push('/home/mustsku')
+          that.$message({
+            message:data.data.msg
+          });
+          that.saveBoxShow = false
+        }else{
+          that.$message({
+            message:data.data.msg
+          });
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -167,6 +238,13 @@ export default {
       .then(function (data) {
         data.data.data.forEach((val,index)=>{
           val.show = false
+        })
+        that.tagList.forEach((val,index)=>{
+          for(var i=0;i<data.data.data.length;i++){
+            if(val.id == data.data.data[i].id){
+              data.data.data[i].show = true
+            }
+          }
         })
         that.selectList = data.data.data
       })
@@ -204,11 +282,118 @@ export default {
     confimAdd(){
       this.getAjaxListSave()
     },
+    addconfimAdd(){
+      var that  = this
+      var type = this.$router.currentRoute.query.type
+      var id = this.$router.currentRoute.query.id
+      var skuListTag = []
+      var tagList = []
+      this.skuListTag.forEach((val,index)=>{
+        if(val.show){
+          skuListTag.push(val)
+        }
+      })
+      this.tagList.forEach((val,index)=>{
+        if(val.show){
+          tagList.push(val)
+        }
+      })
+      this.Axios.post(`${this.api}/sku/save`,{id:id,g_name:this.g_name,type:type,storeType:tagList,skus:skuListTag})
+      .then(function (data) {
+        if(data.data.code == 200){
+          that.g_name = ''
+          that.tagList = []
+          that.skuListTag =[]
+          that.$message({
+            message:data.data.msg
+          });
+          that.addsaveBoxShow = false
+        }else{
+          that.$message({
+            message:data.data.msg
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
     canverAdd(){
       this.saveBoxShow = false
     },
+    addcanverAdd(){
+      this.addsaveBoxShow = false
+    },
+    savAndadd(){
+      var skuListTag = []
+      var tagList = []
+      this.skuListTag.forEach((val,index)=>{
+        if(val.show){
+          skuListTag.push(val)
+        }
+      })
+      this.tagList.forEach((val,index)=>{
+        if(val.show){
+          tagList.push(val)
+        }
+      })
+      if(this.g_name==null||this.g_name==''){
+        this.$message({
+          message:'类名不能为空'
+        });
+        return
+      }
+      if(tagList==null||tagList==''){
+        this.$message({
+          message:'适用渠道不能为空'
+        });
+        return
+      }
+      if(skuListTag==null||skuListTag==''){
+        this.$message({
+          message:'包含SKU不能为空'
+        });
+        return
+      }
+      this.addsaveBoxShow = true
+
+    },
     saveShow(){
-      this.saveBoxShow = true
+      var skuListTag = []
+      var tagList = []
+      this.skuListTag.forEach((val,index)=>{
+        if(val.show){
+          skuListTag.push(val)
+        }
+      })
+      this.tagList.forEach((val,index)=>{
+        if(val.show){
+          tagList.push(val)
+        }
+      })
+      if(this.g_name==null||this.g_name==''){
+        this.$message({
+          message:'类名不能为空'
+        });
+        return
+      }
+      if(tagList==null||tagList==''){
+        this.$message({
+          message:'适用渠道不能为空'
+        });
+        return
+      }
+      if(skuListTag==null||skuListTag==''){
+        this.$message({
+          message:'包含SKU不能为空'
+        });
+        return
+      }
+      if(this.$router.currentRoute.query.id){
+        this.getAjaxListSave()
+      }else{
+        this.saveBoxShow = true
+      }
     },
     imgC(){
       this.editBoxShow = false
@@ -275,13 +460,15 @@ export default {
     showSearch1(){
       this.seachShow = false
       this.seachShow1 = !this.seachShow1
+      this.getAjaxListskus()
     },
     showSearch(){
       var that = this
       this.seachShow1 = false
       this.seachShow = !this.seachShow
+      this.getAjaxListstoretype()
     },
-    imgClenn(v){
+    imgClenn(v,index){
       v.show = false
       this.selectList.forEach((val,index)=>{
         if(v.id == val.id){

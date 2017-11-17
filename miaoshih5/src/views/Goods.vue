@@ -374,6 +374,11 @@ export default {
           this.bboxes.push(obj)
         }
       }
+      if(v.name == '空缺'){
+        this.bboxes.forEach((val,index)=>{
+          val.color = 'yellow'
+        })
+      }
       this.showAll(this.bboxes)
       this.iconFlag = false
     },
@@ -391,6 +396,11 @@ export default {
           this.bboxes.push(obj)
         }
       }
+      if(v.series_id == 200){
+        this.bboxes.forEach((val,index)=>{
+          val.color = 'yellow'
+        })
+      }
       this.showAll(this.bboxes)
       this.iconFlag = false
     },
@@ -401,7 +411,13 @@ export default {
       }
       if(!this.iconFlag){
         for(var i=0;i<this.skuList.length;i++){
-          var obj = {truncated:false,color:'red'}
+          var obj;
+          if(this.skuList[i].series_id == 200){
+            obj = {truncated:false,color:'yellow'}
+          }else{
+            obj = {truncated:false,color:'red'}
+          }
+
           obj.x1 = this.skuList[i].x1
           obj.x2 =this.skuList[i].x2
           obj.y1 = this.skuList[i].y1
